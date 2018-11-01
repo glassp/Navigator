@@ -32,7 +32,7 @@ class Graph
         //increase offset by 1
         for ($i = $index; $i < count($this->offset); $i++) {
             $val = $this->offset[$i];
-            $this->offset[$i] = $val + 1;
+            $this->setOffset($i, $val + 1);
         }
         //move edges to right by 1
         for ($i = count($this->edges); $i >= $index; $i--) {
@@ -84,10 +84,15 @@ class Graph
         return false;
     }
 
-    //TODO: store edges
-    //TODO: offset array
-    //TODO: addEdge(Node 1, Node 2, int weight):void
-    //TODO: setOffset(Node node, int offset):void
+    /**
+     * @param int $node the node
+     * @param int $offset the offset for the node
+     */
+    public function setOffset(int $node, int $offset)
+    {
+        $this->offset[$node] = $offset;
+    }
+
     //TODO: hasPath(Node 1, Node 2):bool
     //TODO: nextNode(Node node, criteria):Node  criteria as constant like NEXT_GEO or NEXT_WEIGHT
     //TODO: sort(criteria)
