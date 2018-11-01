@@ -53,6 +53,15 @@ class Graph
     }
 
     /**
+     * @param int $node the node
+     * @param int $offset the offset for the node
+     */
+    public function setOffset(int $node, int $offset)
+    {
+        $this->offset[$node] = $offset;
+    }
+
+    /**
      * @param int $edge the index from the edges array
      * @return int returns the weight of the edge or -1
      */
@@ -82,15 +91,6 @@ class Graph
         }
         //if nothing found return
         return false;
-    }
-
-    /**
-     * @param int $node the node
-     * @param int $offset the offset for the node
-     */
-    public function setOffset(int $node, int $offset)
-    {
-        $this->offset[$node] = $offset;
     }
 
     //TODO: hasPath(Node 1, Node 2):bool
