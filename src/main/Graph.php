@@ -163,7 +163,6 @@ class Graph
         return $this->weight[$edge];
     }
 
-    //TODO: hasPath(Node 1, Node 2):bool
     //TODO: nextNode(Node node, criteria):Node  criteria as constant like NEXT_GEO or NEXT_WEIGHT
     //TODO: sort(criteria)
     //TODO: removeEdge(Node 1, Node 2):void
