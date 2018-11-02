@@ -6,40 +6,70 @@
  * Time: 2:25 PM
  */
 
+namespace Navigator;
 class Graph
 {
     /**
      * @var array which stores the destinations of the node with an offset
      */
-    private $edges;
+    private $edges = array();
     /**
      * @var array which store the offset(edges) for the node
      */
-    private $offset;
+    private $offset = array();
     /**
      * @var array which stores the weight for the edges
      */
-    private $weight;
+    private $weight = array();
+
 
     /**
      * @param int $start the start node
      * @param int $dest the destination node
      * @param int $weight the weight for the node
      */
+
     public function addEdge(int $start, int $dest, int $weight)
     {
+        /*
+        //get the next start nodes offset
         $index = $this->getOffset($start + 1);
-        //increase offset by 1
-        for ($i = $index; $i < count($this->offset); $i++) {
-            $val = $this->offset[$i];
-            $this->setOffset($i, $val + 1);
+        print $start.":".count($this->edges);
+        if ($this->hasEdge()) {
+
+            //increase offset by 1
+            for ($i = $index; $i < count($this->offset); $i++) {
+                $val = $this->offset[$i];
+                $this->setOffset($i, $val + 1);
+            }
+            //move edges to right by 1
+            for ($i = count($this->edges); $i >= $index; $i--) {
+                $this->edges[$i + 1] = $this->edges[$i];
+            }
+        } else {
+            $this->setOffset($start, 0);
+            $index=0;
         }
-        //move edges to right by 1
-        for ($i = count($this->edges); $i >= $index; $i--) {
-            $this->edges[$i + 1] = $this->edges[$i];
-        }
+        //insert data into array
         $this->edges[$index] = $dest;
         $this->weight[$index] = $weight;
+        */
+    }
+
+    public function countOutgoingEdges(int $node)
+    {
+        $n = 0;
+        if ($this->getOffset($node + 1) == -1)
+            return count($this->edges) - $this->getOffset($node);
+        for ($i = $this->getOffset($node + 1); $i < $this->getOffset($node + 1); $i++) {
+            $n++;
+        }
+        return $n;
+    }
+
+    public function hasEdge()
+    {
+        return isset($this->edges[0]) && $this->edges[0] != null;
     }
 
     /**
@@ -48,7 +78,7 @@ class Graph
      */
     public function getOffset(int $node)
     {
-        if ($this->offset[$node] == null || empty($this->offset)) return -1;
+        if (!isset($this->offset[$node]) || $this->offset[$node] == null) return -1;
         return $this->offset[$node];
     }
 
