@@ -118,6 +118,17 @@ class GraphTest extends TestCase
         }
     }
 
+    public function testNextNode()
+    {
+        $graph = new Graph();
+        $this->assertEquals(-1, $graph->nextNode(0));
+        $graph->addEdge(0, 1, 5);
+        $this->assertEquals(1, $graph->nextNode(0));
+        $graph->addEdge(0, 2, 10);
+        $this->assertEquals(1, $graph->nextNode(0));
+
+    }
+
     public function testAddEdge()
     {
         try {

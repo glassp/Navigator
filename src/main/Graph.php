@@ -7,6 +7,7 @@
  */
 
 namespace Navigator;
+
 /**
  * Class Graph
  * @package Navigator
@@ -26,6 +27,15 @@ class Graph
      */
     private $weight = array();
 
+    /**
+     * @var array which stores the latitude of the nodes
+     */
+    private $latitude = array();
+
+    /**
+     * @var array which stores the longitude of the nodes
+     */
+    private $longitude = array();
 
     /**
      * Adds a new Edge and moves indices as well as edges as needed.
@@ -124,6 +134,41 @@ class Graph
     }
 
     /**
+     * Checks if the graph has edges
+     *
+     * @return bool returns true if graph has edges
+     */
+    public function hasEdge()
+    {
+        return !empty($this->edges);
+    }
+
+    /**
+     * Returns the next node weight-wise
+     *
+     * @param int $node the node
+     * @return int the next node or -1
+     */
+    public function nextNode(int $node)
+    {
+        //running infinit time
+        $minVal = INF;
+        $minIndex = -1;
+        $offset = $this->getOffset($node);
+        if ($offset == -1) return -1;
+        $elem = $this->countOutgoingEdges($node);
+        if ($elem < 1) return -1;
+        for ($i = 0; $i < $elem; $i++) {
+            $var = $this->getWeight($node, $this->edges[$offset + $i]);
+            if ($var < $minVal) {
+                $minVal = $var;
+                $minIndex = $i;
+            }
+        }
+        return $this->edges[$offset + $minIndex];
+    }
+
+    /**
      * Counts the outgoing edges
      *
      * @param int $node the node
@@ -136,16 +181,6 @@ class Graph
             return count($this->edges) - $this->getOffset($node);
         else
             return $this->getOffset($node + 1) - $this->getOffset($node);
-    }
-
-    /**
-     * Checks if the graph has edges
-     *
-     * @return bool returns true if graph has edges
-     */
-    public function hasEdge()
-    {
-        return !empty($this->edges);
     }
 
     /**
@@ -162,8 +197,5 @@ class Graph
         if (is_bool($edge) && !$edge) return -1;
         return $this->weight[$edge];
     }
-
-    //TODO: nextNode(Node node, criteria):Node  criteria as constant like NEXT_GEO or NEXT_WEIGHT
-    //TODO: sort(criteria)
     //TODO: removeEdge(Node 1, Node 2):void
 }
