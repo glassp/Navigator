@@ -38,6 +38,11 @@ class Graph
     private $longitude = array();
 
     /**
+     * @var array which stores the distances calculated by dijkstra
+     */
+    private $distance = array();
+
+    /**
      * Adds a new Edge and moves indices as well as edges as needed.
      *
      * @param int $start the start node
@@ -196,6 +201,50 @@ class Graph
         $edge = $this->getEdge($start, $dest);
         if (is_bool($edge) && !$edge) return -1;
         return $this->weight[$edge];
+    }
+
+    /**
+     * Returns the distance from a certain node to dest
+     *
+     * @param int $dest the destination node
+     * @return mixed the distance form a certain node(specified in Dijkstra class)
+     */
+    public function getDistance(int $dest)
+    {
+        return $this->distance[$dest];
+    }
+
+    /**
+     * sets the distance to dest and checks if value has changed
+     *
+     * @param int $dest the destination node
+     * @param $dist mixed the distance
+     * @return bool returns true if value has changed else false
+     */
+    public function setDistance(int $dest, $dist)
+    {
+        $val = $this->getDistance($dest);
+        if ($val == $dist) return false;
+        $this->distance[$dest] = $dist;
+        return true;
+    }
+
+    /**
+     * returns a list of all nodes
+     *
+     * @return array off all nodes
+     */
+    public function getNodeList()
+    {
+        $nodes = array();
+
+        for ($i = 0; $i < count($this->offset); $i++) {
+            if ($this->offset[$i] != null) $nodes[$i] = true;
+        }
+        for ($i = 0; $i < count($this->edges); $i++) {
+            if ($this->edges[$i] != null) $nodes[$this->edges[$i]] = true;
+        }
+        return $nodes;
     }
     //TODO: removeEdge(Node 1, Node 2):void
 }
