@@ -86,11 +86,6 @@ public class Graph {
     }
 
 
-    boolean hasEdge() {
-        return true;
-    }
-
-
     int nextNode(int node) {
         //running infinit time
         double minVal = Double.POSITIVE_INFINITY;
