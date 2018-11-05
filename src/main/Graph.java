@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Arrays;
+
 public class Graph {
     private int[] edges;
     private int[] offset;
@@ -17,6 +19,9 @@ public class Graph {
         this.longitude = new double[nodes];
         this.distance = new double[nodes];
         this.lastIndex = 0;
+        //initializes all values in offset with -1
+        Arrays.fill(offset, -1);
+
     }
 
     void addEdge(int start, int dest, int weight) {
@@ -47,14 +52,14 @@ public class Graph {
             this.setOffset(start, this.edges.length);
             this.edges[lastIndex] = dest;
             this.lastIndex++;
-            this.weight[this.getEdge(start, dest)] = weight;
+            if (this.getEdge(start, dest) != -1)
+                this.weight[this.getEdge(start, dest)] = weight;
         }
     }
 
 
     boolean hasOutgoingEdges(int node) {
-        return true;
-
+        return this.offset[node] != -1;
     }
 
 
@@ -83,11 +88,6 @@ public class Graph {
         }
         //if nothing found return
         return -1;
-    }
-
-
-    boolean hasEdge() {
-        return true;
     }
 
 
