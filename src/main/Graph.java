@@ -2,15 +2,47 @@ package main;
 
 import java.util.Arrays;
 
+
+/**
+ * The Graph class
+ */
 public class Graph {
+
+    /**
+     * stores the destination of a edge
+     */
     private int[] edges;
+    /**
+     * stores the offset
+     */
     private int[] offset;
-    private int lastIndex;
+    /**
+     * the first unused index
+     */
+    private int current;
+    /**
+     * stores the weight of a edge
+     */
     private double[] weight;
+    /**
+     * stores the latitude of a node
+     */
     private double[] latitude;
+    /**
+     * stores the longitude of a node
+     */
     private double[] longitude;
+    /**
+     * stores the distance to a node
+     */
     private double[] distance;
 
+    /**
+     * Constructor
+     *
+     * @param nodes number of nodes that are used in the graph
+     * @param edges number of edges that are used in the graph
+     */
     public Graph(int nodes, int edges) {
         this.edges = new int[edges];
         this.weight = new double[edges];
@@ -18,63 +50,111 @@ public class Graph {
         this.latitude = new double[nodes];
         this.longitude = new double[nodes];
         this.distance = new double[nodes];
-        this.lastIndex = 0;
+        this.current = 0;
         //initializes all values in offset with -1
         Arrays.fill(offset, -1);
+        Arrays.fill(distance, Double.POSITIVE_INFINITY);
 
     }
 
-    void addEdge(int start, int dest, int weight) {
-        //if Node is has offset
-        if (this.hasOutgoingEdges(start)) {
-            if (this.hasOutgoingEdges(start + 1)) {
-                //CASE: BETWEEN TWO NODES
-                int index = this.getOffset(start + 1);
-                //move edges right by 1
+    /**
+     * adds a new Edge to the Graph
+     *
+     * @param start  the start node
+     * @param dest   the destination node
+     * @param weight the weight
+     */
+    void addEdge(int start, int dest, double weight) {
+        //edges are added in right order just append in array
+        if (hasOutgoingEdges(start + 1))
+            throw new IllegalStateException("The next Node has already created Edges please ty to use insertEdge(...)");
+        if (!hasOutgoingEdges(start)) {
+            this.setOffset(start, this.current);
+        }
+        this.edges[this.current] = dest;
+        this.weight[getEdge(start, dest)] = weight;
+        this.current++;
+    }
 
-                if (this.edges.length - index >= 0)
-                    System.arraycopy(this.edges, index, this.edges, index + 1, this.edges.length - index);
-                //increase offset by 1
-                for (int i = start + 1; i < this.offset.length; i++) {
-                    this.setOffset(i, this.getOffset(i) + 1);
-                }
-                //add the edge
-                this.edges[index] = dest;
-                this.weight[this.getEdge(start, dest)] = weight;
-            } else {
-                //CASE: NO NODE WITH HIGHER INDEX
-                this.edges[this.lastIndex] = dest;
-                this.lastIndex++;
-                this.weight[this.getEdge(start, dest)] = weight;
+
+    /**
+     * adds a new Edge to the Graph and moves indices if needed
+     *
+     * @param start  the start node
+     * @param dest   the destination node
+     * @param weight the weight
+     * @param skip   if true skips the test and forces indices to be moved
+     */
+    public void insertEdge(int start, int dest, double weight, boolean skip) {
+        //TODO: implement
+        //move offset
+        //move edges
+        //insert edge in freed index
+        //increase array if needed
+        if (!skip) {
+            try {
+                addEdge(start, dest, weight);
+            } catch (Exception e) {
+                insertEdge(start, dest, weight, true);
             }
         } else {
-            //CASE: NO OFFSET YET
-            this.setOffset(start, this.edges.length);
-            this.edges[lastIndex] = dest;
-            this.lastIndex++;
-            if (this.getEdge(start, dest) != -1)
-                this.weight[this.getEdge(start, dest)] = weight;
+
         }
     }
 
+    /**
+     * adds a new Edge to the Graph and moves indices if needed
+     *
+     * @param start  the start node
+     * @param dest   the destination node
+     * @param weight the weight
+     */
+    public void insertEdge(int start, int dest, double weight) {
+        insertEdge(start, dest, weight, false);
+    }
 
+    /**
+     * Checks if a node has a outgoing edge
+     *
+     * @param node the node to be checked
+     * @return true if has outgoing edge else false
+     */
     boolean hasOutgoingEdges(int node) {
         return this.offset[node] != -1;
     }
 
 
+    /**
+     * Returns the Offset of a node
+     *
+     * @param node the node
+     * @return the offset or -1 if it does not exist
+     */
     int getOffset(int node) {
         if (!this.hasOutgoingEdges(node)) return -1;
         return this.offset[node];
     }
 
 
+    /**
+     * Sets the offset of a node
+     *
+     * @param node   the node
+     * @param offset the offset
+     */
     void setOffset(int node, int offset) {
         this.offset[node] = offset;
     }
 
 
-    int getEdge(int start, int dest) {
+    /**
+     * Returns the index of the edge
+     *
+     * @param start the start node
+     * @param dest  the destination node
+     * @return the offset of the edge or -1 if it does not exist
+     */
+    public int getEdge(int start, int dest) {
         //gets all edges starting from start
         int from = this.getOffset(start);
         int to = this.getOffset(start + 1);
@@ -91,6 +171,12 @@ public class Graph {
     }
 
 
+    /**
+     * Returns the node which is nearest to [node]
+     *
+     * @param node the node
+     * @return the next node or -1 if it does not exist
+     */
     int nextNode(int node) {
         //running infinit time
         double minVal = Double.POSITIVE_INFINITY;
@@ -110,15 +196,28 @@ public class Graph {
     }
 
 
+    /**
+     * Returns the number of outgoing edges
+     *
+     * @param node the node
+     * @return number of outgoing edges or 0 if none found
+     */
     int countOutgoingEdges(int node) {
         if (!this.hasOutgoingEdges(node)) return 0;
         if (this.getOffset(node + 1) == -1)
-            return this.edges.length - this.getOffset(node);
+            return this.current - this.getOffset(node);
         else
             return this.getOffset(node + 1) - this.getOffset(node);
     }
 
 
+    /**
+     * Returns the weight of a Edge
+     *
+     * @param start the start node
+     * @param dest  the destination node
+     * @return the weight of the edge or -1 if it does not exist
+     */
     double getWeight(int start, int dest) {
         if (!this.hasOutgoingEdges(start)) return -1;
         int edge = this.getEdge(start, dest);
@@ -127,11 +226,24 @@ public class Graph {
     }
 
 
+    /**
+     * Returns the distance
+     *
+     * @param dest the destination node
+     * @return the distance to a node or POSITIVE_INFINITY if {@link Dijkstra} did not run yet or if unreachable
+     */
     double getDistance(int dest) {
         return this.distance[dest];
     }
 
 
+    /**
+     * Sets the Distance to dest
+     *
+     * @param dest the destination node
+     * @param dist the distance
+     * @return true if distance has changed else false
+     */
     boolean setDistance(int dest, double dist) {
         double val = this.getDistance(dest);
         if (val == dist) return false;
@@ -139,9 +251,12 @@ public class Graph {
         return true;
     }
 
+    /**
+     * Returns list of all nodes with their offsets
+     *
+     * @return offset array
+     */
     int[] getNodeList() {
         return this.offset;
     }
-
-    //TODO: removeEdge(Node 1, Node 2):void
 }
