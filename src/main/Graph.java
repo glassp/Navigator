@@ -63,11 +63,13 @@ public class Graph {
      * @param start  the start node
      * @param dest   the destination node
      * @param weight the weight
+     * @throws UnorderedGraphException A special Exception which tells caller to try insert method or to die on error if unchecked
      */
-    void addEdge(int start, int dest, double weight) {
+    void addEdge(int start, int dest, double weight) throws UnorderedGraphException {
         //edges are added in right order just append in array
         if (hasOutgoingEdges(start + 1))
-            throw new IllegalStateException("The next Node has already created Edges please ty to use insertEdge(...)");
+            throw new UnorderedGraphException("The next Node has already created Edges please ty to use insertEdge(...)");
+        if (this.current >= edges.length) increase(edges);
         if (!hasOutgoingEdges(start)) {
             this.setOffset(start, this.current);
         }
@@ -76,11 +78,37 @@ public class Graph {
         this.current++;
     }
 
+    private void increase(double[] arr) {
+        double[] array = new double[arr.length + 2];
+        //copies array into other array
+        System.arraycopy(arr, 0, array, 0, arr.length);
+        if (arr == this.weight) this.weight = array;
+        else if (arr == this.distance) this.distance = array;
+        else if (arr == this.latitude) this.latitude = array;
+        else if (arr == this.longitude) this.longitude = array;
+        else {
+            //just ignore it
+        }
+
+    }
+
+    private void increase(int[] arr) {
+        int[] array = new int[arr.length + 2];
+        for (int i = 0; i < arr.length; i++) {
+            array[i] = arr[i];
+        }
+        if (arr == this.edges) this.edges = array;
+        else if (arr == this.offset) this.offset = array;
+        else {
+            //just ignore it
+        }
+    }
 
     /**
      * adds a new Edge to the Graph and moves indices if needed
      *
      * @param start  the start node
+     *               addEdge(start, dest, weight);
      * @param dest   the destination node
      * @param weight the weight
      * @param skip   if true skips the test and forces indices to be moved
@@ -91,14 +119,26 @@ public class Graph {
         //move edges
         //insert edge in freed index
         //increase array if needed
-        if (!skip) {
+
+        if (getOffset(start + 1) == -1 || !skip) {
             try {
-                addEdge(start, dest, weight);
             } catch (Exception e) {
                 insertEdge(start, dest, weight, true);
             }
         } else {
+            int index = getOffset(start + 1);
+            //move edges top Right by 1
+            if (edges.length <= current + 1) increase(edges);
+            for (int i = this.current; i >= index; i--) {
 
+                edges[i + 1] = edges[i];
+            }
+            edges[index] = dest;
+            this.current++;
+            //increase offset
+            for (int i = start + 1; i < offset.length; i++) {
+                if (getOffset(i) >= 0) setOffset(i, getOffset(i) + 1);
+            }
         }
     }
 
@@ -223,6 +263,7 @@ public class Graph {
         int edge = this.getEdge(start, dest);
         if (edge < 0) return -1;
         return this.weight[edge];
+
     }
 
 
