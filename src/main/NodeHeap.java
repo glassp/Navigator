@@ -36,8 +36,8 @@ public class NodeHeap {
 		
 		this.maxIndex = graphNodes.length - 1;
 		
-		// Heap-Eigenschaft herstellen: wohl alle nodes durchgehen unten nach oben (leafs ignorieren, also nur erste maxIndex/2 ansehen,), jeweils prüfen ob Eigenschaft gilt.
-		// hier zu beginn nicht nötig.
+		// Heap-Eigenschaft herstellen: wohl alle nodes durchgehen unten nach oben (leafs ignorieren, also nur erste maxIndex/2 ansehen,), jeweils prï¿½fen ob Eigenschaft gilt.
+		// hier zu beginn nicht nï¿½tig.
 		
 //		this.nodesArray = new int[graph.getNodeList().length];
 //		Arrays.fill(nodesArray, Integer.MAX_VALUE);
