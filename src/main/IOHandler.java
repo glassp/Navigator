@@ -5,7 +5,7 @@ import java.io.*;
 /**
  * The IOHandler which reads the graph .fmi file
  */
-public class IOHandler {
+public class IOHandler extends CLILogger {
     /**
      * the starttime for time tracking
      */
@@ -24,6 +24,9 @@ public class IOHandler {
         this.startTime = System.currentTimeMillis();
     }
 
+    /**
+     * stops the times and calculates runtime
+     */
     public void stop() {
         this.runtime = System.currentTimeMillis() - startTime;
     }
@@ -72,14 +75,41 @@ public class IOHandler {
                 double cost = Double.parseDouble(data[2]);
             }
             this.stop();
-            //EOL expected
-
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
-
+        if (runtime == 0)
+            throw new RuntimeException("Error creating graph");
         return graph;
+    }
+
+    public double runQuery(int start, int dest, Graph graph) {
+        //TODO: start Dijkstra with start
+        //TODO: read distance to dest from graph
+        return 0;
+    }
+
+    public void runQuery(String path) {
+        //TODO: implement
+    }
+
+    public int diff(String solPath, String outputPath) {
+        int counter = 0;
+        try {
+            var solReader = new FileReader(solPath);
+            var sol = new BufferedReader(solReader);
+            var outReader = new FileReader(outputPath);
+            var out = new BufferedReader(outReader);
+
+            String s = sol.readLine();
+            String o = out.readLine();
+            if (!s.equals(o)) counter++;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return -1;
+        }
+        return counter;
     }
 
 

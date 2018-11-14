@@ -1,6 +1,6 @@
 package main;
 
-public class Dijkstra {
+public class Dijkstra extends CLILogger {
     public long startTime;
     private Graph graph;
     private int startNode;
