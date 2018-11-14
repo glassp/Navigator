@@ -58,6 +58,58 @@ public class Graph {
     }
 
     /**
+     * sets the latitude of a node
+     *
+     * @param node     the node
+     * @param latitude the latitude
+     */
+    void setLatitude(int node, double latitude) {
+        this.latitude[node] = latitude;
+    }
+
+    /**
+     * sets the longitude
+     *
+     * @param node      the node
+     * @param longitude the longitude
+     */
+    void setLongitude(int node, double longitude) {
+        this.longitude[node] = longitude;
+    }
+
+    /**
+     * sets both geo information at once
+     *
+     * @param node      the node
+     * @param latitude  the latitude
+     * @param longitude the longitude
+     */
+    void setGeo(int node, double latitude, double longitude) {
+        this.setLatitude(node, latitude);
+        this.setLongitude(node, longitude);
+    }
+
+    /**
+     * returns the latitude
+     *
+     * @param node the node
+     * @return the latitude
+     */
+    double getLatitude(int node) {
+        return this.latitude[node];
+    }
+
+    /**
+     * returns the longitude
+     *
+     * @param node the node
+     * @return the longitude
+     */
+    double getLongitude(int node) {
+        return this.longitude[node];
+    }
+
+    /**
      * adds a new Edge to the Graph
      *
      * @param start  the start node
