@@ -78,7 +78,15 @@ public class Graph {
         this.current++;
     }
 
-    private void increase(double[] arr) {
+    /**
+     * increases the length of a double array
+     * <p>
+     * If array is a known array to this class e.g latitude it will automatically be replaced
+     *
+     * @param arr the double array to be increased
+     * @return the increased array
+     */
+    private double[] increase(double[] arr) {
         double[] array = new double[arr.length + 2];
         //copies array into other array
         System.arraycopy(arr, 0, array, 0, arr.length);
@@ -86,54 +94,55 @@ public class Graph {
         else if (arr == this.distance) this.distance = array;
         else if (arr == this.latitude) this.latitude = array;
         else if (arr == this.longitude) this.longitude = array;
-        else {
-            //just ignore it
-        }
+        return array;
 
     }
 
-    private void increase(int[] arr) {
+    /**
+     * increases the length of a int array
+     * <p>
+     * If array is a known array to this class e.g. edges it will automatically be replaced
+     *
+     * @param arr the int array to be increased
+     * @return the increased array
+     */
+    private int[] increase(int[] arr) {
         int[] array = new int[arr.length + 2];
-        for (int i = 0; i < arr.length; i++) {
-            array[i] = arr[i];
-        }
+        System.arraycopy(arr, 0, array, 0, arr.length);
         if (arr == this.edges) this.edges = array;
         else if (arr == this.offset) this.offset = array;
-        else {
-            //just ignore it
-        }
+        return array;
+
     }
 
     /**
      * adds a new Edge to the Graph and moves indices if needed
      *
      * @param start  the start node
-     *               addEdge(start, dest, weight);
      * @param dest   the destination node
      * @param weight the weight
      * @param skip   if true skips the test and forces indices to be moved
      */
     public void insertEdge(int start, int dest, double weight, boolean skip) {
-        //TODO: implement
-        //move offset
-        //move edges
-        //insert edge in freed index
-        //increase array if needed
 
         if (getOffset(start + 1) == -1 || !skip) {
             try {
-            } catch (Exception e) {
+                addEdge(start, dest, weight);
+            } catch (UnorderedGraphException e) {
                 insertEdge(start, dest, weight, true);
             }
         } else {
             int index = getOffset(start + 1);
+            if (this.edges.length <= current + 1) increase(this.edges);
+            if (this.weight.length <= current + 1) increase(this.weight);
             //move edges top Right by 1
-            if (edges.length <= current + 1) increase(edges);
-            for (int i = this.current; i >= index; i--) {
-
-                edges[i + 1] = edges[i];
-            }
+            if (this.current + 1 - index >= 0)
+                System.arraycopy(this.edges, index, this.edges, index + 1, this.current + 1 - index);
+            //move weight top Right by 1
+            if (this.current + 1 - index >= 0)
+                System.arraycopy(this.weight, index, this.weight, index + 1, this.current + 1 - index);
             edges[index] = dest;
+            this.weight[index] = weight;
             this.current++;
             //increase offset
             for (int i = start + 1; i < offset.length; i++) {
