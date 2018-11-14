@@ -28,6 +28,23 @@ public class GraphTest {
     }
 
     @Test
+    public void insertEdge() {
+        try {
+            Graph graph = new Graph(4, 3);
+            assertFalse(graph.hasOutgoingEdges(0));
+            graph.insertEdge(0, 1, 1);
+            assertTrue(graph.hasOutgoingEdges(0));
+            assertEquals(0, graph.getEdge(0, 1));
+            graph.insertEdge(1, 2, 1);
+            graph.insertEdge(0, 2, 1);
+            assertEquals(1, graph.getEdge(0, 2));
+            assertEquals(2, graph.getEdge(1, 2));
+        } catch (Exception e) {
+            fail("");
+        }
+    }
+
+    @Test
     public void addEdge() {
         try {
             Graph graph = new Graph(3, 3);
@@ -39,7 +56,7 @@ public class GraphTest {
             graph.addEdge(1, 2, 1);
             assertEquals(1, graph.getEdge(0, 2));
             assertEquals(2, graph.getEdge(1, 2));
-        } catch (Exception e) {
+        } catch (UnorderedGraphException e) {
             fail();
             e.printStackTrace();
 
