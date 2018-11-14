@@ -116,6 +116,44 @@ public abstract class CLILogger {
     }
 
     /**
+     * changes all settings to a certain setting
+     *
+     * @param option the setting
+     */
+    public void setAll(boolean option) {
+        setDebug(option);
+        setInfo(option);
+        setVerbose(option);
+    }
+
+    /**
+     * sets all settings to true
+     */
+    public void enableAll() {
+        enableDebug();
+        enableInfo();
+        enableVerbose();
+    }
+
+    /**
+     * sets all settings to false
+     */
+    public void disableAll() {
+        disableDebug();
+        disableInfo();
+        disableVerbose();
+    }
+
+    /**
+     * toogles all settings
+     */
+    public void toogleAll() {
+        toogleDebug();
+        toogleInfo();
+        toogleVerbose();
+    }
+
+    /**
      * prints a message if verbose is enabled
      *
      * @param msg the message
