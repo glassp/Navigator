@@ -20,7 +20,7 @@ public class GraphTest {
             graph.addEdge(0, 2, 1);
             assertEquals(1, graph.getEdge(0, 2));
             assertEquals(2, graph.getEdge(1, 2));
-        } catch (Exception e) {
+        } catch (UnorderedGraphException e) {
             thrown = true;
 
         }
