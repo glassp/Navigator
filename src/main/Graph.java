@@ -66,6 +66,7 @@ public class Graph extends CLILogger {
      */
     void setLatitude(int node, double latitude) {
         this.latitude[node] = latitude;
+        this.infoPrint("Latitude set");
     }
 
     /**
@@ -76,6 +77,7 @@ public class Graph extends CLILogger {
      */
     void setLongitude(int node, double longitude) {
         this.longitude[node] = longitude;
+        this.infoPrint("Longitude set");
     }
 
     /**
@@ -86,6 +88,7 @@ public class Graph extends CLILogger {
      * @param longitude the longitude
      */
     void setGeo(int node, double latitude, double longitude) {
+        this.debugPrint("running set Geo");
         this.setLatitude(node, latitude);
         this.setLongitude(node, longitude);
     }
@@ -97,6 +100,7 @@ public class Graph extends CLILogger {
      * @return the latitude
      */
     double getLatitude(int node) {
+        this.infoPrint("Latitude returning");
         return this.latitude[node];
     }
 
@@ -107,6 +111,7 @@ public class Graph extends CLILogger {
      * @return the longitude
      */
     double getLongitude(int node) {
+        this.infoPrint("Longitude returning");
         return this.longitude[node];
     }
 
@@ -120,13 +125,17 @@ public class Graph extends CLILogger {
      */
     void addEdge(int start, int dest, double weight) throws UnorderedGraphException {
         //edges are added in right order just append in array
-        if (hasOutgoingEdges(start + 1))
+        if (hasOutgoingEdges(start + 1)) {
+            this.infoPrint("UnorderedGraphException thrown");
             throw new UnorderedGraphException("The next Node has already created Edges please ty to use insertEdge(...)");
+        }
         if (this.current >= edges.length) increase(edges);
         if (!hasOutgoingEdges(start)) {
             this.setOffset(start, this.current);
         }
+        this.infoPrint("setting edge");
         this.edges[this.current] = dest;
+        this.infoPrint("setting weight");
         this.weight[getEdge(start, dest)] = weight;
         this.current++;
     }
@@ -140,6 +149,7 @@ public class Graph extends CLILogger {
      * @return the increased array
      */
     private double[] increase(double[] arr) {
+        this.debugPrint("need to increase array");
         double[] array = new double[arr.length + 2];
         //copies array into other array
         System.arraycopy(arr, 0, array, 0, arr.length);
@@ -147,6 +157,7 @@ public class Graph extends CLILogger {
         else if (arr == this.distance) this.distance = array;
         else if (arr == this.latitude) this.latitude = array;
         else if (arr == this.longitude) this.longitude = array;
+        this.debugPrint("array was increased");
         return array;
 
     }
@@ -160,10 +171,12 @@ public class Graph extends CLILogger {
      * @return the increased array
      */
     private int[] increase(int[] arr) {
+        this.debugPrint("need to increase array");
         int[] array = new int[arr.length + 2];
         System.arraycopy(arr, 0, array, 0, arr.length);
         if (arr == this.edges) this.edges = array;
         else if (arr == this.offset) this.offset = array;
+        this.debugPrint("array was increased");
         return array;
 
     }
@@ -180,27 +193,37 @@ public class Graph extends CLILogger {
 
         if (getOffset(start + 1) == -1 || !skip) {
             try {
+                this.infoPrint("trying to add Edge");
                 addEdge(start, dest, weight);
             } catch (UnorderedGraphException e) {
+                this.debugPrint("Exception handled");
+                this.infoPrint("inserting Edge");
                 insertEdge(start, dest, weight, true);
             }
         } else {
+
             int index = getOffset(start + 1);
             if (this.edges.length <= current + 1) increase(this.edges);
             if (this.weight.length <= current + 1) increase(this.weight);
-            //move edges top Right by 1
+
+            this.infoPrint("moving edges to right by 1");
             if (this.current + 1 - index >= 0)
                 System.arraycopy(this.edges, index, this.edges, index + 1, this.current + 1 - index);
-            //move weight top Right by 1
+
+            this.infoPrint("moving weight of edges to right by 1");
             if (this.current + 1 - index >= 0)
                 System.arraycopy(this.weight, index, this.weight, index + 1, this.current + 1 - index);
-            edges[index] = dest;
-            this.weight[index] = weight;
-            this.current++;
-            //increase offset
+
+            this.infoPrint("moving offsets");
             for (int i = start + 1; i < offset.length; i++) {
                 if (getOffset(i) >= 0) setOffset(i, getOffset(i) + 1);
             }
+
+            this.infoPrint("inserting new edge data");
+            edges[index] = dest;
+            this.weight[index] = weight;
+            this.current++;
+
         }
     }
 
@@ -222,6 +245,7 @@ public class Graph extends CLILogger {
      * @return true if has outgoing edge else false
      */
     boolean hasOutgoingEdges(int node) {
+        this.debugPrint("checking outgoing edges");
         return this.offset[node] != -1;
     }
 

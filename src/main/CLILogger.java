@@ -7,6 +7,16 @@ public abstract class CLILogger {
     private boolean verbose;
 
     /**
+     * display debug level
+     */
+    private boolean debug;
+
+    /**
+     * display info level
+     */
+    private boolean info;
+
+    /**
      * changes verbose to a certain setting
      *
      * @param verbose the setting
@@ -40,11 +50,77 @@ public abstract class CLILogger {
     }
 
     /**
+     * changes debug to a certain setting
+     *
+     * @param debug the setting
+     */
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+
+    /**
+     * sets debug to true
+     */
+    public void enableDebug() {
+        setDebug(true);
+    }
+
+    /**
+     * sets debug to false
+     */
+    public void disableDebug() {
+        setDebug(false);
+    }
+
+    /**
+     * toogles debug setting
+     */
+    public void toogleDebug() {
+        if (this.debug) {
+            disableDebug();
+        } else
+            enableDebug();
+    }
+
+    /**
+     * changes info to a certain setting
+     *
+     * @param info the setting
+     */
+    public void setInfo(boolean info) {
+        this.info = info;
+    }
+
+    /**
+     * sets info to true
+     */
+    public void enableInfo() {
+        setInfo(true);
+    }
+
+    /**
+     * sets info to false
+     */
+    public void disableInfo() {
+        setInfo(false);
+    }
+
+    /**
+     * toogles info setting
+     */
+    public void toogleInfo() {
+        if (this.info) {
+            disableInfo();
+        } else
+            enableInfo();
+    }
+
+    /**
      * prints a message if verbose is enabled
      *
      * @param msg the message
      */
-    private void verbosePrint(String msg) {
+    void verbosePrint(String msg) {
         if (this.verbose)
             CLI.print(msg);
     }
@@ -55,10 +131,17 @@ public abstract class CLILogger {
      * @param msg   the message
      * @param level the logging level
      */
-    private void verbosePrint(String msg, String level) {
+    void verbosePrint(String msg, String level) {
         if (this.verbose) {
             String output = "[" + level + "] " + msg;
-            CLI.print(output);
+            if (level.equalsIgnoreCase("info"))
+                CLI.print(output, this.info);
+            if (level.equalsIgnoreCase("debug"))
+                CLI.print(output, this.debug);
+            if (level.equalsIgnoreCase("debugging"))
+                CLI.print(output, this.debug);
+            else
+                CLI.print(output);
         }
 
     }
@@ -68,7 +151,7 @@ public abstract class CLILogger {
      *
      * @param msg the message
      */
-    private void debugPrint(String msg) {
+    void debugPrint(String msg) {
         verbosePrint(msg, "Debugging");
     }
 
@@ -77,7 +160,7 @@ public abstract class CLILogger {
      *
      * @param msg the message
      */
-    private void infoPrint(String msg) {
+    void infoPrint(String msg) {
         verbosePrint(msg, "Info");
     }
 
@@ -86,7 +169,7 @@ public abstract class CLILogger {
      *
      * @param msg the message
      */
-    private void warningPrint(String msg) {
+    void warningPrint(String msg) {
         verbosePrint(msg, "Warning");
     }
 
@@ -95,7 +178,7 @@ public abstract class CLILogger {
      *
      * @param msg the message
      */
-    private void print(String msg) {
+    void print(String msg) {
         CLI.print(msg);
     }
 }
