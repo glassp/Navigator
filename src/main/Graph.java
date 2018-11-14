@@ -53,6 +53,7 @@ public class Graph {
         this.current = 0;
         //initializes all values in offset with -1
         Arrays.fill(offset, -1);
+        //initializes all values in distance with Positive Infinity
         Arrays.fill(distance, Double.POSITIVE_INFINITY);
 
     }
