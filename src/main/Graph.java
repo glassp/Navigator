@@ -269,6 +269,7 @@ public class Graph extends CLILogger {
      * @param offset the offset
      */
     void setOffset(int node, int offset) {
+        this.infoPrint("setting offset");
         this.offset[node] = offset;
     }
 
@@ -281,6 +282,7 @@ public class Graph extends CLILogger {
      * @return the offset of the edge or -1 if it does not exist
      */
     public int getEdge(int start, int dest) {
+        this.debugPrint("running getEdge");
         //gets all edges starting from start
         int from = this.getOffset(start);
         int to = this.getOffset(start + 1);
@@ -293,6 +295,7 @@ public class Graph extends CLILogger {
             if (this.edges[i] == dest) return i;
         }
         //if nothing found return
+        this.verbosePrint("no Edge found. Exception may be thrown", "Warning");
         return -1;
     }
 
@@ -304,6 +307,7 @@ public class Graph extends CLILogger {
      * @return the next node or -1 if it does not exist
      */
     int nextNode(int node) {
+        this.debugPrint("running nextNode");
         //running infinit time
         double minVal = Double.POSITIVE_INFINITY;
         int minIndex = -1;
