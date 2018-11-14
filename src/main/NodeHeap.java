@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
  * Lowest distance in graph instance means highest priority.
  * 
  */
-public class NodeHeap {
+public class NodeHeap extends CLILogger {
 
 	/**
 	 * Graph instance the nodes of which are represented in the heap.

@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * The Graph class
  */
-public class Graph {
+public class Graph extends CLILogger {
 
     /**
      * stores the destination of a edge
