@@ -18,6 +18,17 @@ public class Dijkstra {
 
     public void start() {
         this.startTime = System.currentTimeMillis();
+        
+        
+        // In Heap: nächstes Elem. mit Priorität (niedrigste Kosten. Am anfang: Startknoten, der dann entfernt wird, dann niedrigster anliegender etc.)
+        
+        // Nachbarkosten aktualisieren, falls billiger
+        // dafür bisherige + edge vergleichen mit bisherigen Zielkosten (in Graph?)
+        
+        // entfernen aus Heap, wenn selbst betrachtet wurde.
+        
+        
+        
     }
     //TODO: implement algorithm
     //TODO: assertTimeout: run under 20 seconds

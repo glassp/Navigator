@@ -11,8 +11,19 @@ import java.util.stream.IntStream;
  */
 public class NodeHeap {
 
+	/**
+	 * Graph instance the nodes of which are represented in the heap.
+	 */
 	private Graph graph;
+	
+	/**
+	 * Contains node indices from graph. Represents the heap, so element 0's node has lowest distace of all.
+	 */
 	private int graphNodes[];
+	
+	/**
+	 * Maximum index used in graphNodes[]. Elements beyond are not considered part of the heap anymore.
+	 */
 	private int maxIndex;
 	
 	// min heap: parent's distance has to be less than or equal to any child's
