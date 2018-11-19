@@ -193,7 +193,7 @@ public class Graph extends CLILogger {
 
         if (getOffset(start + 1) == -1 || !skip) {
             try {
-                this.infoPrint("trying to add Edge");
+                this.verbosePrint("trying to add Edge");
                 addEdge(start, dest, weight);
             } catch (UnorderedGraphException e) {
                 this.debugPrint("Exception handled");
@@ -312,9 +312,15 @@ public class Graph extends CLILogger {
         double minVal = Double.POSITIVE_INFINITY;
         int minIndex = -1;
         int offset = this.getOffset(node);
-        if (offset == -1) return -1;
+        if (offset == -1){
+          this.debugPrint("no nextNode: offset invalid")
+          return -1;
+        }
         int elem = this.countOutgoingEdges(node);
-        if (elem < 1) return -1;
+        if (elem < 1){
+          this.debugPrint("no nextNode: zero outgoing Edges")
+          return -1;
+        }
         for (int i = 0; i < elem; i++) {
             double var = this.getWeight(node, this.edges[offset + i]);
             if (var < minVal) {
@@ -322,6 +328,7 @@ public class Graph extends CLILogger {
                 minIndex = i;
             }
         }
+        this.
         return this.edges[offset + minIndex];
     }
 

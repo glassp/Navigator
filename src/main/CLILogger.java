@@ -186,6 +186,7 @@ public abstract class CLILogger {
 
     /**
      * prints a formated message if verbose is enabled
+     * Usage: only use to see execution order and exit point
      *
      * @param msg the message
      */
@@ -195,6 +196,7 @@ public abstract class CLILogger {
 
     /**
      * prints a formated message if verbose is enabled
+     * Usage: only use to inform about changes to values or objects
      *
      * @param msg the message
      */
