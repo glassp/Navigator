@@ -36,6 +36,12 @@ public class Graph {
      * stores the distance to a node
      */
     private double[] distance;
+    
+    /**
+     * stores any node's preceding node on the ideal path from Dijkstra's starting node to that node, if Dijkstra's algorithm has been run.
+     * Values will be -1 if there is no path or if Dijkstra has not run yet.
+     */
+    private int[] predecessor;
 
     /**
      * Constructor
@@ -44,18 +50,26 @@ public class Graph {
      * @param edges number of edges that are used in the graph
      */
     public Graph(int nodes, int edges) {
-        this.edges = new int[edges];
+    	this.offset = new int[nodes];
+    	this.predecessor = new int[edges];
+    	this.distance = new double[nodes];
+    	
+    	this.edges = new int[edges];
         this.weight = new double[edges];
-        this.offset = new int[nodes];
+        
         this.latitude = new double[nodes];
         this.longitude = new double[nodes];
-        this.distance = new double[nodes];
+        
         this.current = 0;
-        //initializes all values in offset with -1
+        
+        //initializes all values in arrays with their default value, if there is one
         Arrays.fill(offset, -1);
+        Arrays.fill(predecessor, -1);
         Arrays.fill(distance, Double.POSITIVE_INFINITY);
 
     }
+    
+    
 
     /**
      * adds a new Edge to the Graph
@@ -171,7 +185,7 @@ public class Graph {
      * @return the offset or -1 if it does not exist
      */
     int getOffset(int node) {
-        if (!this.hasOutgoingEdges(node)) return -1;
+        if (!this.hasOutgoingEdges(node)) return -1;		//TODO: This line has no real effect and can be removed (since offset[node] will be -1 if there are no edges). Up for review.
         return this.offset[node];
     }
 
@@ -286,12 +300,35 @@ public class Graph {
      * @return true if distance has changed else false
      */
     boolean setDistance(int dest, double dist) {
-        double val = this.getDistance(dest);
+        double val = this.getDistance(dest);		// TODO: Why use a temp variable? This operation is supposed to happen often and may produce a lot of garbage to collect. Can call getter in if-expression directly. 
         if (val == dist) return false;
         this.distance[dest] = dist;
         return true;
     }
 
+	/**
+	 * Sets the node's predecessor on a path from Dijkstra's starting node to given node. Used by Dijkstra class while the algorithm runs.
+	 * 
+	 * @param node	The node of which a predecessor gets set.
+	 * @param predecessor The preceding node on a path to Dijkstra's start.
+	 */
+    public void setPredecessor(int node, int predecessor) {
+    	this.predecessor[node] = predecessor;
+    }
+    
+    /**
+     * Returns the node's predecessor on a path from Dijkstra's starting node to given node.
+     * The starting node is set when creating an instance of Dijkstra's algorithm for this graph.
+     * If there is no path or if Dijkstra has not run yet, -1 will be returned!
+     * 
+     * 
+     * @param node From this node, by going to the returned node and that one's predecessors, you can recursively find the ideal path to the starting node.
+     * @return	preceding node on a path to start, or -1
+     */
+    public int getPredecessor(int node) {
+    	return this.predecessor[node];
+    }
+    
     /**
      * Returns list of all nodes with their offsets
      *
