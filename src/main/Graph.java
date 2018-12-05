@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * The Graph class
  */
-public class Graph {
+public class Graph extends CLILogger {
 
     /**
      * stores the destination of a edge
@@ -64,12 +64,73 @@ public class Graph {
         
         //initializes all values in arrays with their default value, if there is one
         Arrays.fill(offset, -1);
+<<<<<<< HEAD
         Arrays.fill(predecessor, -1);
+=======
+        //initializes all values in distance with Positive Infinity
+>>>>>>> branch 'dev' of https://github.com/otakupasi/Navigator.git
         Arrays.fill(distance, Double.POSITIVE_INFINITY);
 
     }
     
     
+
+    /**
+     * sets the latitude of a node
+     *
+     * @param node     the node
+     * @param latitude the latitude
+     */
+    void setLatitude(int node, double latitude) {
+        this.latitude[node] = latitude;
+        this.infoPrint("Latitude set");
+    }
+
+    /**
+     * sets the longitude
+     *
+     * @param node      the node
+     * @param longitude the longitude
+     */
+    void setLongitude(int node, double longitude) {
+        this.longitude[node] = longitude;
+        this.infoPrint("Longitude set");
+    }
+
+    /**
+     * sets both geo information at once
+     *
+     * @param node      the node
+     * @param latitude  the latitude
+     * @param longitude the longitude
+     */
+    void setGeo(int node, double latitude, double longitude) {
+        this.debugPrint("running set Geo");
+        this.setLatitude(node, latitude);
+        this.setLongitude(node, longitude);
+    }
+
+    /**
+     * returns the latitude
+     *
+     * @param node the node
+     * @return the latitude
+     */
+    double getLatitude(int node) {
+        this.infoPrint("Latitude returning");
+        return this.latitude[node];
+    }
+
+    /**
+     * returns the longitude
+     *
+     * @param node the node
+     * @return the longitude
+     */
+    double getLongitude(int node) {
+        this.infoPrint("Longitude returning");
+        return this.longitude[node];
+    }
 
     /**
      * adds a new Edge to the Graph
@@ -81,18 +142,31 @@ public class Graph {
      */
     void addEdge(int start, int dest, double weight) throws UnorderedGraphException {
         //edges are added in right order just append in array
-        if (hasOutgoingEdges(start + 1))
+        if (hasOutgoingEdges(start + 1)) {
+            this.infoPrint("UnorderedGraphException thrown");
             throw new UnorderedGraphException("The next Node has already created Edges please ty to use insertEdge(...)");
+        }
         if (this.current >= edges.length) increase(edges);
         if (!hasOutgoingEdges(start)) {
             this.setOffset(start, this.current);
         }
+        this.infoPrint("setting edge");
         this.edges[this.current] = dest;
+        this.infoPrint("setting weight");
         this.weight[getEdge(start, dest)] = weight;
         this.current++;
     }
 
-    private void increase(double[] arr) {
+    /**
+     * increases the length of a double array
+     * <p>
+     * If array is a known array to this class e.g latitude it will automatically be replaced
+     *
+     * @param arr the double array to be increased
+     * @return the increased array
+     */
+    private double[] increase(double[] arr) {
+        this.debugPrint("need to increase array");
         double[] array = new double[arr.length + 2];
         //copies array into other array
         System.arraycopy(arr, 0, array, 0, arr.length);
@@ -100,59 +174,73 @@ public class Graph {
         else if (arr == this.distance) this.distance = array;
         else if (arr == this.latitude) this.latitude = array;
         else if (arr == this.longitude) this.longitude = array;
-        else {
-            //just ignore it
-        }
+        this.debugPrint("array was increased");
+        return array;
 
     }
 
-    private void increase(int[] arr) {
+    /**
+     * increases the length of a int array
+     * <p>
+     * If array is a known array to this class e.g. edges it will automatically be replaced
+     *
+     * @param arr the int array to be increased
+     * @return the increased array
+     */
+    private int[] increase(int[] arr) {
+        this.debugPrint("need to increase array");
         int[] array = new int[arr.length + 2];
-        for (int i = 0; i < arr.length; i++) {
-            array[i] = arr[i];
-        }
+        System.arraycopy(arr, 0, array, 0, arr.length);
         if (arr == this.edges) this.edges = array;
         else if (arr == this.offset) this.offset = array;
-        else {
-            //just ignore it
-        }
+        this.debugPrint("array was increased");
+        return array;
+
     }
 
     /**
      * adds a new Edge to the Graph and moves indices if needed
      *
      * @param start  the start node
-     *               addEdge(start, dest, weight);
      * @param dest   the destination node
      * @param weight the weight
      * @param skip   if true skips the test and forces indices to be moved
      */
     public void insertEdge(int start, int dest, double weight, boolean skip) {
-        //TODO: implement
-        //move offset
-        //move edges
-        //insert edge in freed index
-        //increase array if needed
 
         if (getOffset(start + 1) == -1 || !skip) {
             try {
-            } catch (Exception e) {
+                this.verbosePrint("trying to add Edge");
+                addEdge(start, dest, weight);
+            } catch (UnorderedGraphException e) {
+                this.debugPrint("Exception handled");
+                this.infoPrint("inserting Edge");
                 insertEdge(start, dest, weight, true);
             }
         } else {
-            int index = getOffset(start + 1);
-            //move edges top Right by 1
-            if (edges.length <= current + 1) increase(edges);
-            for (int i = this.current; i >= index; i--) {
 
-                edges[i + 1] = edges[i];
-            }
-            edges[index] = dest;
-            this.current++;
-            //increase offset
+            int index = getOffset(start + 1);
+            if (this.edges.length <= current + 1) increase(this.edges);
+            if (this.weight.length <= current + 1) increase(this.weight);
+
+            this.infoPrint("moving edges to right by 1");
+            if (this.current + 1 - index >= 0)
+                System.arraycopy(this.edges, index, this.edges, index + 1, this.current + 1 - index);
+
+            this.infoPrint("moving weight of edges to right by 1");
+            if (this.current + 1 - index >= 0)
+                System.arraycopy(this.weight, index, this.weight, index + 1, this.current + 1 - index);
+
+            this.infoPrint("moving offsets");
             for (int i = start + 1; i < offset.length; i++) {
                 if (getOffset(i) >= 0) setOffset(i, getOffset(i) + 1);
             }
+
+            this.infoPrint("inserting new edge data");
+            edges[index] = dest;
+            this.weight[index] = weight;
+            this.current++;
+
         }
     }
 
@@ -174,6 +262,7 @@ public class Graph {
      * @return true if has outgoing edge else false
      */
     boolean hasOutgoingEdges(int node) {
+        this.debugPrint("checking outgoing edges");
         return this.offset[node] != -1;
     }
 
@@ -197,6 +286,7 @@ public class Graph {
      * @param offset the offset
      */
     void setOffset(int node, int offset) {
+        this.infoPrint("setting offset");
         this.offset[node] = offset;
     }
 
@@ -209,6 +299,7 @@ public class Graph {
      * @return the offset of the edge or -1 if it does not exist
      */
     public int getEdge(int start, int dest) {
+        this.debugPrint("running getEdge");
         //gets all edges starting from start
         int from = this.getOffset(start);
         int to = this.getOffset(start + 1);
@@ -221,6 +312,7 @@ public class Graph {
             if (this.edges[i] == dest) return i;
         }
         //if nothing found return
+        this.verbosePrint("no Edge found. Exception may be thrown", "Warning");
         return -1;
     }
 
@@ -232,13 +324,20 @@ public class Graph {
      * @return the next node or -1 if it does not exist
      */
     int nextNode(int node) {
+        this.debugPrint("running nextNode");
         //running infinit time
         double minVal = Double.POSITIVE_INFINITY;
         int minIndex = -1;
         int offset = this.getOffset(node);
-        if (offset == -1) return -1;
+        if (offset == -1){
+          this.debugPrint("no nextNode: offset invalid")
+          return -1;
+        }
         int elem = this.countOutgoingEdges(node);
-        if (elem < 1) return -1;
+        if (elem < 1){
+          this.debugPrint("no nextNode: zero outgoing Edges")
+          return -1;
+        }
         for (int i = 0; i < elem; i++) {
             double var = this.getWeight(node, this.edges[offset + i]);
             if (var < minVal) {
@@ -246,6 +345,7 @@ public class Graph {
                 minIndex = i;
             }
         }
+        this.
         return this.edges[offset + minIndex];
     }
 

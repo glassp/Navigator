@@ -1,6 +1,6 @@
 package main;
 
-public class Dijkstra {
+public class Dijkstra extends CLILogger {
     public long startTime;
     private Graph graph;
     private int startNode;
@@ -43,10 +43,13 @@ public class Dijkstra {
         //alle anliegende updaten, falls geringer.
         
         
-        // In Heap: nächstes Elem. mit Priorität (niedrigste Kosten. Am anfang: Startknoten, der dann entfernt wird, dann niedrigster anliegender etc.)
+        // In Heap: nï¿½chstes Elem. mit Prioritï¿½t (niedrigste Kosten. Am anfang: Startknoten, der dann entfernt wird, dann niedrigster anliegender etc.)
         
         // Nachbarkosten aktualisieren, falls billiger
-        // dafür bisherige + edge vergleichen mit bisherigen Zielkosten (in Graph?)
+        // dafï¿½r bisherige + edge vergleichen mit bisherigen Zielkosten (in Graph?)
+
+        // Kosten vom startknoten zu knoten x kann Ã¼ber setDistance und getDistance verwaltet werden startknoten selbstÃ¤ndig mit setDistance(destination, distance) auf 0 setzen
+        // setDistance gibt auch aus ob ein wert geÃ¤ndert wurde
         
         // entfernen aus Heap, wenn selbst betrachtet wurde.
         
