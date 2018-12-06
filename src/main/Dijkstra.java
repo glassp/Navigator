@@ -34,13 +34,38 @@ public class Dijkstra extends CLILogger {
          * edges[n]	 contains destination of edge # n
          * weight[n] contains weight of edge # n
          * 
+         * offset[n] is where the first edge for node n is stored
+         * offset[n+1] -1 is the last one (can overflow! last edge is last entry. can be -1.)
+         * 			is taken care off in new implementation of countOutgoingEdges
+         * 
+         * TODO: Might be better implementing the offset array as explained in specification
          */
         
         
         int currentNode = heap.getAndRemoveNext();
-        graph.getOffset(currentNode);
         
-        //alle anliegende updaten, falls geringer.
+        
+        int offset[] = graph.getNodeList();	// maybe not ideal, but shouldn be a problem
+
+        
+        while (currentNode >= 0) {
+        	
+            //update all neighbours
+        	
+        	int firstEdge = offset[currentNode];
+        	
+        	for (int i = firstEdge; i < firstEdge + graph.countOutgoingEdges(currentNode); i++) {
+				
+        		graph.getWeight(i); //can be -1 if edge doesn't exist, so maybe throw exeption instead
+        		
+			}
+        		
+        		
+        		
+        	
+        	
+        	
+        }
         
         
         // In Heap: n�chstes Elem. mit Priorit�t (niedrigste Kosten. Am anfang: Startknoten, der dann entfernt wird, dann niedrigster anliegender etc.)
