@@ -17,7 +17,7 @@ public class Graph extends CLILogger {
      */
     private int[] offset;
     /**
-     * the first unused index
+     * the first unused index (of edges, it seems)
      */
     private int current;
     /**
@@ -341,7 +341,7 @@ public class Graph extends CLILogger {
                 minIndex = i;
             }
         }
-        this.
+//        this.			//TODO: Unfinished - Pretty sure this was already like this before I pushed my first changes. 
         return this.edges[offset + minIndex];
     }
 
@@ -354,11 +354,32 @@ public class Graph extends CLILogger {
      */
     int countOutgoingEdges(int node) {
         if (!this.hasOutgoingEdges(node)) return 0;
-        if (this.getOffset(node + 1) == -1)
-            return this.current - this.getOffset(node);
-        else
-            return this.getOffset(node + 1) - this.getOffset(node);
+        
+        // Has to iterate in O(n), but could be done in O(1) if offset was managed like in specifications, see TO.DO below.
+   
+    	int lastEdge = -1;
+    	for (int i = node+1; i < this.current; i++) {
+			lastEdge = offset[i];
+			if (lastEdge != -1) break;
+		}
+    	
+    	if (lastEdge == -1) {
+			// no other node after it that has edges
+    		return this.current - offset[node];
+		}
+    	
+    	return lastEdge - offset[node];
+        
+    	
+    	// Old implementation:
+//        if (this.getOffset(node + 1) == -1)
+//            return this.current - this.getOffset(node);	//TODO: Do we really know there can be no nodes with 0 outgoing edges?
+//        												// might consider implementing offset array as described in project specification
+//        else
+//            return this.getOffset(node + 1) - this.getOffset(node);
     }
+    
+    
 
 
     /**
@@ -374,6 +395,20 @@ public class Graph extends CLILogger {
         if (edge < 0) return -1;
         return this.weight[edge];
 
+    }
+    
+    /**
+     * Returns weight of an edge
+     * 
+     * @param edge
+     * @return weight or -1 if it doesn't exist
+     */
+    double getWeight(int edge) {
+    	if (edge >= this.current) {
+			return -1;
+		}
+    	
+    	return this.weight[edge];
     }
 
 
@@ -396,7 +431,7 @@ public class Graph extends CLILogger {
      * @return true if distance has changed else false
      */
     boolean setDistance(int dest, double dist) {
-        double val = this.getDistance(dest);		// TODO: Why use a temp variable? This operation is supposed to happen often and may produce a lot of garbage to collect. Can call getter in if-expression directly. 
+        double val = this.getDistance(dest);		// TODO: Why use a temp variable? This operation is supposed to happen often and may produce a lot of garbage to collect. Suggest calling getter in if-expression directly for perhaps miniscule or even non-existing boost yay. 
         if (val == dist) return false;
         this.distance[dest] = dist;
         return true;
