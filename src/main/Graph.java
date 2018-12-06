@@ -64,11 +64,7 @@ public class Graph extends CLILogger {
         
         //initializes all values in arrays with their default value, if there is one
         Arrays.fill(offset, -1);
-<<<<<<< HEAD
         Arrays.fill(predecessor, -1);
-=======
-        //initializes all values in distance with Positive Infinity
->>>>>>> branch 'dev' of https://github.com/otakupasi/Navigator.git
         Arrays.fill(distance, Double.POSITIVE_INFINITY);
 
     }
@@ -325,17 +321,17 @@ public class Graph extends CLILogger {
      */
     int nextNode(int node) {
         this.debugPrint("running nextNode");
-        //running infinit time
+        //running infinite time
         double minVal = Double.POSITIVE_INFINITY;
         int minIndex = -1;
         int offset = this.getOffset(node);
         if (offset == -1){
-          this.debugPrint("no nextNode: offset invalid")
+          this.debugPrint("no nextNode: offset invalid");
           return -1;
         }
         int elem = this.countOutgoingEdges(node);
         if (elem < 1){
-          this.debugPrint("no nextNode: zero outgoing Edges")
+          this.debugPrint("no nextNode: zero outgoing Edges");
           return -1;
         }
         for (int i = 0; i < elem; i++) {
