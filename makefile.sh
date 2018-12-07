@@ -17,17 +17,9 @@ fi
 mkdir ./bin
 
 #compile code
-for filename in ./src/main/*.java;
-do
-javac ${filename}
-done
-
-#move compiled code
-for filename in ./src/main/*.class;
-do
-mv ${filename} ./bin/
-done
+javac ./src/main/*.java -d ./bin/
 
 #start main()
-java CLI
+#TODO: ERROR: does not run: NOClassDefFoundError
+java -cp ./bin/main/CLI
 

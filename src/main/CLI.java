@@ -72,8 +72,11 @@ public class CLI {
     }
 
     public void runDijkstraDialog() {
+        print("Input starting node");
+        sol("$");
+        //TODO input handler
+        //TODO: call graph.runDijkstra();
 
-        //TODO
     }
 
     public void runQueryDialog() {
