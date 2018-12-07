@@ -26,7 +26,7 @@ public class Dijkstra extends CLILogger {
      * 
      */
     public void start() {
-        this.startTime = System.currentTimeMillis();
+        this.startTiming();
         
         NodeHeap heap = new NodeHeap(graph, startNode);
         
@@ -43,9 +43,9 @@ public class Dijkstra extends CLILogger {
         
         
         int currentNode = heap.getAndRemoveNext();
-        
-        
-        int offset[] = graph.getNodeList();	// maybe not ideal, but shouldn be a problem
+
+
+        int[] offset = graph.getNodeList();    // maybe not ideal, but shouldn be a problem
 
         
         while (currentNode >= 0) {
@@ -77,10 +77,9 @@ public class Dijkstra extends CLILogger {
         // setDistance gibt auch aus ob ein wert geändert wurde
         
         // entfernen aus Heap, wenn selbst betrachtet wurde.
-        
-        
-        long timeTaken = System.currentTimeMillis() - startTime;
-        System.out.println("Dijkstra's algorithm completed in " + timeTaken/1000 + " seconds.");
+
+
+        System.out.println("Dijkstra's algorithm completed in " + this.runtime + " seconds.");
     }
     //TODO: implement algorithm
     //TODO: assertTimeout: run under 20 seconds

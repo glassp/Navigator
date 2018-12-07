@@ -270,7 +270,6 @@ public class Graph extends CLILogger {
      * @return the offset or -1 if it does not exist
      */
     int getOffset(int node) {
-        if (!this.hasOutgoingEdges(node)) return -1;		//TODO: This line has no real effect and can be removed (since offset[node] will be -1 if there are no edges). Up for review.
         return this.offset[node];
     }
 
@@ -321,7 +320,6 @@ public class Graph extends CLILogger {
      */
     int nextNode(int node) {
         this.debugPrint("running nextNode");
-        //running infinite time
         double minVal = Double.POSITIVE_INFINITY;
         int minIndex = -1;
         int offset = this.getOffset(node);
@@ -341,7 +339,6 @@ public class Graph extends CLILogger {
                 minIndex = i;
             }
         }
-//        this.			//TODO: Unfinished - Pretty sure this was already like this before I pushed my first changes. 
         return this.edges[offset + minIndex];
     }
 
@@ -369,14 +366,6 @@ public class Graph extends CLILogger {
 		}
     	
     	return lastEdge - offset[node];
-        
-    	
-    	// Old implementation:
-//        if (this.getOffset(node + 1) == -1)
-//            return this.current - this.getOffset(node);	//TODO: Do we really know there can be no nodes with 0 outgoing edges?
-//        												// might consider implementing offset array as described in project specification
-//        else
-//            return this.getOffset(node + 1) - this.getOffset(node);
     }
     
     
@@ -399,8 +388,8 @@ public class Graph extends CLILogger {
     
     /**
      * Returns weight of an edge
-     * 
-     * @param edge
+     *
+     * @param edge the edge
      * @return weight or -1 if it doesn't exist
      */
     double getWeight(int edge) {
@@ -431,8 +420,7 @@ public class Graph extends CLILogger {
      * @return true if distance has changed else false
      */
     boolean setDistance(int dest, double dist) {
-        double val = this.getDistance(dest);		// TODO: Why use a temp variable? This operation is supposed to happen often and may produce a lot of garbage to collect. Suggest calling getter in if-expression directly for perhaps miniscule or even non-existing boost yay. 
-        if (val == dist) return false;
+        if (this.getDistance(dest) == dist) return false;
         this.distance[dest] = dist;
         return true;
     }
