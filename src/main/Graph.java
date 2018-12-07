@@ -74,6 +74,10 @@ public class Graph extends CLILogger {
         //TODO: run dijkstra
     }
 
+    public void runQuery(int start, int dest) {
+
+    }
+
     /**
      * sets the latitude of a node
      *
