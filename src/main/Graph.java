@@ -71,11 +71,15 @@ public class Graph extends CLILogger {
 
     public void runDijkstra(int start) {
         Dijkstra dijkstra = new Dijkstra(this, start);
+        dijkstra.setDebug(this.debug);
+        dijkstra.setInfo(this.info);
+        dijkstra.setVerbose(this.verbose);
         //TODO: run dijkstra
     }
 
-    public void runQuery(int start, int dest) {
-
+    public double runQuery(int start, int dest) {
+        //TODO
+        return 0;
     }
 
     /**

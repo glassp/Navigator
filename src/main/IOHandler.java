@@ -62,12 +62,6 @@ public class IOHandler extends CLILogger {
         return graph;
     }
 
-    public double runQuery(int start, int dest, Graph graph) {
-        //TODO: start Dijkstra with start
-        //TODO: read distance to dest from graph
-        return 0;
-    }
-
     public double runQuery(String path) {
         //TODO: implement
         return 0;

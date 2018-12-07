@@ -28,17 +28,17 @@ public abstract class CLILogger {
     /**
      * setting for verbose output
      */
-    private boolean verbose;
+    boolean verbose;
 
     /**
      * display debug level
      */
-    private boolean debug;
+    boolean debug;
 
     /**
      * display info level
      */
-    private boolean info;
+    boolean info;
 
     /**
      * changes verbose to a certain setting
