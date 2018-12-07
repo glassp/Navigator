@@ -68,8 +68,9 @@ public class IOHandler extends CLILogger {
         return 0;
     }
 
-    public void runQuery(String path) {
+    public double runQuery(String path) {
         //TODO: implement
+        return 0;
     }
 
     public int diff(String solPath, String outputPath) {

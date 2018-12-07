@@ -49,6 +49,7 @@ public class Dijkstra extends CLILogger {
 
         
         while (currentNode >= 0) {
+            //TODO: ERROR: Variable is not updated inside loop! Review needed
         	
             //update all neighbours
         	
@@ -79,7 +80,8 @@ public class Dijkstra extends CLILogger {
         // entfernen aus Heap, wenn selbst betrachtet wurde.
 
 
-        System.out.println("Dijkstra's algorithm completed in " + this.runtime + " seconds.");
+        //passes info to CLI
+        print("Dijkstra's algorithm completed in " + this.runtime + " seconds.");
     }
     //TODO: implement algorithm
     //TODO: assertTimeout: run under 20 seconds

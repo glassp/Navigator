@@ -13,13 +13,4 @@ public class UnorderedGraphException extends IllegalStateException {
         super(msg);
     }
 
-    @Override
-    public void printStackTrace() {
-        super.printStackTrace();
-    }
-
-    @Override
-    public String getMessage() {
-        return super.getMessage();
-    }
 }

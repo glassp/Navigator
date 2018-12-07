@@ -29,13 +29,6 @@ public class CLI {
     }
     //menu functions
 
-    public static void main(String[] args) {
-        //TODO
-        CLI cli = new CLI();
-        cli.header("0.1 - dev build");
-        cli.mainMenu();
-    }
-
     public void mainMenu() {
         print("Please select your action.");
         navigatorCommands();
@@ -54,11 +47,11 @@ public class CLI {
         print("3");
         solPrint("Run Difference Analysis form .sol file");
         print("v");
-        solPrint("Toogles verbose printing");
+        solPrint("Toogle verbose printing");
         print("d");
-        solPrint("Toogles debug printing");
+        solPrint("Toogle debug printing");
         print("i");
-        solPrint("Toogles info printing");
+        solPrint("Toogle info printing");
 
     }
 
@@ -69,19 +62,27 @@ public class CLI {
         print("E.g. /home/<USER>/downloads/<FILENAME>.fmi");
         sol("$");
         //TODO: input handler
+        IOHandler ioHandler = new IOHandler();
+        //graph = ioHandler.importGraph();
     }
 
     public void runDijkstraDialog() {
+        print("Input starting node");
+        sol("$");
+        //TODO input handler
+        //TODO: call graph.runDijkstra();
 
-        //TODO
     }
 
     public void runQueryDialog() {
-        //TODO
+        print("Input path to Query File");
+        sol("$");
+        //TODO input handler
+        //TODO: call graph.runQuery()
     }
 
     public void runDiffDialog() {
-
+        //TODO
     }
 
     public void header(String version) {

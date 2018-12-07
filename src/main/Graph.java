@@ -68,8 +68,15 @@ public class Graph extends CLILogger {
         Arrays.fill(distance, Double.POSITIVE_INFINITY);
 
     }
-    
-    
+
+    public void runDijkstra(int start) {
+        Dijkstra dijkstra = new Dijkstra(this, start);
+        //TODO: run dijkstra
+    }
+
+    public void runQuery(int start, int dest) {
+
+    }
 
     /**
      * sets the latitude of a node

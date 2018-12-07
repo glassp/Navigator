@@ -15,21 +15,21 @@ public class NodeHeap {
 	 * Graph instance the nodes of which are represented in the heap.
 	 */
 	private Graph graph;
-	
+
 	/**
 	 * Contains node indices from graph. Represents the heap, so item 0's node has lowest distance of all.
 	 */
-	private int heapNodes[];
+	private int[] heapNodes;
 	
 	/**
 	 * Maximum index used in graphNodes array. Items beyond are not considered part of the heap anymore.
 	 */
 	private int maxIndex;
-	
+
 	/**
-	 * Entry n contains the index under which node n from the graph is currently found in heap's array heapNodes[]. 
+	 * Entry n contains the index under which node n from the graph is currently found in heap's array heapNodes[].
 	 */
-	private int nodeLocation[];
+	private int[] nodeLocation;
 	
 	// min heap: parent's distance has to be less than or equal to any child's
 	
