@@ -6,30 +6,7 @@ import java.io.*;
  * The IOHandler which reads the graph .fmi file
  */
 public class IOHandler extends CLILogger {
-    /**
-     * the starttime for time tracking
-     */
-    public double startTime;
-    /**
-     * the runtime for a certain task
-     */
-    public double runtime;
 
-    /**
-     * starts the timer
-     */
-    public void start() {
-        //reset runtime
-        this.runtime = 0;
-        this.startTime = System.currentTimeMillis();
-    }
-
-    /**
-     * stops the times and calculates runtime
-     */
-    public void stop() {
-        this.runtime = System.currentTimeMillis() - startTime;
-    }
 
     /**
      * imports the Graph from a graph .fmi file also stops runtime for this task
@@ -40,6 +17,7 @@ public class IOHandler extends CLILogger {
     public Graph importGraph(String path) {
         Graph graph;
         try {
+            this.startTiming();
             var fileReader = new FileReader(path);
             var file = new BufferedReader(fileReader);
 

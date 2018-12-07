@@ -17,7 +17,7 @@ public class Graph extends CLILogger {
      */
     private int[] offset;
     /**
-     * the first unused index
+     * the first unused index (of edges, it seems)
      */
     private int current;
     /**
@@ -36,6 +36,12 @@ public class Graph extends CLILogger {
      * stores the distance to a node
      */
     private double[] distance;
+    
+    /**
+     * stores any node's preceding node on the ideal path from Dijkstra's starting node to that node, if Dijkstra's algorithm has been run.
+     * Values will be -1 if there is no path or if Dijkstra has not run yet.
+     */
+    private int[] predecessor;
 
     /**
      * Constructor
@@ -44,19 +50,26 @@ public class Graph extends CLILogger {
      * @param edges number of edges that are used in the graph
      */
     public Graph(int nodes, int edges) {
-        this.edges = new int[edges];
+    	this.offset = new int[nodes];
+    	this.predecessor = new int[edges];
+    	this.distance = new double[nodes];
+    	
+    	this.edges = new int[edges];
         this.weight = new double[edges];
-        this.offset = new int[nodes];
+        
         this.latitude = new double[nodes];
         this.longitude = new double[nodes];
-        this.distance = new double[nodes];
+        
         this.current = 0;
-        //initializes all values in offset with -1
+        
+        //initializes all values in arrays with their default value, if there is one
         Arrays.fill(offset, -1);
-        //initializes all values in distance with Positive Infinity
+        Arrays.fill(predecessor, -1);
         Arrays.fill(distance, Double.POSITIVE_INFINITY);
 
     }
+    
+    
 
     /**
      * sets the latitude of a node
@@ -193,7 +206,7 @@ public class Graph extends CLILogger {
 
         if (getOffset(start + 1) == -1 || !skip) {
             try {
-                this.infoPrint("trying to add Edge");
+                this.verbosePrint("trying to add Edge");
                 addEdge(start, dest, weight);
             } catch (UnorderedGraphException e) {
                 this.debugPrint("Exception handled");
@@ -257,7 +270,6 @@ public class Graph extends CLILogger {
      * @return the offset or -1 if it does not exist
      */
     int getOffset(int node) {
-        if (!this.hasOutgoingEdges(node)) return -1;
         return this.offset[node];
     }
 
@@ -308,13 +320,18 @@ public class Graph extends CLILogger {
      */
     int nextNode(int node) {
         this.debugPrint("running nextNode");
-        //running infinit time
         double minVal = Double.POSITIVE_INFINITY;
         int minIndex = -1;
         int offset = this.getOffset(node);
-        if (offset == -1) return -1;
+        if (offset == -1){
+          this.debugPrint("no nextNode: offset invalid");
+          return -1;
+        }
         int elem = this.countOutgoingEdges(node);
-        if (elem < 1) return -1;
+        if (elem < 1){
+          this.debugPrint("no nextNode: zero outgoing Edges");
+          return -1;
+        }
         for (int i = 0; i < elem; i++) {
             double var = this.getWeight(node, this.edges[offset + i]);
             if (var < minVal) {
@@ -334,11 +351,24 @@ public class Graph extends CLILogger {
      */
     int countOutgoingEdges(int node) {
         if (!this.hasOutgoingEdges(node)) return 0;
-        if (this.getOffset(node + 1) == -1)
-            return this.current - this.getOffset(node);
-        else
-            return this.getOffset(node + 1) - this.getOffset(node);
+        
+        // Has to iterate in O(n), but could be done in O(1) if offset was managed like in specifications, see TO.DO below.
+   
+    	int lastEdge = -1;
+    	for (int i = node+1; i < this.current; i++) {
+			lastEdge = offset[i];
+			if (lastEdge != -1) break;
+		}
+    	
+    	if (lastEdge == -1) {
+			// no other node after it that has edges
+    		return this.current - offset[node];
+		}
+    	
+    	return lastEdge - offset[node];
     }
+    
+    
 
 
     /**
@@ -354,6 +384,20 @@ public class Graph extends CLILogger {
         if (edge < 0) return -1;
         return this.weight[edge];
 
+    }
+    
+    /**
+     * Returns weight of an edge
+     *
+     * @param edge the edge
+     * @return weight or -1 if it doesn't exist
+     */
+    double getWeight(int edge) {
+    	if (edge >= this.current) {
+			return -1;
+		}
+    	
+    	return this.weight[edge];
     }
 
 
@@ -376,12 +420,34 @@ public class Graph extends CLILogger {
      * @return true if distance has changed else false
      */
     boolean setDistance(int dest, double dist) {
-        double val = this.getDistance(dest);
-        if (val == dist) return false;
+        if (this.getDistance(dest) == dist) return false;
         this.distance[dest] = dist;
         return true;
     }
 
+	/**
+	 * Sets the node's predecessor on a path from Dijkstra's starting node to given node. Used by Dijkstra class while the algorithm runs.
+	 * 
+	 * @param node	The node of which a predecessor gets set.
+	 * @param predecessor The preceding node on a path to Dijkstra's start.
+	 */
+    public void setPredecessor(int node, int predecessor) {
+    	this.predecessor[node] = predecessor;
+    }
+    
+    /**
+     * Returns the node's predecessor on a path from Dijkstra's starting node to given node.
+     * The starting node is set when creating an instance of Dijkstra's algorithm for this graph.
+     * If there is no path or if Dijkstra has not run yet, -1 will be returned!
+     * 
+     * 
+     * @param node From this node, by going to the returned node and that one's predecessors, you can recursively find the ideal path to the starting node.
+     * @return	preceding node on a path to start, or -1
+     */
+    public int getPredecessor(int node) {
+    	return this.predecessor[node];
+    }
+    
     /**
      * Returns list of all nodes with their offsets
      *
