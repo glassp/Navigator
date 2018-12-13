@@ -4,12 +4,14 @@ import java.util.Arrays;
 
 
 /**
- * The Graph class
+ * A class for a directed graph.
+ * 
+ * It can be used with the Dijkstra class to find minimum distances from all nodes to one starting node.
  */
 public class Graph extends CLILogger {
 
     /**
-     * stores the destination of a edge
+     * stores the destination of an edge
      */
     private int[] edges;
     /**
