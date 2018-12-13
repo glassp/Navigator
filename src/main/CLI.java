@@ -28,6 +28,10 @@ public class CLI {
         sol();
         print(msg);
     }
+
+    public boolean hasGraph() {
+        return this.graph != null;
+    }
     //menu functions
 
     public void mainMenu() {
@@ -183,5 +187,9 @@ public class CLI {
         print("Find this on Github: https://github.com/otakupasi/Navigator");
         print("Accessibility may be restricted while in development");
         print();
+    }
+
+    public void runOnBench(String fmiPath, String quePath, String solPath) {
+        //TODO implement
     }
 }

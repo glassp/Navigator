@@ -10,6 +10,13 @@ public abstract class CLILogger {
      */
     public double runtime;
 
+    public static int runtimeInSeconds(double runtime) {
+        return 0;
+    }
+
+    public static int runtimeInMinutes(double runtime) {
+        return 0;
+    }
     /**
      * starts the timer
      */

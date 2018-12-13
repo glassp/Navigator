@@ -26,6 +26,7 @@ public class IOHandler extends CLILogger {
      * @return a Graph object or null
      */
     public Graph importGraph(String path) {
+        this.print("Reading Graph Data...");
         Graph graph;
         try {
             this.startTiming();
@@ -64,6 +65,7 @@ public class IOHandler extends CLILogger {
                 double cost = Double.parseDouble(data[2]);
             }
             this.stop();
+            this.print("Finished Reading Graph Data in " + CLILogger.runtimeInMinutes(this.runtime) + "minutes." + "\r\n" + "Time in Seconds: " + CLILogger.runtimeInSeconds(this.runtime));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -73,18 +75,30 @@ public class IOHandler extends CLILogger {
         return graph;
     }
 
-    public double runQuery(String path, Graph graph) {
-        //TODO: implement
-        return 0;
+    public void runQuery(String path, Graph graph) {
+        try {
+            var fileReader = new FileReader(path);
+            var file = new BufferedReader(fileReader);
+            String line;
+            while ((line = file.readLine()) != null) {
+                String[] data = line.split(" ");
+                if (data[0] != null && data[1] != null && !data[0].isEmpty() && !data[1].isEmpty()) {
+                    var result = graph.runQuery(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
+                    //TODO: write into .out file
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public int diff(String solPath, String outputPath) {
         int counter = 0;
         try {
-            var solReader = new FileReader(solPath);
-            var sol = new BufferedReader(solReader);
             var outReader = new FileReader(outputPath);
+            var solReader = new FileReader(solPath);
             var out = new BufferedReader(outReader);
+            var sol = new BufferedReader(solReader);
             String s;
             String o;
             while ((s = sol.readLine()) != null && (o = out.readLine()) != null) {

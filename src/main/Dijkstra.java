@@ -104,7 +104,7 @@ public class Dijkstra extends CLILogger {
 
 
         //passes info to CLI
-        print("Dijkstra's algorithm completed in " + this.runtime + " seconds.");
+        print("Dijkstra's algorithm completed in " + CLILogger.runtimeInSeconds(this.runtime) + " seconds.");
     }
     
     //TODO: assertTimeout: run under 20 seconds
