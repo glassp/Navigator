@@ -2,8 +2,6 @@ package main;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 public class DijkstraTest {
 // Are edges with weight 0 supported? maybe test that.
 
@@ -22,8 +20,8 @@ public class DijkstraTest {
 		graph.insertEdge(2, 3, 9);
 		graph.insertEdge(4, 1, 0);
 		graph.insertEdge(5, 6, 1);
-		
-		Dijkstra dijkstra = new Dijkstra(graph, 0)
+
+		Dijkstra dijkstra = new Dijkstra(graph, 0);
 
         dijkstra.start();
 		

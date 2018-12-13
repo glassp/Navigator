@@ -1,12 +1,23 @@
 package main;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Paths;
 
 /**
  * The IOHandler which reads the graph .fmi file
  */
 public class IOHandler extends CLILogger {
 
+    String pathToBin() {
+        return pathToProjectRoot() + "/bin/";
+    }
+
+    String pathToProjectRoot() {
+        String current = Paths.get(".").toAbsolutePath().normalize().toString();
+        return current.split("/src/")[0];
+    }
 
     /**
      * imports the Graph from a graph .fmi file also stops runtime for this task
@@ -62,7 +73,7 @@ public class IOHandler extends CLILogger {
         return graph;
     }
 
-    public double runQuery(String path) {
+    public double runQuery(String path, Graph graph) {
         //TODO: implement
         return 0;
     }
@@ -74,10 +85,12 @@ public class IOHandler extends CLILogger {
             var sol = new BufferedReader(solReader);
             var outReader = new FileReader(outputPath);
             var out = new BufferedReader(outReader);
-
-            String s = sol.readLine();
-            String o = out.readLine();
-            if (!s.equals(o)) counter++;
+            String s;
+            String o;
+            while ((s = sol.readLine()) != null && (o = out.readLine()) != null) {
+                if (!s.equals(o))
+                    counter++;
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return -1;
@@ -85,9 +98,6 @@ public class IOHandler extends CLILogger {
         return counter;
     }
 
-
-    //TODO: importQueryFrom(String path)
     //TODO: assertTimeout: Graphimport under 2 minutes
     //TODO: exportSolutionTo(String path, solution):void
-    //TODO: diff(String pathSol, String pathSolution):bool
 }

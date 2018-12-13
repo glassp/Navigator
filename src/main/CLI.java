@@ -1,8 +1,9 @@
 package main;
 
+import java.util.Scanner;
 public class CLI {
-    //TODO
     Graph graph;
+    Scanner scanner = new Scanner(System.in);
     //print functions
     public static void print() {
         System.out.println();
@@ -33,8 +34,46 @@ public class CLI {
         print("Please select your action.");
         navigatorCommands();
         sol("$");
-        //TODO: input handler
+        String action = this.scanner.next();
+        switch (action) {
+            case "0":
+                graphImportDialog();
+                return;
+            case "1":
+                runDijkstraDialog();
+                return;
+            case "2":
+                runQueryDialog();
+                return;
+            case "3":
+                runDiffDialog();
+                return;
+            case "v":
+                this.graph.toogleVerbose();
+                break;
+            case "d":
+                this.graph.toogleDebug();
+                break;
+            case "i":
+                this.graph.toogleInfo();
+                break;
+            case "exit":
+                die();
+                break;
+            case "die":
+                die();
+                break;
+            default:
+                print("Invalid option. Try again or terminate script with 'die'");
+                mainMenu();
+        }
 
+    }
+
+    private void die() {
+        this.scanner.close();
+        print("Script terminated.");
+        System.exit(0);
     }
 
     public void navigatorCommands() {
@@ -52,7 +91,11 @@ public class CLI {
         solPrint("Toogle debug printing");
         print("i");
         solPrint("Toogle info printing");
-
+        print("exit");
+        solPrint("Exits the current Menu.");
+        solPrint("When in main menu this will have the same result as 'die'");
+        print("die");
+        solPrint("Terminates the script");
     }
 
     public void graphImportDialog() {
@@ -61,28 +104,77 @@ public class CLI {
         print("Please provide path to .fmi File");
         print("E.g. /home/<USER>/downloads/<FILENAME>.fmi");
         sol("$");
-        //TODO: input handler
+        String path = this.scanner.next();
+        switch (path) {
+            case "exit":
+                print();
+                mainMenu();
+                return;
+            case "die":
+                die();
+                break;
+            default:
+                break;
+        }
         IOHandler ioHandler = new IOHandler();
-        //graph = ioHandler.importGraph();
+        this.graph = ioHandler.importGraph(path);
     }
 
     public void runDijkstraDialog() {
-        print("Input starting node");
+        print("Input starting node as Integer. Integers smaller than 0 equal to command 'exit'.");
+        print("Non-Integer inputs are not allowed");
         sol("$");
-        //TODO input handler
-        //TODO: call graph.runDijkstra();
+        int start;
+        if (scanner.hasNextInt()) {
+            start = this.scanner.nextInt();
+        } else {
+            print("Invalid value. Try again");
+            print();
+            runDijkstraDialog();
+            return;
+        }
+        if (start < 0) {
+            mainMenu();
+            return;
+        }
+        this.graph.runDijkstra(start);
 
     }
 
     public void runQueryDialog() {
-        print("Input path to Query File");
+        print("Input path to .que File");
         sol("$");
-        //TODO input handler
-        //TODO: call graph.runQuery()
+        String path = this.scanner.next();
+        switch (path) {
+            case "exit":
+                mainMenu();
+                return;
+            case "die":
+                die();
+                return;
+            default:
+                break;
+        }
+        IOHandler ioHandler = new IOHandler();
+        ioHandler.runQuery(path, this.graph);
     }
 
     public void runDiffDialog() {
-        //TODO
+        print("Input path to .sol File");
+        sol("$");
+        String path = scanner.next();
+        switch (path) {
+            case "die":
+                die();
+                return;
+            case "exit":
+                mainMenu();
+                return;
+            default:
+                break;
+        }
+        IOHandler ioHandler = new IOHandler();
+        ioHandler.diff(path, ioHandler.pathToBin() + "out/");
     }
 
     public void header(String version) {

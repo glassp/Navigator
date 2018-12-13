@@ -4,6 +4,7 @@ for name in java
 do
     [[ $(which ${name} 2>/dev/null) ]] || { echo -en "\n${name} missing. Try 'sudo apt-get install ${name}'."; deps = 1; }
 done
+#unresolved variable annotation may be ignored here.
 [[ ${deps} -ne 1 ]] && echo -en "OK \n\n" || { echo -en "\n Install the above  and rerun this script\n"; exit 1; }
 
 #chech if bin exists
@@ -15,6 +16,8 @@ fi
 
 #create bin dir
 mkdir ./bin
+#create dir for dijkstra outputs
+mkdir ./bin/out
 
 #compile code
 javac ./src/main/*.java -d ./bin/

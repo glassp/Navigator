@@ -74,7 +74,7 @@ public class Graph extends CLILogger {
         dijkstra.setDebug(this.debug);
         dijkstra.setInfo(this.info);
         dijkstra.setVerbose(this.verbose);
-        //TODO: run dijkstra
+        dijkstra.start();
     }
 
     public double runQuery(int start, int dest) {
@@ -200,6 +200,7 @@ public class Graph extends CLILogger {
         System.arraycopy(arr, 0, array, 0, arr.length);
         if (arr == this.edges) this.edges = array;
         else if (arr == this.offset) this.offset = array;
+        else if (arr == this.predecessor) this.predecessor = array;
         this.debugPrint("array was increased");
         return array;
 
@@ -505,7 +506,7 @@ public class Graph extends CLILogger {
     
     /**
      * Returns the destination node of edge
-     * @param edge
+     * @param edge The Edge
      * @return destination of given edge
      */
     public int getDestination(int edge) {
