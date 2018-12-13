@@ -33,11 +33,18 @@ public class NodeHeap {
 	
 	// min heap: parent's distance has to be less than or equal to any child's
 	
-	
+	/**
+	 * Construct a NodeHeap instance.
+	 * 
+	 * 
+	 * @param graph	The graph to work with.
+	 * @param startingNode 
+	 */
 	public NodeHeap(Graph graph, int startingNode) {
 		
 		this.graph = graph;
-		this.heapNodes = IntStream.rangeClosed(0, graph.getNodeList().length-1).toArray();
+//		this.heapNodes = IntStream.rangeClosed(0, graph.getNodeList().length-1).toArray();
+		this.heapNodes = IntStream.rangeClosed(0, graph.getNodesCount()-1).toArray();
 		
 		this.maxIndex = heapNodes.length - 1;
 		
@@ -244,8 +251,17 @@ public class NodeHeap {
 			return -1;
 		}
 		else {
-			swap(0, maxIndex--);
+//			System.out.println("Swap first element (node " + heapNodes[0] + ") with " + maxIndex + " (node " + heapNodes[maxIndex] + ")"  ); //TODO: debug info to be removed
+			swap(0, maxIndex--);	//0 and maxIndex, then maxIndex is decremented afterwards
+			
 			siftDown(0);
+			
+//			System.out.print("Will return " + heapNodes[maxIndex+1] + " as highest prio node.\n heap looks like this now after reheap: ");
+//			System.out.print(heapNodes[0]);
+//			for (int i = 1; i < heapNodes.length; i++) {
+//				System.out.print(","+heapNodes[i]);
+//			}
+			
 			return heapNodes[maxIndex+1];
 
 		}
