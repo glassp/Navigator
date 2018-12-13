@@ -46,10 +46,12 @@ public class Graph extends CLILogger {
     private int[] predecessor;
 
     /**
-     * Constructor
+     * Constructor.
+     * 
+     * Edges have to be manually added to the graph using the method insertEdge(). TODO: should insertEdge be used, or addEdge? What's the difference? 
      *
      * @param nodes number of nodes that are used in the graph
-     * @param edges number of edges that are used in the graph
+     * @param edges number of edges that are to be used in the graph
      */
     public Graph(int nodes, int edges) {
     	this.offset = new int[nodes];
@@ -525,4 +527,30 @@ public class Graph extends CLILogger {
     public int getDestination(int edge) {
     	return this.edges[edge];
     }
+    
+    
+    /**
+     * Returns amount of edges that have been added to this directed graph.
+     */
+    public int getCurrentEdgesCount() {
+    	return this.current;
+    }
+    
+    /**
+     * Returns maximum number of edges supported in this directed graph.
+     * 
+     * This value is determined upon construction of a graph instance via parameter 'edges'.
+     */
+    public int getMaxEdgesCount() {
+    	return this.edges.length;
+    }
+    
+    /**
+     * Returns the amount of nodes in the graph.
+     * 
+     */
+    public int getNodesCount() {
+    	return this.distance.length;
+    }
+    
 }
