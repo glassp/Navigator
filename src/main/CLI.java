@@ -1,21 +1,44 @@
 package main;
 
 import java.util.Scanner;
+
+/**
+ * The Class for the User Interface
+ */
 public class CLI {
     Graph graph;
     Scanner scanner = new Scanner(System.in);
     //print functions
+
+    /**
+     * prints a empty line
+     */
     public static void print() {
         System.out.println();
     }
+
+    /**
+     * prints msg in a new line
+     *
+     * @param msg the message
+     */
     public static void print(String msg) {
         System.out.println(msg);
     }
+
+    /**
+     * prints msg if printlevel is true
+     * @param msg the message
+     * @param printLevel if msg should be printed
+     */
     public static void print(String msg, boolean printLevel) {
         if (printLevel)
             print(msg);
     }
 
+    /**
+     * adds a tab on the start of a line
+     */
     public static void sol() {
         sol("   ");
     }
@@ -24,16 +47,27 @@ public class CLI {
         System.out.print(msg + " ");
     }
 
+    /**
+     * prints msg in a indented line
+     * @param msg the message
+     */
     public static void solPrint(String msg) {
         sol();
         print(msg);
     }
 
+    /**
+     * checks if a Graph was imported
+     * @return if CLI has a Graph
+     */
     public boolean hasGraph() {
         return this.graph != null;
     }
     //menu functions
 
+    /**
+     * prints a the main menu dialog in the CLI
+     */
     public void mainMenu() {
         print("Please select your action.");
         navigatorCommands();
@@ -74,12 +108,18 @@ public class CLI {
 
     }
 
+    /**
+     * kills the script
+     */
     private void die() {
         this.scanner.close();
         print("Script terminated.");
         System.exit(0);
     }
 
+    /**
+     * prints list of avaiable commands
+     */
     public void navigatorCommands() {
         print("0");
         solPrint("import Graph from .fmi file");
@@ -102,6 +142,9 @@ public class CLI {
         solPrint("Terminates the script");
     }
 
+    /**
+     * prints import graph dialog
+     */
     public void graphImportDialog() {
         print("Import Graph from .fmi File");
         print();
@@ -124,6 +167,9 @@ public class CLI {
         this.graph = ioHandler.importGraph(path);
     }
 
+    /**
+     * prints run dijkstra dialog
+     */
     public void runDijkstraDialog() {
         print("Input starting node as Integer. Integers smaller than 0 equal to command 'exit'.");
         print("Non-Integer inputs are not allowed");
@@ -145,6 +191,9 @@ public class CLI {
 
     }
 
+    /**
+     * prints run query dialog
+     */
     public void runQueryDialog() {
         print("Input path to .que File");
         sol("$");
@@ -163,6 +212,9 @@ public class CLI {
         ioHandler.runQuery(path, this.graph);
     }
 
+    /**
+     * prints run Diff dialog
+     */
     public void runDiffDialog() {
         print("Input path to .sol File");
         sol("$");
@@ -181,6 +233,10 @@ public class CLI {
         ioHandler.diff(path, ioHandler.pathToBin() + "out/");
     }
 
+    /**
+     * prints header for CLI
+     * @param version the version to be displayed
+     */
     public void header(String version) {
         print("Dijkstra Navigator [Version " + version + "]");
         print("(c) Pascal Glaesser, Stephan Schroth. Licenced GNU Lesser GPL v3.0");
@@ -189,6 +245,12 @@ public class CLI {
         print();
     }
 
+    /**
+     * automatically calls methods to import graph run query and check for differences when invoced via terminal
+     * @param fmiPath path to Graph file
+     * @param quePath path to Query file
+     * @param solPath path to Solution file
+     */
     public void runOnBench(String fmiPath, String quePath, String solPath) {
         //TODO implement
     }

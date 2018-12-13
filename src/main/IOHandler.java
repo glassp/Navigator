@@ -6,14 +6,23 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 /**
- * The IOHandler which reads the graph .fmi file
+ * The IOHandler
  */
 public class IOHandler extends CLILogger {
 
+    /**
+     * returns the path to the bin dir
+     *
+     * @return path to bin dir
+     */
     String pathToBin() {
         return pathToProjectRoot() + "/bin/";
     }
 
+    /**
+     * returns the path to the projects root dir
+     * @return path to project root dir
+     */
     String pathToProjectRoot() {
         String current = Paths.get(".").toAbsolutePath().normalize().toString();
         return current.split("/src/")[0];
@@ -75,6 +84,11 @@ public class IOHandler extends CLILogger {
         return graph;
     }
 
+    /**
+     * runs the queries from .que file on the graph and outputs into a .out file
+     * @param path the path the .que file
+     * @param graph the graph
+     */
     public void runQuery(String path, Graph graph) {
         try {
             var fileReader = new FileReader(path);
@@ -92,10 +106,17 @@ public class IOHandler extends CLILogger {
         }
     }
 
-    public int diff(String solPath, String outputPath) {
+    /**
+     * checks for differences between .sol and .out filr
+     *
+     * @param solPath path to .sol file
+     * @param outPath path to .out file
+     * @return number of differences
+     */
+    public int diff(String solPath, String outPath) {
         int counter = 0;
         try {
-            var outReader = new FileReader(outputPath);
+            var outReader = new FileReader(outPath);
             var solReader = new FileReader(solPath);
             var out = new BufferedReader(outReader);
             var sol = new BufferedReader(solReader);

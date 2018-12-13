@@ -69,6 +69,11 @@ public class Graph extends CLILogger {
 
     }
 
+    /**
+     * runs dijkstra on this graph with start as start node
+     *
+     * @param start the start node
+     */
     public void runDijkstra(int start) {
         Dijkstra dijkstra = new Dijkstra(this, start);
         dijkstra.setDebug(this.debug);
@@ -77,6 +82,12 @@ public class Graph extends CLILogger {
         dijkstra.start();
     }
 
+    /**
+     * runs query on this graph with start as start node and dest as destination
+     * @param start the start node
+     * @param dest the destination
+     * @return the distance from start to dest
+     */
     public double runQuery(int start, int dest) {
         //TODO
         return 0;

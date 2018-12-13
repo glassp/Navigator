@@ -1,5 +1,8 @@
 package main;
 
+/**
+ * abstract class for logging
+ */
 public abstract class CLILogger {
     /**
      * the starttime for time tracking
@@ -17,6 +20,7 @@ public abstract class CLILogger {
     public static int runtimeInMinutes(double runtime) {
         return 0;
     }
+
     /**
      * starts the timer
      */
@@ -32,6 +36,7 @@ public abstract class CLILogger {
     public void stop() {
         this.runtime = System.currentTimeMillis() - startTime;
     }
+
     /**
      * setting for verbose output
      */
