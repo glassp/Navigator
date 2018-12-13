@@ -1,12 +1,32 @@
 package main;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Paths;
 
 /**
- * The IOHandler which reads the graph .fmi file
+ * The IOHandler
  */
 public class IOHandler extends CLILogger {
 
+    /**
+     * returns the path to the bin dir
+     *
+     * @return path to bin dir
+     */
+    String pathToBin() {
+        return pathToProjectRoot() + "/bin/";
+    }
+
+    /**
+     * returns the path to the projects root dir
+     * @return path to project root dir
+     */
+    String pathToProjectRoot() {
+        String current = Paths.get(".").toAbsolutePath().normalize().toString();
+        return current.split("/src/")[0];
+    }
 
     /**
      * imports the Graph from a graph .fmi file also stops runtime for this task
@@ -15,6 +35,7 @@ public class IOHandler extends CLILogger {
      * @return a Graph object or null
      */
     public Graph importGraph(String path) {
+        this.print("Reading Graph Data...");
         Graph graph;
         try {
             this.startTiming();
@@ -53,6 +74,7 @@ public class IOHandler extends CLILogger {
                 double cost = Double.parseDouble(data[2]);
             }
             this.stop();
+            this.print("Finished Reading Graph Data in " + CLILogger.runtimeInMinutes(this.runtime) + "minutes." + "\r\n" + "Time in Seconds: " + CLILogger.runtimeInSeconds(this.runtime));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -62,28 +84,48 @@ public class IOHandler extends CLILogger {
         return graph;
     }
 
-    public double runQuery(int start, int dest, Graph graph) {
-        //TODO: start Dijkstra with start
-        //TODO: read distance to dest from graph
-        return 0;
+    /**
+     * runs the queries from .que file on the graph and outputs into a .out file
+     * @param path the path the .que file
+     * @param graph the graph
+     */
+    public void runQuery(String path, Graph graph) {
+        try {
+            var fileReader = new FileReader(path);
+            var file = new BufferedReader(fileReader);
+            String line;
+            while ((line = file.readLine()) != null) {
+                String[] data = line.split(" ");
+                if (data[0] != null && data[1] != null && !data[0].isEmpty() && !data[1].isEmpty()) {
+                    var result = graph.runQuery(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
+                    //TODO: write into .out file
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public double runQuery(String path) {
-        //TODO: implement
-        return 0;
-    }
-
-    public int diff(String solPath, String outputPath) {
+    /**
+     * checks for differences between .sol and .out filr
+     *
+     * @param solPath path to .sol file
+     * @param outPath path to .out file
+     * @return number of differences
+     */
+    public int diff(String solPath, String outPath) {
         int counter = 0;
         try {
+            var outReader = new FileReader(outPath);
             var solReader = new FileReader(solPath);
-            var sol = new BufferedReader(solReader);
-            var outReader = new FileReader(outputPath);
             var out = new BufferedReader(outReader);
-
-            String s = sol.readLine();
-            String o = out.readLine();
-            if (!s.equals(o)) counter++;
+            var sol = new BufferedReader(solReader);
+            String s;
+            String o;
+            while ((s = sol.readLine()) != null && (o = out.readLine()) != null) {
+                if (!s.equals(o))
+                    counter++;
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return -1;
@@ -91,9 +133,6 @@ public class IOHandler extends CLILogger {
         return counter;
     }
 
-
-    //TODO: importQueryFrom(String path)
     //TODO: assertTimeout: Graphimport under 2 minutes
     //TODO: exportSolutionTo(String path, solution):void
-    //TODO: diff(String pathSol, String pathSolution):bool
 }

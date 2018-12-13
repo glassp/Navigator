@@ -186,6 +186,7 @@ public class NodeHeap {
 	/**
 	 * Returns the index of the item's left child, if it exists.
 	 * Returns -1 if not.
+	 * TODO: missing parameter description
 	 * @param heapItem 
 	 */
 	private int getLeftChild(int heapItem) {
@@ -200,6 +201,7 @@ public class NodeHeap {
 	/**
 	 * Returns the index of the item's right child, if it exists.
 	 * Returns -1 if not.
+	 * TODO: missing parameter description
 	 * @param heapItem 
 	 */
 	private int getRightChild(int heapItem) {

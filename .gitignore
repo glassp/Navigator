@@ -1,1 +1,4 @@
 *.fmi
+/bin/
+*.core.prefs
+.classpath
