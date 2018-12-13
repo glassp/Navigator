@@ -82,20 +82,30 @@ public class Dijkstra extends CLILogger {
         	double newDistance;
         	
         	for (int i = firstEdge; i < firstEdge + graph.countOutgoingEdges(currentNode); i++) {
+        		System.out.print("looking at edge " +i + " from " + currentNode +" to " +graph.getDestination(i) ); //TODO: remove DEBUG info
+        		
         		if (graph.getWeight(i) >= 0) {
             		// graph.getWeight(i) can be -1 if edge doesn't exist. Maybe throw exception?
+        			
+        			System.out.println(" which has a weight of " + graph.getWeight(i));	//TODO: remove DEBUG info
         			
         			currentDestination = graph.getDestination(i);
         			newDistance = graph.getDistance(currentNode) + graph.getWeight(i);
         			
+        			System.out.print("\t\t Is " + graph.getDistance( currentDestination ) + " > " + newDistance + "? (current > newly found distance)"); //TODO: remove DEBUG info
         			if (graph.getDistance( currentDestination ) > newDistance) {
+        				//TODO: do we need an exceptional case if node has already been seen? prob not since then it will have the lowest distcnace possible.
+        				
 						//found shorter path to this neighbour. Update distance, predecessor and heap.
         				heap.decreaseDistance(currentDestination, newDistance);
         				graph.setPredecessor(currentDestination, currentNode);
+        				
+        				System.out.print(" Yes! ... updated dist. of " + currentDestination + " to "+ newDistance + " (there: it's saved as " + graph.getDistance(currentDestination) + ")");
 					} 
         			
 				}
         		
+        		System.out.println(); //new line. TODO: remove DEBUG info
 			}
         		
         	
