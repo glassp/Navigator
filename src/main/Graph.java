@@ -286,7 +286,8 @@ public class Graph extends CLILogger {
      */
     public boolean hasOutgoingEdges(int node) {
         this.debugPrint("checking outgoing edges");
-        return this.offset[node] != -1;
+//        return this.offset[node] != -1;
+        return getOffset(node) != -1;
     }
 
 
@@ -402,7 +403,8 @@ public class Graph extends CLILogger {
    
     	int lastEdge = -1;
     	for (int i = node+1; i < this.current; i++) {
-			lastEdge = offset[i];
+//			lastEdge = offset[i];
+    		lastEdge = getOffset(i);
 			if (lastEdge != -1) break;
 		}
     	
