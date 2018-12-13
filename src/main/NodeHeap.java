@@ -67,7 +67,7 @@ public class NodeHeap {
 	 * @param newDistance	Will be written in graph object.
 	 */
 	public void decreaseDistance(int node, double newDistance) {
-		graph.setDistance(heapNodes[node], newDistance);
+		graph.setDistance(node, newDistance);
 		
 		// Find heap item that belongs to the node.
 		node = nodeLocation[node];
