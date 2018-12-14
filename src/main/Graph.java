@@ -402,7 +402,8 @@ public class Graph extends CLILogger {
         // TODO: Has to iterate in O(n), but could be done in O(1) if offset was managed like in specifications
    
     	int lastEdge = -1;
-    	for (int i = node+1; i < this.current; i++) {
+//    	for (int i = node+1; i < this.current; i++) {
+    	for (int i = node+1; i < offset.length; i++) {
 //			lastEdge = offset[i];
     		lastEdge = getOffset(i);
 			if (lastEdge != -1) break;
