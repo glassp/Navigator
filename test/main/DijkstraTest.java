@@ -1,5 +1,7 @@
 package main;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.*;
 
 public class DijkstraTest {
@@ -42,9 +44,9 @@ public class DijkstraTest {
 		
 		System.out.println("Graph has maximum of " + graph.getMaxEdgesCount() + " edges");
 		System.out.println("Graph has " + graph.getNodesCount() + " nodes");
-		System.out.println();
 
-//		assertTrue(graph.getDistance(graph.getEdge(0, 3)) == 8);
+		assertEquals(8, graph.getWeight(graph.getEdge(0, 3)));
+		// Test edge just cause
 		
 		Dijkstra dijkstra = new Dijkstra(graph, 0);
 
@@ -56,14 +58,23 @@ public class DijkstraTest {
 //		}
 		
         dijkstra.start();
+
+        //For manual check:
+//		System.out.println("Entfernungen:");
+//		System.out.println("Knoten\tEntfernung von Knoten 0");
 		
-		System.out.println("Entfernungen:");
-		System.out.println("Knoten\tEntfernung von Knoten 0");
-		
-		for (int i = 0; i < graph.getNodesCount(); i++) {
-			System.out.println(i + "\t" + graph.getDistance(i));
-		}
-		
+//		for (int i = 0; i < graph.getNodesCount(); i++) {
+//			System.out.println(i + "\t" + graph.getDistance(i));
+//		}
+        
+        //Auto check:
+		assertEquals(0, graph.getDistance(0));
+		assertEquals(5, graph.getDistance(1));
+		assertEquals(15, graph.getDistance(2));
+		assertEquals(6, graph.getDistance(3));
+		assertEquals(3, graph.getDistance(4));
+		assertEquals(Double.POSITIVE_INFINITY, graph.getDistance(5));
+		assertEquals(Double.POSITIVE_INFINITY, graph.getDistance(6));
         
     }
 }
