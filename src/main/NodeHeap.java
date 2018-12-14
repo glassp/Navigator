@@ -46,6 +46,11 @@ public class NodeHeap {
 //		this.heapNodes = IntStream.rangeClosed(0, graph.getNodeList().length-1).toArray();
 		this.heapNodes = IntStream.rangeClosed(0, graph.getNodesCount()-1).toArray();
 		
+//		System.out.println("Heap structure upon creation:");
+//		for (int i : heapNodes) {
+//			System.out.println(i);
+//		}
+		
 		this.maxIndex = heapNodes.length - 1;
 		
 //		this.nodesArray = new int[graph.getNodeList().length];
@@ -159,7 +164,7 @@ public class NodeHeap {
 		
 		int parent = getParent(heapItem);
 		
-		if (graph.getDistance(parent) > distanceOfNode) {
+		if (graph.getDistance(heapNodes[parent]) > distanceOfNode) {
 			swap(heapItem, parent);
 			
 			//Recursion - ending at root or earlier, since getParent(0) = 0
@@ -193,7 +198,6 @@ public class NodeHeap {
 	/**
 	 * Returns the index of the item's left child, if it exists.
 	 * Returns -1 if not.
-	 * TODO: missing parameter description
 	 * @param heapItem 
 	 */
 	private int getLeftChild(int heapItem) {
@@ -208,7 +212,6 @@ public class NodeHeap {
 	/**
 	 * Returns the index of the item's right child, if it exists.
 	 * Returns -1 if not.
-	 * TODO: missing parameter description
 	 * @param heapItem 
 	 */
 	private int getRightChild(int heapItem) {
@@ -246,21 +249,18 @@ public class NodeHeap {
 	 * @return Node number in graph or -1 
 	 */
 	private int removeRoot() {
-		if (maxIndex <= 0) {
+		if (maxIndex < 0) {
 			maxIndex = -1;
 			return -1;
 		}
+		else if (maxIndex == 0) {
+			maxIndex--;
+			return heapNodes[0];
+		}
 		else {
-//			System.out.println("Swap first element (node " + heapNodes[0] + ") with " + maxIndex + " (node " + heapNodes[maxIndex] + ")"  ); //TODO: debug info to be removed
 			swap(0, maxIndex--);	//0 and maxIndex, then maxIndex is decremented afterwards
 			
 			siftDown(0);
-			
-//			System.out.print("Will return " + heapNodes[maxIndex+1] + " as highest prio node.\n heap looks like this now after reheap: ");
-//			System.out.print(heapNodes[0]);
-//			for (int i = 1; i < heapNodes.length; i++) {
-//				System.out.print(","+heapNodes[i]);
-//			}
 			
 			return heapNodes[maxIndex+1];
 
