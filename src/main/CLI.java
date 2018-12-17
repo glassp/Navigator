@@ -95,10 +95,6 @@ public class CLI {
                 this.graph.toogleDebug();
                 mainMenu();
                 return;
-            case "i":
-                this.graph.toogleInfo();
-                mainMenu();
-                return;
             case "exit":
                 die();
                 break;
@@ -137,8 +133,6 @@ public class CLI {
         solPrint("Toogle verbose printing");
         print("d");
         solPrint("Toogle debug printing");
-        print("i");
-        solPrint("Toogle info printing");
         print("exit");
         solPrint("Exits the current Menu.");
         solPrint("When in main menu this will have the same result as 'die'");

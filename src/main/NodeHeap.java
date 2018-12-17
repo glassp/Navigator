@@ -38,7 +38,7 @@ public class NodeHeap {
 	 * 
 	 * 
 	 * @param graph	The graph to work with.
-	 * @param startingNode 
+	 * @param startingNode the starting node
 	 */
 	public NodeHeap(Graph graph, int startingNode) {
 		
@@ -198,7 +198,8 @@ public class NodeHeap {
 	/**
 	 * Returns the index of the item's left child, if it exists.
 	 * Returns -1 if not.
-	 * @param heapItem 
+	 * @param heapItem
+	 * TODO: add javadoc description for heapItem
 	 */
 	private int getLeftChild(int heapItem) {
 //		int temp = 2*(heapItem + 1) - 1;
@@ -212,7 +213,8 @@ public class NodeHeap {
 	/**
 	 * Returns the index of the item's right child, if it exists.
 	 * Returns -1 if not.
-	 * @param heapItem 
+	 * @param heapItem
+	 * TODO: add javadoc description for heapItem
 	 */
 	private int getRightChild(int heapItem) {
 		int temp = 2*heapItem + 2;
