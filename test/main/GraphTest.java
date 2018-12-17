@@ -4,31 +4,35 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GraphTest {
+class GraphTest {
+
+    @Test
+    void runQuery() {
+        //TODO
+    }
 
 
     @Test
-    public void addEdgeError() {
-        boolean thrown = false;
+    void addEdge() {
         try {
             Graph graph = new Graph(3, 3);
             assertFalse(graph.hasOutgoingEdges(0));
             graph.addEdge(0, 1, 1);
             assertTrue(graph.hasOutgoingEdges(0));
             assertEquals(0, graph.getEdge(0, 1));
-            graph.addEdge(1, 2, 1);
             graph.addEdge(0, 2, 1);
+            graph.addEdge(1, 2, 1);
             assertEquals(1, graph.getEdge(0, 2));
             assertEquals(2, graph.getEdge(1, 2));
         } catch (UnorderedGraphException e) {
-            thrown = true;
+            fail("unordered graph exception");
+            e.printStackTrace();
 
         }
-        assertTrue(thrown);
     }
 
     @Test
-    public void insertEdge() {
+    void insertEdge() {
         try {
             Graph graph = new Graph(4, 3);
             assertFalse(graph.hasOutgoingEdges(0));
@@ -45,33 +49,14 @@ public class GraphTest {
     }
 
     @Test
-    public void addEdge() {
-        try {
-            Graph graph = new Graph(3, 3);
-            assertFalse(graph.hasOutgoingEdges(0));
-            graph.addEdge(0, 1, 1);
-            assertTrue(graph.hasOutgoingEdges(0));
-            assertEquals(0, graph.getEdge(0, 1));
-            graph.addEdge(0, 2, 1);
-            graph.addEdge(1, 2, 1);
-            assertEquals(1, graph.getEdge(0, 2));
-            assertEquals(2, graph.getEdge(1, 2));
-        } catch (UnorderedGraphException e) {
-            fail();
-            e.printStackTrace();
-
-        }
-    }
-
-    @Test
-    public void hasOutgoingEdges() {
+    void hasOutgoingEdges() {
         try {
             Graph graph = new Graph(3, 3);
             assertFalse(graph.hasOutgoingEdges(0));
             graph.addEdge(0, 1, 1);
             assertTrue(graph.hasOutgoingEdges(0));
         } catch (Exception e) {
-            fail();
+            fail("exception in hasOutgoing edges");
             e.printStackTrace();
         }
     }
@@ -84,7 +69,7 @@ public class GraphTest {
             graph.addEdge(0, 1, 1);
             assertEquals(0, graph.getOffset(0));
         } catch (Exception e) {
-            fail();
+            fail("exception in getOffset");
             e.printStackTrace();
         }
     }
@@ -97,7 +82,7 @@ public class GraphTest {
             graph.setOffset(0, 0);
             assertEquals(0, graph.getOffset(0));
         } catch (Exception e) {
-            fail();
+            fail("exception in setOffset");
             e.printStackTrace();
         }
     }
@@ -112,7 +97,7 @@ public class GraphTest {
             graph.addEdge(0, 2, 1);
             assertEquals(1, graph.getEdge(0, 2));
         } catch (Exception e) {
-            fail();
+            fail("exception in getEdge");
             e.printStackTrace();
         }
     }
@@ -128,7 +113,7 @@ public class GraphTest {
             assertEquals(1, graph.nextNode(0));
             assertEquals(0, graph.nextNode(1));
         } catch (Exception e) {
-            fail();
+            fail("exception in nextNode");
             e.printStackTrace();
         }
     }
@@ -142,7 +127,7 @@ public class GraphTest {
             graph.addEdge(0, 2, 2);
             assertEquals(2, graph.countOutgoingEdges(0));
         } catch (Exception e) {
-            fail();
+            fail("exception");
             e.printStackTrace();
         }
     }
@@ -155,7 +140,7 @@ public class GraphTest {
             graph.addEdge(0, 1, 4);
             assertEquals(4, graph.getWeight(0, 1), 0.1);
         } catch (Exception e) {
-            fail();
+            fail("exception");
             e.printStackTrace();
         }
     }
@@ -169,7 +154,7 @@ public class GraphTest {
             graph.setDistance(1, 1.5);
             assertEquals(1.5, graph.getDistance(1), 0.1);
         } catch (Exception e) {
-            fail();
+            fail("exception");
             e.printStackTrace();
         }
     }
@@ -187,8 +172,24 @@ public class GraphTest {
             graph.addEdge(1, 2, 3);
             assertArrayEquals(arr, graph.getNodeList());
         } catch (Exception e) {
-            fail();
+            fail("exception");
+            e.printStackTrace();
+
+        }
+    }
+
+
+    @Test
+    void getWeight1() {
+        try {
+            Graph graph = new Graph(3, 3);
+            assertEquals(-1, graph.getWeight(graph.getEdge(0, 1)), 0.1);
+            graph.addEdge(0, 1, 4);
+            assertEquals(4, graph.getWeight(graph.getEdge(0, 1)), 0.1);
+        } catch (Exception e) {
+            fail("exception");
             e.printStackTrace();
         }
+
     }
 }

@@ -37,12 +37,6 @@ public class Dijkstra extends CLILogger {
         graph.setDistance(start, 0.0);
     }
 
-    
-//    public void init() {
-//        int[] nodeList = this.graph.getNodeList();
-//        //distance is by default set to Double.POSITIVE_INFINITY
-//        this.graph.setDistance(this.startNode, 0);
-//    }
 
     
     /**
@@ -65,12 +59,11 @@ public class Dijkstra extends CLILogger {
          * offset[n] is where the first edge for node n is stored
          * offset[n+1] -1 is the last one (can overflow! last edge is last entry. can be -1.)
          * 			is taken care off in new implementation of countOutgoingEdges
-         * 
-         * TODO: Might be better implementing the offset array as explained in specification
+         *
+         *  TODO: Might be better implementing the offset array as explained in specification
+         *  TODO: Feel free to change it :)
          */
 
-
-        //int[] offset = graph.getNodeList();    // maybe not ideal, but shouldn't be a problem
 
       
         int currentNode = heap.getAndRemoveNext();
@@ -82,6 +75,7 @@ public class Dijkstra extends CLILogger {
         	double newDistance;
         	
         	for (int i = firstEdge; i < firstEdge + graph.countOutgoingEdges(currentNode); i++) {
+        		
         		if (graph.getWeight(i) >= 0) {
             		// graph.getWeight(i) can be -1 if edge doesn't exist. Maybe throw exception?
         			
@@ -89,21 +83,26 @@ public class Dijkstra extends CLILogger {
         			newDistance = graph.getDistance(currentNode) + graph.getWeight(i);
         			
         			if (graph.getDistance( currentDestination ) > newDistance) {
+//        				TODO: do we need an exceptional case if node has already been seen? prob not since then it will have the lowest distcnace possible.
+        				
 						//found shorter path to this neighbour. Update distance, predecessor and heap.
         				heap.decreaseDistance(currentDestination, newDistance);
         				graph.setPredecessor(currentDestination, currentNode);
+        				
 					} 
         			
 				}
-        		
+
 			}
-        		
+        	
         	
         	currentNode = heap.getAndRemoveNext();
+
         }
 
 
         //passes info to CLI
+        this.stop();
         print("Dijkstra's algorithm completed in " + CLILogger.runtimeInSeconds(this.runtime) + " seconds.");
     }
     

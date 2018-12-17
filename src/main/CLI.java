@@ -7,6 +7,7 @@ import java.util.Scanner;
  */
 public class CLI {
     Graph graph;
+    private String outPath;
     Scanner scanner = new Scanner(System.in);
     //print functions
 
@@ -88,13 +89,16 @@ public class CLI {
                 return;
             case "v":
                 this.graph.toogleVerbose();
-                break;
+                mainMenu();
+                return;
             case "d":
                 this.graph.toogleDebug();
-                break;
+                mainMenu();
+                return;
             case "i":
                 this.graph.toogleInfo();
-                break;
+                mainMenu();
+                return;
             case "exit":
                 die();
                 break;
@@ -165,6 +169,7 @@ public class CLI {
         }
         IOHandler ioHandler = new IOHandler();
         this.graph = ioHandler.importGraph(path);
+        mainMenu();
     }
 
     /**
@@ -188,7 +193,7 @@ public class CLI {
             return;
         }
         this.graph.runDijkstra(start);
-
+        mainMenu();
     }
 
     /**
@@ -209,7 +214,8 @@ public class CLI {
                 break;
         }
         IOHandler ioHandler = new IOHandler();
-        ioHandler.runQuery(path, this.graph);
+        outPath = ioHandler.runQuery(path, this.graph);
+        mainMenu();
     }
 
     /**
@@ -230,7 +236,8 @@ public class CLI {
                 break;
         }
         IOHandler ioHandler = new IOHandler();
-        ioHandler.diff(path, ioHandler.pathToBin() + "out/");
+        ioHandler.diff(path, outPath);
+        mainMenu();
     }
 
     /**
@@ -251,7 +258,12 @@ public class CLI {
      * @param quePath path to Query file
      * @param solPath path to Solution file
      */
-    public void runOnBench(String fmiPath, String quePath, String solPath) {
-        //TODO implement
+    public void fullRun(String fmiPath, String quePath, String solPath) {
+        header("0.1 - dev");
+        IOHandler ioHandler = new IOHandler();
+        graph = ioHandler.importGraph(fmiPath);
+        String filename = ioHandler.runQuery(quePath, graph);
+        ioHandler.diff(solPath, filename);
+
     }
 }

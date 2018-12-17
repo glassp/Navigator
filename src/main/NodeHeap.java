@@ -33,11 +33,23 @@ public class NodeHeap {
 	
 	// min heap: parent's distance has to be less than or equal to any child's
 	
-	
+	/**
+	 * Construct a NodeHeap instance.
+	 * 
+	 * 
+	 * @param graph	The graph to work with.
+	 * @param startingNode 
+	 */
 	public NodeHeap(Graph graph, int startingNode) {
 		
 		this.graph = graph;
-		this.heapNodes = IntStream.rangeClosed(0, graph.getNodeList().length-1).toArray();
+//		this.heapNodes = IntStream.rangeClosed(0, graph.getNodeList().length-1).toArray();
+		this.heapNodes = IntStream.rangeClosed(0, graph.getNodesCount()-1).toArray();
+		
+//		System.out.println("Heap structure upon creation:");
+//		for (int i : heapNodes) {
+//			System.out.println(i);
+//		}
 		
 		this.maxIndex = heapNodes.length - 1;
 		
@@ -67,7 +79,7 @@ public class NodeHeap {
 	 * @param newDistance	Will be written in graph object.
 	 */
 	public void decreaseDistance(int node, double newDistance) {
-		graph.setDistance(heapNodes[node], newDistance);
+		graph.setDistance(node, newDistance);
 		
 		// Find heap item that belongs to the node.
 		node = nodeLocation[node];
@@ -152,7 +164,7 @@ public class NodeHeap {
 		
 		int parent = getParent(heapItem);
 		
-		if (graph.getDistance(parent) > distanceOfNode) {
+		if (graph.getDistance(heapNodes[parent]) > distanceOfNode) {
 			swap(heapItem, parent);
 			
 			//Recursion - ending at root or earlier, since getParent(0) = 0
@@ -186,7 +198,6 @@ public class NodeHeap {
 	/**
 	 * Returns the index of the item's left child, if it exists.
 	 * Returns -1 if not.
-	 * TODO: missing parameter description
 	 * @param heapItem 
 	 */
 	private int getLeftChild(int heapItem) {
@@ -201,7 +212,6 @@ public class NodeHeap {
 	/**
 	 * Returns the index of the item's right child, if it exists.
 	 * Returns -1 if not.
-	 * TODO: missing parameter description
 	 * @param heapItem 
 	 */
 	private int getRightChild(int heapItem) {
@@ -239,13 +249,19 @@ public class NodeHeap {
 	 * @return Node number in graph or -1 
 	 */
 	private int removeRoot() {
-		if (maxIndex <= 0) {
+		if (maxIndex < 0) {
 			maxIndex = -1;
 			return -1;
 		}
+		else if (maxIndex == 0) {
+			maxIndex--;
+			return heapNodes[0];
+		}
 		else {
-			swap(0, maxIndex--);
+			swap(0, maxIndex--);	//0 and maxIndex, then maxIndex is decremented afterwards
+			
 			siftDown(0);
+			
 			return heapNodes[maxIndex+1];
 
 		}
