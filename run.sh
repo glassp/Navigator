@@ -11,7 +11,7 @@ done
 if [[ -d "./bin" ]];
 then
     #previous compiled files exist => remove them
-    rm -r  ./bin
+    rm -r  ./bin/
 fi
 
 #create bin dir
@@ -22,7 +22,23 @@ mkdir ./bin/out
 #compile code
 javac ./src/main/*.java -d ./bin/
 
-#start main()
-java -cp ./bin/ main/Main
+#if param 1,2,3 empty exit
+if [[ -z $1 ]]; then
+echo -e "\nPlease call $0 <arg1> <arg2> <arg3> to run this command!\n"
+sleep 3s
+exit 1;
+fi
+if [[ -z $2 ]]; then
+echo -e "\nPlease call $0 <arg1> <arg2> <arg3> to run this command!\n"
+sleep 3s
+exit 1;
+fi
+if [[ -z $3 ]]; then
+echo -e "\nPlease call $0 <arg1> <arg2> <arg3> to run this command!\n"
+sleep 3s
+exit 1;
+fi
 
-sleep 5s
+#run main(arg1, arg2, arg3)
+java -cp ./bin/ main/Main ${1} ${2} ${3}
+

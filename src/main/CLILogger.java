@@ -13,12 +13,12 @@ public abstract class CLILogger {
      */
     public double runtime;
 
-    public static int runtimeInSeconds(double runtime) {
-        return 0;
+    public static double runtimeInSeconds(double runtime) {
+        return (runtime / 1000);
     }
 
-    public static int runtimeInMinutes(double runtime) {
-        return 0;
+    public static double runtimeInMinutes(double runtime) {
+        return (double) Math.round((runtimeInSeconds(runtime) / 60) * 1000d) / 1000d;
     }
 
     /**

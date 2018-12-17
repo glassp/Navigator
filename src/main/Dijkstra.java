@@ -59,8 +59,9 @@ public class Dijkstra extends CLILogger {
          * offset[n] is where the first edge for node n is stored
          * offset[n+1] -1 is the last one (can overflow! last edge is last entry. can be -1.)
          * 			is taken care off in new implementation of countOutgoingEdges
-         * 
-         * TODO: Might be better implementing the offset array as explained in specification
+         *
+         *  TODO: Might be better implementing the offset array as explained in specification
+         *  TODO: Feel free to change it :)
          */
 
 
@@ -101,6 +102,7 @@ public class Dijkstra extends CLILogger {
 
 
         //passes info to CLI
+        this.stop();
         print("Dijkstra's algorithm completed in " + CLILogger.runtimeInSeconds(this.runtime) + " seconds.");
     }
     

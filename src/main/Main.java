@@ -10,9 +10,12 @@ public class Main {
      * @param args the arguments
      */
     public static void main(String[] args) {
-        //TODO: add switch for cli and bench
         CLI cli = new CLI();
-        cli.header("0.1 - dev build");
-        cli.mainMenu();
+        if (args.length == 3) {
+            cli.fullRun(args[0], args[1], args[2]);
+        } else {
+            cli.header("0.1 - dev build");
+            cli.mainMenu();
+        }
     }
 }

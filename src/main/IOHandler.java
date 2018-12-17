@@ -1,14 +1,24 @@
 package main;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Paths;
 
 /**
  * The IOHandler
  */
 public class IOHandler extends CLILogger {
+
+    private String filename;
+    private BufferedWriter outputStream;
+
+    private void initStream(Graph graph) {
+        filename = graph.hashCode() + ".out";
+        try {
+            outputStream = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(pathToBin() + "out/" + filename))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * returns the path to the bin dir
@@ -74,7 +84,7 @@ public class IOHandler extends CLILogger {
                 double cost = Double.parseDouble(data[2]);
             }
             this.stop();
-            this.print("Finished Reading Graph Data in " + CLILogger.runtimeInMinutes(this.runtime) + "minutes." + "\r\n" + "Time in Seconds: " + CLILogger.runtimeInSeconds(this.runtime));
+            this.print("Finished Reading Graph Data in " + CLILogger.runtimeInMinutes(this.runtime) + " minutes." + "\r\n" + "Time in Seconds: " + CLILogger.runtimeInSeconds(this.runtime));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -88,8 +98,9 @@ public class IOHandler extends CLILogger {
      * runs the queries from .que file on the graph and outputs into a .out file
      * @param path the path the .que file
      * @param graph the graph
+     * @return the output path of the file as absolute path
      */
-    public void runQuery(String path, Graph graph) {
+    public String runQuery(String path, Graph graph) {
         try {
             var fileReader = new FileReader(path);
             var file = new BufferedReader(fileReader);
@@ -98,12 +109,16 @@ public class IOHandler extends CLILogger {
                 String[] data = line.split(" ");
                 if (data[0] != null && data[1] != null && !data[0].isEmpty() && !data[1].isEmpty()) {
                     var result = graph.runQuery(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
-                    //TODO: write into .out file
+                    this.initStream(graph);
+                    outputStream.write(result + "");
+                    outputStream.newLine();
+                    return pathToBin() + "out/" + filename;
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return "";
     }
 
     /**
@@ -113,7 +128,7 @@ public class IOHandler extends CLILogger {
      * @param outPath path to .out file
      * @return number of differences
      */
-    public int diff(String solPath, String outPath) {
+    public void diff(String solPath, String outPath) {
         int counter = 0;
         try {
             var outReader = new FileReader(outPath);
@@ -128,11 +143,7 @@ public class IOHandler extends CLILogger {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return -1;
         }
-        return counter;
+        print("There are " + counter + " differences.");
     }
-
-    //TODO: assertTimeout: Graphimport under 2 minutes
-    //TODO: exportSolutionTo(String path, solution):void
 }

@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 /**
  * A class for a directed graph.
- * 
+ * <p>
  * It can be used with the Dijkstra class to find minimum distances from all nodes to one starting node.
  */
 public class Graph extends CLILogger {
@@ -38,7 +38,7 @@ public class Graph extends CLILogger {
      * stores the distance to a node
      */
     private double[] distance;
-    
+
     /**
      * stores any node's preceding node on the ideal path from Dijkstra's starting node to that node, if Dijkstra's algorithm has been run.
      * Values will be -1 if there is no path or if Dijkstra has not run yet.
@@ -47,25 +47,27 @@ public class Graph extends CLILogger {
 
     /**
      * Constructor.
-     * 
-     * Edges have to be manually added to the graph using the method insertEdge(). TODO: should insertEdge be used, or addEdge? What's the difference? 
+     * <p>
+     * Edges have to be manually added to the graph using the method insertEdge().
+     * <p>
+     * TODO: the preferable way to add egdes is insertEdge(...) as it handles unorderedGraphExceptions
      *
      * @param nodes number of nodes that are used in the graph
      * @param edges number of edges that are to be used in the graph
      */
     public Graph(int nodes, int edges) {
-    	this.offset = new int[nodes];
-    	this.predecessor = new int[nodes];
-    	this.distance = new double[nodes];
-    	
-    	this.edges = new int[edges];
+        this.offset = new int[nodes];
+        this.predecessor = new int[nodes];
+        this.distance = new double[nodes];
+
+        this.edges = new int[edges];
         this.weight = new double[edges];
-        
+
         this.latitude = new double[nodes];
         this.longitude = new double[nodes];
-        
+
         this.current = 0;
-        
+
         //initializes all values in arrays with their default value, if there is one
         Arrays.fill(offset, -1);
         Arrays.fill(predecessor, -1);
@@ -88,13 +90,14 @@ public class Graph extends CLILogger {
 
     /**
      * runs query on this graph with start as start node and dest as destination
+     *
      * @param start the start node
-     * @param dest the destination
+     * @param dest  the destination
      * @return the distance from start to dest
      */
     public double runQuery(int start, int dest) {
-        //TODO
-        return 0;
+        runDijkstra(start);
+        return getDistance(dest);
     }
 
     /**
@@ -162,7 +165,7 @@ public class Graph extends CLILogger {
      * @param weight the weight
      * @throws UnorderedGraphException A special Exception which tells caller to try insert method or to die on error if unchecked
      */
-     void addEdge(int start, int dest, double weight) throws UnorderedGraphException {
+    void addEdge(int start, int dest, double weight) throws UnorderedGraphException {
         //edges are added in right order just append in array
         if (hasOutgoingEdges(start + 1)) {
             this.infoPrint("UnorderedGraphException thrown");
@@ -296,21 +299,22 @@ public class Graph extends CLILogger {
      * Will return -1 if
      * A) no edges exist for given node
      * B) given node index is the first index beyond the node array (node == offset.length), meaning that node does not exist. This is to simplify iterative operations.
-     * 
-     * Other non-existent nodes will result in an exception. 
+     * <p>
+     * Other non-existent nodes will result in an exception.
      *
      * @param node the node
      * @return the offset or -1 if it has no edges.
      * @throws IllegalArgumentException if node index is < 0 or > offset.length
      */
-    public int getOffset(int node) throws IllegalArgumentException{
-    	if (node > offset.length || node < 0)
-    		throw new IllegalArgumentException("Can't give offset, since node " +node +" doesn't exist. Offset-Array length is " +offset.length);
+    public int getOffset(int node) throws IllegalArgumentException {
+        if (node > offset.length || node < 0)
+            throw new IllegalArgumentException("Can't give offset, since node " + node + " doesn't exist. Offset-Array length is " + offset.length);
         if (node == offset.length)
-        	return -1;					//TODO: I added exceptions for most non-existent nodes. Making an exception for this exception is a bit of a hack, but so is not using exceptions in any way.
-        								//I don't think there was any case implemented for node == offset.length before, which is needed though in my understanding for methods that add edges to the last node and check for node+1 (without increasing array size, but that shouldn't be done if all goes correctly anyways)  
-        
-    	return this.offset[node];
+            return -1;
+        // I added exceptions for most non-existent nodes. Making an exception for this exception is a bit of a hack, but so is not using exceptions in any way.
+        // I don't think there was any case implemented for node == offset.length before, which is needed though in my understanding for methods that add edges to the last node and check for node+1 (without increasing array size, but that shouldn't be done if all goes correctly anyways)
+
+        return this.offset[node];
     }
 
 
@@ -323,11 +327,11 @@ public class Graph extends CLILogger {
      * @throws IllegalArgumentException only if node does not exist and isn't equal to offset.length
      */
     void setOffset(int node, int offset) throws IllegalArgumentException {
-    	if (node > this.offset.length || node < 0)
-    		throw new IllegalArgumentException("Can't set offset, since node " +node +" doesn't exist. Offset-Array length is " +this.offset.length);
-    	if (node == this.offset.length)
-    		return;
-    	
+        if (node > this.offset.length || node < 0)
+            throw new IllegalArgumentException("Can't set offset, since node " + node + " doesn't exist. Offset-Array length is " + this.offset.length);
+        if (node == this.offset.length)
+            return;
+
         this.infoPrint("setting offset");
         this.offset[node] = offset;
     }
@@ -370,14 +374,14 @@ public class Graph extends CLILogger {
         double minVal = Double.POSITIVE_INFINITY;
         int minIndex = -1;
         int offset = this.getOffset(node);
-        if (offset == -1){
-          this.debugPrint("no nextNode: offset invalid");
-          return -1;
+        if (offset == -1) {
+            this.debugPrint("no nextNode: offset invalid");
+            return -1;
         }
         int elem = this.countOutgoingEdges(node);
-        if (elem < 1){
-          this.debugPrint("no nextNode: zero outgoing Edges");
-          return -1;
+        if (elem < 1) {
+            this.debugPrint("no nextNode: zero outgoing Edges");
+            return -1;
         }
         for (int i = 0; i < elem; i++) {
             double var = this.getWeight(node, this.edges[offset + i]);
@@ -398,26 +402,24 @@ public class Graph extends CLILogger {
      */
     public int countOutgoingEdges(int node) {
         if (!this.hasOutgoingEdges(node)) return 0;
-        
-        // TODO: Has to iterate in O(n), but could be done in O(1) if offset was managed like in specifications
-   
-    	int lastEdge = -1;
+
+        //  Has to iterate in O(n), but could be done in O(1) if offset was managed like in specifications
+        // TODO: Feel free to change it :)
+        int lastEdge = -1;
 //    	for (int i = node+1; i < this.current; i++) {
-    	for (int i = node+1; i < offset.length; i++) {
+        for (int i = node + 1; i < offset.length; i++) {
 //			lastEdge = offset[i];
-    		lastEdge = getOffset(i);
-			if (lastEdge != -1) break;
-		}
-    	
-    	if (lastEdge == -1) {
-			// no other node after it that has edges
-    		return this.current - offset[node];
-		}
-    	
-    	return lastEdge - offset[node];
+            lastEdge = getOffset(i);
+            if (lastEdge != -1) break;
+        }
+
+        if (lastEdge == -1) {
+            // no other node after it that has edges
+            return this.current - offset[node];
+        }
+
+        return lastEdge - offset[node];
     }
-    
-    
 
 
     /**
@@ -434,7 +436,7 @@ public class Graph extends CLILogger {
         return this.weight[edge];
 
     }
-    
+
     /**
      * Returns weight of an edge
      *
@@ -442,11 +444,11 @@ public class Graph extends CLILogger {
      * @return weight or -1 if it doesn't exist
      */
     public double getWeight(int edge) {
-    	if (edge >= this.current || edge < 0) {
-			return -1;
-		}
-    	
-    	return this.weight[edge];
+        if (edge >= this.current || edge < 0) {
+            return -1;
+        }
+
+        return this.weight[edge];
     }
 
 
@@ -458,9 +460,9 @@ public class Graph extends CLILogger {
      * @throws IllegalArgumentException if node index is out of bounds
      */
     public double getDistance(int dest) throws IllegalArgumentException {
-    	if (dest < 0 || dest >= offset.length)
-			throw new IllegalArgumentException("Given destination " + dest +" is not a node ID in [0,"+ (offset.length-1) +" ]");
-    	
+        if (dest < 0 || dest >= offset.length)
+            throw new IllegalArgumentException("Given destination " + dest + " is not a node ID in [0," + (offset.length - 1) + " ]");
+
         return this.distance[dest];
     }
 
@@ -474,45 +476,44 @@ public class Graph extends CLILogger {
      * @throws IllegalArgumentException if dest index is out of bounds
      */
     public boolean setDistance(int dest, double dist) throws IllegalArgumentException {
-    	if (dest < 0 || dest >= offset.length)
-			throw new IllegalArgumentException("Given destination " + dest +" is not a node ID in [0,"+ (offset.length-1) +" ]");
-    	
+        if (dest < 0 || dest >= offset.length)
+            throw new IllegalArgumentException("Given destination " + dest + " is not a node ID in [0," + (offset.length - 1) + " ]");
+
         if (this.getDistance(dest) == dist) return false;
         this.distance[dest] = dist;
         return true;
     }
 
-	/**
-	 * Sets the node's predecessor on a path from Dijkstra's starting node to given node. Used by Dijkstra class while the algorithm runs.
-	 * 
-	 * @param node	The node of which a predecessor gets set.
-	 * @param predecessor The preceding node on a path to Dijkstra's start.
-	 * @throws IllegalArgumentException if node index is out of bounds
-	 */
+    /**
+     * Sets the node's predecessor on a path from Dijkstra's starting node to given node. Used by Dijkstra class while the algorithm runs.
+     *
+     * @param node        The node of which a predecessor gets set.
+     * @param predecessor The preceding node on a path to Dijkstra's start.
+     * @throws IllegalArgumentException if node index is out of bounds
+     */
     public void setPredecessor(int node, int predecessor) throws IllegalArgumentException {
-    	if (node < 0 || node >= this.predecessor.length)
-			throw new IllegalArgumentException("Given node id " + node +" is not a legal node ID in [0,"+ (this.predecessor.length-1) +" ]. Offset.length is " + offset.length);
-    	
-    	this.predecessor[node] = predecessor;
+        if (node < 0 || node >= this.predecessor.length)
+            throw new IllegalArgumentException("Given node id " + node + " is not a legal node ID in [0," + (this.predecessor.length - 1) + " ]. Offset.length is " + offset.length);
+
+        this.predecessor[node] = predecessor;
     }
-    
+
     /**
      * Returns the node's predecessor on a path from Dijkstra's starting node to given node.
      * The starting node is set when creating an instance of Dijkstra's algorithm for this graph.
      * If there is no path or if Dijkstra has not run yet, -1 will be returned!
-     * 
-     * 
+     *
      * @param node From this node, by going to the returned node and that one's predecessors, you can recursively find the ideal path to the starting node.
-     * @return	preceding node on a path to start, or -1
      * @throws IllegalArgumentException if node index is out of bounds
+     * @return preceding node on a path to start, or -1
      */
     public int getPredecessor(int node) throws IllegalArgumentException {
-    	if (node < 0 || node >= this.predecessor.length)
-			throw new IllegalArgumentException("Given node id " + node +" is not a legal node ID in [0,"+ (this.predecessor.length-1) +" ]. Offset.length is " + offset.length);
-    	
-    	return this.predecessor[node];
+        if (node < 0 || node >= this.predecessor.length)
+            throw new IllegalArgumentException("Given node id " + node + " is not a legal node ID in [0," + (this.predecessor.length - 1) + " ]. Offset.length is " + offset.length);
+
+        return this.predecessor[node];
     }
-    
+
     /**
      * Returns list of all nodes with their offsets
      *
@@ -521,39 +522,38 @@ public class Graph extends CLILogger {
     int[] getNodeList() {
         return this.offset;
     }
-    
+
     /**
      * Returns the destination node of edge
+     *
      * @param edge The Edge
      * @return destination of given edge
      */
     public int getDestination(int edge) {
-    	return this.edges[edge];
+        return this.edges[edge];
     }
-    
-    
+
+
     /**
      * Returns amount of edges that have been added to this directed graph.
      */
     public int getCurrentEdgesCount() {
-    	return this.current;
+        return this.current;
     }
-    
+
     /**
      * Returns maximum number of edges supported in this directed graph.
-     * 
+     * <p>
      * This value is determined upon construction of a graph instance via parameter 'edges'.
      */
     public int getMaxEdgesCount() {
-    	return this.edges.length;
+        return this.edges.length;
     }
-    
+
     /**
      * Returns the amount of nodes in the graph.
-     * 
      */
     public int getNodesCount() {
-    	return this.distance.length;
+        return this.distance.length;
     }
-    
 }
