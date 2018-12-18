@@ -52,6 +52,8 @@ public class Dijkstra extends CLILogger {
         
         NodeHeap heap = new NodeHeap(graph, startNode);
         
+        //TODO: clean up comments and possible debug sysouts
+        
         /* For reference: in the graph,
          * edges[n]	 contains destination of edge # n
          * weight[n] contains weight of edge # n
@@ -68,34 +70,58 @@ public class Dijkstra extends CLILogger {
       
         int currentNode = heap.getAndRemoveNext();
         
+        int count = 0; //TODO: remove debug counter
+        
         while (currentNode >= 0) {
+        	count++;
+        	
         	int firstEdge = graph.getOffset(currentNode);
         	
         	int currentDestination;
         	double newDistance;
         	
+        	if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
+				debugPrint("Node: " + currentNode);
+			}
+        	
         	for (int i = firstEdge; i < firstEdge + graph.countOutgoingEdges(currentNode); i++) {
         		
         		if (graph.getWeight(i) >= 0) {
-            		// graph.getWeight(i) can be -1 if edge doesn't exist. Maybe throw exception?
+            		// graph.getWeight(i) can be -1 if edge doesn't exist. 
         			
         			currentDestination = graph.getDestination(i);
         			newDistance = graph.getDistance(currentNode) + graph.getWeight(i);
         			
+        			if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
+        				debugPrint("\tedge: to " + currentDestination + " (cost " + graph.getWeight(i) + ")");
+        			}
+        			
+        			
         			if (graph.getDistance( currentDestination ) > newDistance) {
-//        				TODO: do we need an exceptional case if node has already been seen? prob not since then it will have the lowest distcnace possible.
+//        				TODO: perhaps exceptional case if node has already been seen? prob not since then it will have the lowest distance possible.
         				
+        				if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
+            				debugPrint("     decreasing and reheap (" + graph.getDistance( currentDestination ) + ">" + newDistance + ")");
+            			}
 						//found shorter path to this neighbour. Update distance, predecessor and heap.
         				heap.decreaseDistance(currentDestination, newDistance);
         				graph.setPredecessor(currentDestination, currentNode);
+        				if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
+            				debugPrint("       distance of " + currentDestination + " has been set to " + graph.getDistance(currentDestination));
+            			}
         				
-					} 
+					}
+        			if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
+        				debugPrint("\n");//TODO: remove if blocks with extensive debug code
+        			}
         			
 				}
 
 			}
         	
-        	
+        	if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
+				debugPrint("location of 3096359 is " + heap.getPositionOf(3096359)  + ". Determine next node now.");
+			}
         	currentNode = heap.getAndRemoveNext();
 
         }

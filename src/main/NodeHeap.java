@@ -2,6 +2,7 @@ package main;
 
 import java.util.stream.IntStream;
 
+
 /**
  * A Min Heap to manage priorities of nodes.  
  * Assumes that upon creation, all distances of nodes in the graph are positive infinity, except for one starting node with distance 0.
@@ -10,6 +11,7 @@ import java.util.stream.IntStream;
  * 
  */
 public class NodeHeap {
+	int debug;
 
 	/**
 	 * Graph instance the nodes of which are represented in the heap.
@@ -41,6 +43,8 @@ public class NodeHeap {
 	 * @param startingNode the starting node
 	 */
 	public NodeHeap(Graph graph, int startingNode) {
+		this.debug = 0; //TODO: remove
+		
 		
 		this.graph = graph;
 //		this.heapNodes = IntStream.rangeClosed(0, graph.getNodeList().length-1).toArray();
@@ -52,6 +56,9 @@ public class NodeHeap {
 //		}
 		
 		this.maxIndex = heapNodes.length - 1;
+		
+		System.out.println("Heap has " + heapNodes.length + " nodes.");
+		System.out.println("maxIndes is " + maxIndex);
 		
 //		this.nodesArray = new int[graph.getNodeList().length];
 //		Arrays.fill(nodesArray, Integer.MAX_VALUE);
@@ -82,8 +89,9 @@ public class NodeHeap {
 		graph.setDistance(node, newDistance);
 		
 		// Find heap item that belongs to the node.
+//		System.out.println("\t   " +node + " gets new distance " + newDistance); //TODO: remove debug code
 		node = nodeLocation[node];
-		
+//		System.out.print("is at position " + node);
 		siftUp(node, newDistance);
 	}
 	
@@ -127,6 +135,7 @@ public class NodeHeap {
 		
 		if (graph.getDistance(heapNodes[heapItem]) > minChildDist) {
 			swap(heapItem, minChild);
+//			System.out.println(" - now swap (sift down) heap items " + heapItem + " and " + minChild); //TODO: remove
 			siftDown(minChild);
 			
 			return true;
@@ -160,11 +169,12 @@ public class NodeHeap {
 	 */
 	private boolean siftUp(int heapItem, double distanceOfNode) {
 		if (heapItem > maxIndex)
-			throw new IllegalArgumentException("Node " + heapItem + " does not exist in heap. Max index is " + maxIndex);
+			throw new IllegalArgumentException("Heap item " + heapItem + " does not exist. Max index is " + maxIndex);
 		
 		int parent = getParent(heapItem);
 		
 		if (graph.getDistance(heapNodes[parent]) > distanceOfNode) {
+//			System.out.println(" - now swap heap items " + heapItem + " and " + parent); //TODO: remove
 			swap(heapItem, parent);
 			
 			//Recursion - ending at root or earlier, since getParent(0) = 0
@@ -198,8 +208,7 @@ public class NodeHeap {
 	/**
 	 * Returns the index of the item's left child, if it exists.
 	 * Returns -1 if not.
-	 * @param heapItem
-	 * TODO: add javadoc description for heapItem
+	 * @param heapItem index of item on the heap
 	 */
 	private int getLeftChild(int heapItem) {
 //		int temp = 2*(heapItem + 1) - 1;
@@ -213,8 +222,7 @@ public class NodeHeap {
 	/**
 	 * Returns the index of the item's right child, if it exists.
 	 * Returns -1 if not.
-	 * @param heapItem
-	 * TODO: add javadoc description for heapItem
+	 * @param heapItem index of item on the heap
 	 */
 	private int getRightChild(int heapItem) {
 		int temp = 2*heapItem + 2;
@@ -222,6 +230,20 @@ public class NodeHeap {
 			return temp;
 		}
 		return -1;
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @param node a node from the graph
+	 * @return current location of the node in the heap. -1 if out of bounds
+	 */
+	public int getPositionOf(int node) {
+		if (node < 0 || node >= nodeLocation.length) {
+			return -1;
+		}
+		return nodeLocation[node];
 	}
 	
 	
@@ -241,7 +263,12 @@ public class NodeHeap {
 		nodeLocation[ heapNodes[item2] ] 	= item1;	// vice versa
 		
 		heapNodes[item1] = heapNodes[item2];	
-		heapNodes[item2] = temp;				
+		heapNodes[item2] = temp;
+		
+//		if (maxIndex < 30 || maxIndex > heapNodes.length - 45) {
+//			System.out.println("swap index " + item1 + " and " + item2 + " (Nodes "+heapNodes[item2]+" and "+heapNodes[item1]+") | " + heapNodes[item2]+" is now at " +item2 + ", maxIndex is" + maxIndex);
+//		}
+		
 		
 	}
 	
@@ -276,6 +303,22 @@ public class NodeHeap {
 	 * @return Node number in graph or -1 
 	 */
 	public int getAndRemoveNext() {
+		debug++;
+		
+		try {
+			if (maxIndex < 10) {
+//				Thread.sleep(1000);
+				graph.verbosePrint("-- return and remove time " + debug);
+			}
+			if (maxIndex > heapNodes.length - 35) {
+//				Thread.sleep(500);
+				graph.verbosePrint("-- return and remove time " + debug);
+			}
+
+//			Thread.sleep(300);
+		} catch (Exception e) {
+		}
+		
 		return removeRoot();
 	}
 	
