@@ -14,7 +14,7 @@ public class IOHandler extends CLILogger {
     private void initStream(Graph graph) {
         filename = graph.hashCode() + ".out";
         try {
-            outputStream = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(pathToBin() + "out/" + filename))));
+            outputStream = new BufferedWriter(new FileWriter(pathToBin() + "out/" + filename));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -82,6 +82,8 @@ public class IOHandler extends CLILogger {
                 int start = Integer.parseInt(data[0]);
                 int dest = Integer.parseInt(data[1]);
                 double cost = Double.parseDouble(data[2]);
+                
+                graph.insertEdge(start, dest, cost);
             }
             this.stop();
             this.print("Finished Reading Graph Data in " + CLILogger.runtimeInMinutes(this.runtime) + " minutes." + "\r\n" + "Time in Seconds: " + CLILogger.runtimeInSeconds(this.runtime));
@@ -104,21 +106,22 @@ public class IOHandler extends CLILogger {
         try {
             var fileReader = new FileReader(path);
             var file = new BufferedReader(fileReader);
+            this.initStream(graph);
             String line;
             while ((line = file.readLine()) != null) {
                 String[] data = line.split(" ");
                 if (data[0] != null && data[1] != null && !data[0].isEmpty() && !data[1].isEmpty()) {
-                    var result = graph.runQuery(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
-                    this.initStream(graph);
+                    double result = graph.runQuery(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
                     outputStream.write(result + "");
                     outputStream.newLine();
-                    return pathToBin() + "out/" + filename;
                 }
             }
+            outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "";
+
+        return pathToBin() + "out/" + filename;
     }
 
     /**
@@ -138,12 +141,13 @@ public class IOHandler extends CLILogger {
             String s;
             String o;
             while ((s = sol.readLine()) != null && (o = out.readLine()) != null) {
-                if (!s.equals(o))
+                if (!o.equals(s))
                     counter++;
             }
+            print("There are " + counter + " differences.");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        print("There are " + counter + " differences.");
+
     }
 }
