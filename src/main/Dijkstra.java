@@ -48,6 +48,7 @@ public class Dijkstra extends CLILogger {
      * 
      */
     public void start() {
+    	print("Dijkstra's algorithm running...");
         this.startTiming();
         
         NodeHeap heap = new NodeHeap(graph, startNode);
@@ -68,9 +69,12 @@ public class Dijkstra extends CLILogger {
 
 
       
+        debugPrint("Heap Top: " +heap.getTopElementsPeek()); //TODO: debug code
         int currentNode = heap.getAndRemoveNext();
         
-        int count = 0; //TODO: remove debug counter
+        int count = 0; //TODO: remove debug counter and String
+//        String heapTop = heap.get 
+        		
         
         while (currentNode >= 0) {
         	count++;
@@ -121,6 +125,7 @@ public class Dijkstra extends CLILogger {
         	
         	if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
 				debugPrint("location of 3096359 is " + heap.getPositionOf(3096359)  + ". Determine next node now.");
+				debugPrint("Heap Top: "+ heap.getTopElementsPeek() + "\n");
 			}
         	currentNode = heap.getAndRemoveNext();
 
@@ -130,6 +135,16 @@ public class Dijkstra extends CLILogger {
         //passes info to CLI
         this.stop();
         print("Dijkstra's algorithm completed in " + CLILogger.runtimeInSeconds(this.runtime) + " seconds.");
+//        print("1: Node 16743651 has distance " + graph.getDistance(16743651));
+//        print("2: Node 16743652 has distance " + graph.getDistance(16743652));
+//        print("3: Node 16743653 has distance " + graph.getDistance(16743653));
+//        print("4: Node 16743654 has distance " + graph.getDistance(16743654));
+//        print("5: Node 16743655 has distance " + graph.getDistance(16743655));
+//        print("6: Node 16743656 has distance " + graph.getDistance(16743656));
+//        print("7: Node 16743657 has distance " + graph.getDistance(16743657));
+//        print("8: Node 16743658 has distance " + graph.getDistance(16743658));
+//        print("9: Node 16743659 has distance " + graph.getDistance(16743659));
+//        print("10: Node 16743660 has distance " + graph.getDistance(16743660));
     }
     
     //TODO: assertTimeout: run under 20 seconds

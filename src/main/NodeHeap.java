@@ -12,6 +12,11 @@ import java.util.stream.IntStream;
  */
 public class NodeHeap {
 	int debug;
+	
+	/**
+	 * String that can be updated to have current top 7 nodes seperated by comma 
+	 */
+	public String heapTop;
 
 	/**
 	 * Graph instance the nodes of which are represented in the heap.
@@ -58,7 +63,7 @@ public class NodeHeap {
 		this.maxIndex = heapNodes.length - 1;
 		
 		System.out.println("Heap has " + heapNodes.length + " nodes.");
-		System.out.println("maxIndes is " + maxIndex);
+		System.out.println("maxIndex is " + maxIndex + "\n"); //TODO: debug code
 		
 //		this.nodesArray = new int[graph.getNodeList().length];
 //		Arrays.fill(nodesArray, Integer.MAX_VALUE);
@@ -75,6 +80,7 @@ public class NodeHeap {
 		nodeLocation = heapNodes.clone();
 		// In the beginning, all nodes are saved at an index equal to their number in the graph, except for the two swapped ones.
 		// Further tracking of locations is done within the swap method.
+		heapTop = heapNodes[0] + ", " + heapNodes[1] + ", " + heapNodes[2] + ", " + heapNodes[3] + ", " + heapNodes[4] + ", " + heapNodes[5] + ", " + heapNodes[6]; //TODO: debugTool
 	}
 	
 	
@@ -154,7 +160,7 @@ public class NodeHeap {
 	 */
 	private boolean siftUp(int heapItem) {
 		if (heapItem > maxIndex)
-			throw new IllegalArgumentException("Node " + heapItem + " does not exist in heap. Max index is " + maxIndex);
+			throw new IllegalArgumentException("Heap item " + heapItem + " does not exist. Max index is " + maxIndex);
 		
 		return siftUp(heapItem, graph.getDistance(heapNodes[heapItem]));
 	}
@@ -196,14 +202,14 @@ public class NodeHeap {
 		if (heapItem == 0) {
 			return 0;
 		}
-		return (heapItem / 2) - (1/2);
+//		return (heapItem / 2) - (1/2);
 		
-//		int temp = heapItem;
-//		
-//		if (temp % 2 == 1) {
-//			temp++;
-//		}
-//		int parent = temp / 2 - 1;
+		int temp = heapItem;
+		
+		if (temp % 2 == 1) {
+			temp++;
+		}
+		return temp / 2 - 1;
 	}
 	/**
 	 * Returns the index of the item's left child, if it exists.
@@ -272,6 +278,12 @@ public class NodeHeap {
 		
 	}
 	
+	public String getTopElementsPeek() {
+		heapTop = heapNodes[0] + ", " + heapNodes[1] + ", " + heapNodes[2] + ", " + heapNodes[3] + ", " + heapNodes[4] + ", " + heapNodes[5] + ", " + heapNodes[6]; //TODO: debugTool
+		return heapTop;
+	}
+	
+	
 	/**
 	 * removes and returns the root item and determines a new one. Does preserve heap property.
 	 * Returns -1 if no items are on the heap (If so, maxIndex will be -1 as well).
@@ -279,7 +291,7 @@ public class NodeHeap {
 	 */
 	private int removeRoot() {
 		if (maxIndex < 0) {
-			maxIndex = -1;
+//			maxIndex = -1;
 			return -1;
 		}
 		else if (maxIndex == 0) {
