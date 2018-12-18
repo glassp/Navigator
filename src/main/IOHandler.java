@@ -82,6 +82,8 @@ public class IOHandler extends CLILogger {
                 int start = Integer.parseInt(data[0]);
                 int dest = Integer.parseInt(data[1]);
                 double cost = Double.parseDouble(data[2]);
+                
+                graph.insertEdge(start, dest, cost);
             }
             this.stop();
             this.print("Finished Reading Graph Data in " + CLILogger.runtimeInMinutes(this.runtime) + " minutes." + "\r\n" + "Time in Seconds: " + CLILogger.runtimeInSeconds(this.runtime));
