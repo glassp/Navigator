@@ -46,6 +46,12 @@ public class Graph extends CLILogger {
     private int[] predecessor;
 
     /**
+     * the starting node
+     * used to check if dijkstra did run for this node
+     */
+    private int start = -1;
+
+    /**
      * Constructor.
      * <p>
      * Edges have to be manually added to the graph using the method insertEdge().
@@ -81,10 +87,16 @@ public class Graph extends CLILogger {
      * @param start the start node
      */
     public void runDijkstra(int start) {
-        Dijkstra dijkstra = new Dijkstra(this, start);
-        dijkstra.setDebug(this.debug);
-        dijkstra.setVerbose(this.verbose);
-        dijkstra.start();
+        if (this.start != start) {
+            if (this.start != -1)
+                Arrays.fill(distance, Double.POSITIVE_INFINITY);
+            System.out.println("Starting dijkstra for " + start);
+            Dijkstra dijkstra = new Dijkstra(this, start);
+            dijkstra.setDebug(this.debug);
+            dijkstra.setVerbose(this.verbose);
+            dijkstra.start();
+        }
+        this.start = start;
     }
 
     /**
@@ -101,6 +113,7 @@ public class Graph extends CLILogger {
         debugPrint("Distance: " + dist);
         return dist;
     }
+
 
     /**
      * sets the latitude of a node

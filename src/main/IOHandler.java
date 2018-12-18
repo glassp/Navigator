@@ -111,12 +111,13 @@ public class IOHandler extends CLILogger {
             while ((line = file.readLine()) != null) {
                 String[] data = line.split(" ");
                 if (data[0] != null && data[1] != null && !data[0].isEmpty() && !data[1].isEmpty()) {
-                    double result = graph.runQuery(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
+                    int result = (int) graph.runQuery(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
                     outputStream.write(result + "");
                     outputStream.newLine();
                 }
             }
             outputStream.close();
+            file.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
