@@ -1,5 +1,6 @@
 package main;
 
+
 /**
  * abstract class for logging
  */
@@ -20,6 +21,7 @@ public abstract class CLILogger {
     public static double runtimeInMinutes(double runtime) {
         return (double) Math.round((runtimeInSeconds(runtime) / 60) * 1000d) / 1000d;
     }
+
 
     /**
      * starts the timer
@@ -186,7 +188,9 @@ public abstract class CLILogger {
      * @param msg the message
      */
     void debugPrint(String msg) {
-        verbosePrint(msg, "Debugging");
+        //TODO test if debugPrint slows down dijkstra algorithm
+        return;
+        //verbosePrint(msg, "Debugging");
     }
 
     /**
@@ -206,4 +210,5 @@ public abstract class CLILogger {
     void print(String msg) {
         CLI.print(msg);
     }
+
 }

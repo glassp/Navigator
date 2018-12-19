@@ -2,10 +2,17 @@
 echo -n "Checking for dependencies..."
 for name in java
 do
-    [[ $(which ${name} 2>/dev/null) ]] || { echo -en "\n${name} missing. Try 'sudo apt-get install ${name}'."; deps = 1; }
+    [[ $(which ${name} 2>/dev/null) ]] || { echo -en "\n${name} missing. Try 'sudo apt-get install ${name}'."; DEPS=1; }
 done
-#unresolved variable annotation may be ignored here.
-[[ ${deps} -ne 1 ]] && echo -en "OK \n\n" || { echo -en "\n Install the above  and rerun this script\n"; exit 1; }
+
+if [[ ${DEPS} -ne 1 ]];
+then
+    echo -en "OK \n\n"
+else
+	echo -en "\n Install the above  and rerun this script\n"; exit 1;
+fi
+
+
 
 #chech if bin exists
 if [[ -d "./bin" ]];

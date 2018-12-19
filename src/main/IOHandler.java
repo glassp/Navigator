@@ -10,28 +10,14 @@ public class IOHandler extends CLILogger {
 
     private String filename;
     private BufferedWriter outputStream;
-    
-    
-    private void initStream(Graph graph) {
-    	if (new File(pathToBin() + "out/").mkdir()) {
-			print("Created directory '" + pathToBin() + "out'.\n");
-		}
-    	
-        filename = graph.hashCode() + ".out";
-        try {
-            outputStream = new BufferedWriter(new FileWriter(pathToBin() + "out/" + filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-       
+
     /**
      * returns the path to the bin dir
      *
      * @return path to bin dir
      */
-    String pathToBin() {
+    static String pathToBin() {
         return pathToProjectRoot() + "/bin/";
     }
 
@@ -39,9 +25,22 @@ public class IOHandler extends CLILogger {
      * returns the path to the projects root dir
      * @return path to project root dir
      */
-    String pathToProjectRoot() {
+    static String pathToProjectRoot() {
         String current = Paths.get(".").toAbsolutePath().normalize().toString();
         return current.split("/src/")[0];
+    }
+
+    private void initStream(Graph graph) {
+//    	if (new File(pathToBin() + "out/").mkdir()) {
+//			print("Created directory '" + pathToBin() + "out'.\n");
+//		}
+
+        filename = graph.hashCode() + ".out";
+        try {
+            outputStream = new BufferedWriter(new FileWriter(pathToBin() + "out/" + filename));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -132,11 +131,10 @@ public class IOHandler extends CLILogger {
     }
 
     /**
-     * checks for differences between .sol and .out filr
+     * checks for differences between .sol and .out file
      *
      * @param solPath path to .sol file
      * @param outPath path to .out file
-     * @return number of differences
      */
     public void diff(String solPath, String outPath) {
         int counter = 0;

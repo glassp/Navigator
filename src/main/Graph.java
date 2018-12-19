@@ -107,7 +107,6 @@ public class Graph extends CLILogger {
      * @return the distance from start to dest
      */
     public double runQuery(int start, int dest) {
-        debugPrint("Running Query from " + start + " to " + dest);
         runDijkstra(start);
         double dist = getDistance(dest);
         debugPrint("Distance: " + dist);
@@ -360,7 +359,7 @@ public class Graph extends CLILogger {
             if (this.edges[i] == dest) return i;
         }
         //if nothing found return
-        this.verbosePrint("no Edge found. Exception may be thrown", "Warning");
+        //this.verbosePrint("no Edge found. Exception may be thrown", "Warning");
         return -1;
     }
 
@@ -376,12 +375,12 @@ public class Graph extends CLILogger {
         int minIndex = -1;
         int offset = this.getOffset(node);
         if (offset == -1) {
-            this.debugPrint("no nextNode: offset invalid");
+            //this.debugPrint("no nextNode: offset invalid");
             return -1;
         }
         int elem = this.countOutgoingEdges(node);
         if (elem < 1) {
-            this.debugPrint("no nextNode: zero outgoing Edges");
+            //this.debugPrint("no nextNode: zero outgoing Edges");
             return -1;
         }
         for (int i = 0; i < elem; i++) {

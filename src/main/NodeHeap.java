@@ -307,11 +307,11 @@ public class NodeHeap {
 		try {
 			if (maxIndex < 10) {
 //				Thread.sleep(1000);
-				graph.verbosePrint("-- return and remove time " + debug);
+				//graph.verbosePrint("-- return and remove time " + debug);
 			}
 			if (maxIndex > heapNodes.length - 35) {
 //				Thread.sleep(500);
-				graph.verbosePrint("-- return and remove time " + debug);
+				//graph.verbosePrint("-- return and remove time " + debug);
 			}
 
 //			Thread.sleep(300);

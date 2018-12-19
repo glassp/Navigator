@@ -168,6 +168,7 @@ public class CLI {
 
     /**
      * prints run Dijkstra dialog
+     * @TODO cleanup
      */
     public void runDijkstraDialog() {
         print("Input starting node as Integer. Integers smaller than 0 equal to command 'exit'.");
@@ -240,6 +241,7 @@ public class CLI {
 
     /**
      * prints run Diff dialog
+     * @TODO cleanup
      */
     public void runDiffDialog() {
     	
