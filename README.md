@@ -4,7 +4,7 @@ A Simple Dijkstra Navigator
 ![](https://img.shields.io/github/license/otakupasi/Navigator.svg) 
 ![](https://img.shields.io/coveralls/github/otakupasi/Navigator.svg) 
 ![](https://img.shields.io/github/status/s/pulls/badges/shields/1110.svg)
-![goto](https://drive.google.com/drive/folders/18Yi9jL2jzjAOlSKQE7uswRldwCoxtzc1?usp=sharing)
+[goto](https://drive.google.com/drive/folders/18Yi9jL2jzjAOlSKQE7uswRldwCoxtzc1?usp=sharing)
 
 
 
