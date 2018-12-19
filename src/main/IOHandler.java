@@ -54,8 +54,8 @@ public class IOHandler extends CLILogger {
         Graph graph;
         try {
             this.startTiming();
-            var fileReader = new FileReader(path);
-            var file = new BufferedReader(fileReader);
+            FileReader fileReader = new FileReader(path);
+            BufferedReader file = new BufferedReader(fileReader);
 
             //ignore the 4 comment lines
             file.readLine();
@@ -109,8 +109,8 @@ public class IOHandler extends CLILogger {
      */
     public String runQuery(String path, Graph graph) {
         try {
-            var fileReader = new FileReader(path);
-            var file = new BufferedReader(fileReader);
+            FileReader fileReader = new FileReader(path);
+            BufferedReader file = new BufferedReader(fileReader);
             this.initStream(graph);
             String line;
             while ((line = file.readLine()) != null) {
@@ -141,10 +141,10 @@ public class IOHandler extends CLILogger {
         int line = 1;
         print("line:\tdifference");
         try {
-            var outReader = new FileReader(outPath);
-            var solReader = new FileReader(solPath);
-            var out = new BufferedReader(outReader);
-            var sol = new BufferedReader(solReader);
+            FileReader outReader = new FileReader(outPath);
+            FileReader solReader = new FileReader(solPath);
+            BufferedReader out = new BufferedReader(outReader);
+            BufferedReader sol = new BufferedReader(solReader);
             String s;
             String o;
             while ((s = sol.readLine()) != null && (o = out.readLine()) != null) {
