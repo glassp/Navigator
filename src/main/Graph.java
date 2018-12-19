@@ -46,6 +46,12 @@ public class Graph extends CLILogger {
     private int[] predecessor;
 
     /**
+     * the starting node
+     * used to check if dijkstra did run for this node
+     */
+    private int start = -1;
+
+    /**
      * Constructor.
      * <p>
      * Edges have to be manually added to the graph using the method insertEdge().
@@ -81,10 +87,16 @@ public class Graph extends CLILogger {
      * @param start the start node
      */
     public void runDijkstra(int start) {
-        Dijkstra dijkstra = new Dijkstra(this, start);
-        dijkstra.setDebug(this.debug);
-        dijkstra.setVerbose(this.verbose);
-        dijkstra.start();
+        if (this.start != start) {
+            if (this.start != -1)
+                Arrays.fill(distance, Double.POSITIVE_INFINITY);
+            System.out.println("Starting dijkstra for " + start);
+            Dijkstra dijkstra = new Dijkstra(this, start);
+            dijkstra.setDebug(this.debug);
+            dijkstra.setVerbose(this.verbose);
+            dijkstra.start();
+        }
+        this.start = start;
     }
 
     /**
@@ -95,12 +107,12 @@ public class Graph extends CLILogger {
      * @return the distance from start to dest
      */
     public double runQuery(int start, int dest) {
-        debugPrint("Running Query from " + start + " to " + dest);
         runDijkstra(start);
         double dist = getDistance(dest);
         debugPrint("Distance: " + dist);
         return dist;
     }
+
 
     /**
      * sets the latitude of a node
@@ -347,7 +359,7 @@ public class Graph extends CLILogger {
             if (this.edges[i] == dest) return i;
         }
         //if nothing found return
-        this.verbosePrint("no Edge found. Exception may be thrown", "Warning");
+        //this.verbosePrint("no Edge found. Exception may be thrown", "Warning");
         return -1;
     }
 
@@ -363,12 +375,12 @@ public class Graph extends CLILogger {
         int minIndex = -1;
         int offset = this.getOffset(node);
         if (offset == -1) {
-            this.debugPrint("no nextNode: offset invalid");
+            //this.debugPrint("no nextNode: offset invalid");
             return -1;
         }
         int elem = this.countOutgoingEdges(node);
         if (elem < 1) {
-            this.debugPrint("no nextNode: zero outgoing Edges");
+            //this.debugPrint("no nextNode: zero outgoing Edges");
             return -1;
         }
         for (int i = 0; i < elem; i++) {

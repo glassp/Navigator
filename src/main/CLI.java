@@ -12,7 +12,7 @@ public class CLI {
     //print functions
 
     /**
-     * prints a empty line
+     * prints an empty line
      */
     public static void print() {
         System.out.println();
@@ -49,7 +49,7 @@ public class CLI {
     }
 
     /**
-     * prints msg in a indented line
+     * prints msg in an indented line
      * @param msg the message
      */
     public static void solPrint(String msg) {
@@ -67,7 +67,7 @@ public class CLI {
     //menu functions
 
     /**
-     * prints a the main menu dialog in the CLI
+     * prints the main menu dialog in the CLI
      */
     public void mainMenu() {
         print("Please select your action.");
@@ -118,23 +118,23 @@ public class CLI {
     }
 
     /**
-     * prints list of avaiable commands
+     * prints list of available commands
      */
     public void navigatorCommands() {
         print("0");
-        solPrint("import Graph from .fmi file");
+        solPrint("Import Graph from .fmi file");
         print("1");
-        solPrint("run Dijkstra");
+        solPrint("Get Distance between 2 Nodes");
         print("2");
-        solPrint("import Query from .que file");
+        solPrint("Import Query from .que file");
         print("3");
-        solPrint("Run Difference Analysis form .sol file");
+        solPrint("Run Difference Analysis with .sol file");
         print("v");
-        solPrint("Toogle verbose printing");
+        solPrint("Toggle verbose printing");
         print("d");
-        solPrint("Toogle debug printing");
+        solPrint("Toggle debug printing");
         print("exit");
-        solPrint("Exits the current Menu.");
+        solPrint("Exits the current menu.");
         solPrint("When in main menu this will have the same result as 'die'");
         print("die");
         solPrint("Terminates the script");
@@ -167,7 +167,8 @@ public class CLI {
     }
 
     /**
-     * prints run dijkstra dialog
+     * prints run Dijkstra dialog
+     * @TODO cleanup
      */
     public void runDijkstraDialog() {
         print("Input starting node as Integer. Integers smaller than 0 equal to command 'exit'.");
@@ -177,18 +178,44 @@ public class CLI {
         if (scanner.hasNextInt()) {
             start = this.scanner.nextInt();
         } else {
-            print("Invalid value. Try again");
-            print();
-            runDijkstraDialog();
-            return;
+            print("Invalid value.");
+            start = -1;
+//            print(); //Restart didn't work since input is sometimes still immediately acquired from first time, resulting in exception, so I disabled it for now.
+//            runDijkstraDialog();
+//            return;
         }
         if (start < 0) {
             mainMenu();
             return;
         }
+        
+        print("Input target node in the same way.");
+        sol("$");
+        int target;
+        if (scanner.hasNextInt()) {
+            target = this.scanner.nextInt();
+        } else {
+            print("Invalid value.");
+            target = -1;
+//            print();
+//            runDijkstraDialog();
+//            return;
+        }
+        if (target < 0) {
+            mainMenu();
+            return;
+        }
+
+        
+        
         this.graph.runDijkstra(start);
+        print("");
+        print("Distance between " + start + " and " + target + " is " + graph.getDistance(target) + ".");
+        print("");
+        
         mainMenu();
     }
+    
 
     /**
      * prints run query dialog
@@ -214,8 +241,34 @@ public class CLI {
 
     /**
      * prints run Diff dialog
+     * @TODO cleanup
      */
     public void runDiffDialog() {
+    	
+//System.out.println(outPath);
+        if (outPath == null) {
+        	// No Query with output has been run yet this session. Set own outPath for diff.
+			print("Please input path to a previous output file. (usually [this program's path]\\out\\[numbers].out)");
+			sol("$");
+			
+			String temp = scanner.next();
+	        switch (temp) {
+	            case "die":
+	                die();
+	                return;
+	            case "exit":
+	                mainMenu();
+	                return;
+	            default:
+	                break;
+	        }
+	        outPath = temp;
+		}
+        else {
+        	print();
+        	print("Comparing this sessions most recent query from " + outPath);
+        }
+        
         print("Input path to .sol File");
         sol("$");
         String path = scanner.next();
@@ -260,4 +313,12 @@ public class CLI {
         ioHandler.diff(solPath, filename);
 
     }
+    /**
+     * Setter for outPath 
+     * @param path
+     */
+    public void setOutPath(String path) {
+    	this.outPath = path;
+    }
+    
 }

@@ -11,21 +11,13 @@ public class IOHandler extends CLILogger {
     private String filename;
     private BufferedWriter outputStream;
 
-    private void initStream(Graph graph) {
-        filename = graph.hashCode() + ".out";
-        try {
-            outputStream = new BufferedWriter(new FileWriter(pathToBin() + "out/" + filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * returns the path to the bin dir
      *
      * @return path to bin dir
      */
-    String pathToBin() {
+    static String pathToBin() {
         return pathToProjectRoot() + "/bin/";
     }
 
@@ -33,9 +25,22 @@ public class IOHandler extends CLILogger {
      * returns the path to the projects root dir
      * @return path to project root dir
      */
-    String pathToProjectRoot() {
+    static String pathToProjectRoot() {
         String current = Paths.get(".").toAbsolutePath().normalize().toString();
         return current.split("/src/")[0];
+    }
+
+    private void initStream(Graph graph) {
+//    	if (new File(pathToBin() + "out/").mkdir()) {
+//			print("Created directory '" + pathToBin() + "out'.\n");
+//		}
+
+        filename = graph.hashCode() + ".out";
+        try {
+            outputStream = new BufferedWriter(new FileWriter(pathToBin() + "out/" + filename));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -49,8 +54,8 @@ public class IOHandler extends CLILogger {
         Graph graph;
         try {
             this.startTiming();
-            var fileReader = new FileReader(path);
-            var file = new BufferedReader(fileReader);
+            FileReader fileReader = new FileReader(path);
+            BufferedReader file = new BufferedReader(fileReader);
 
             //ignore the 4 comment lines
             file.readLine();
@@ -104,19 +109,20 @@ public class IOHandler extends CLILogger {
      */
     public String runQuery(String path, Graph graph) {
         try {
-            var fileReader = new FileReader(path);
-            var file = new BufferedReader(fileReader);
+            FileReader fileReader = new FileReader(path);
+            BufferedReader file = new BufferedReader(fileReader);
             this.initStream(graph);
             String line;
             while ((line = file.readLine()) != null) {
                 String[] data = line.split(" ");
                 if (data[0] != null && data[1] != null && !data[0].isEmpty() && !data[1].isEmpty()) {
-                    double result = graph.runQuery(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
+                    int result = (int) graph.runQuery(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
                     outputStream.write(result + "");
                     outputStream.newLine();
                 }
             }
             outputStream.close();
+            file.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -125,24 +131,26 @@ public class IOHandler extends CLILogger {
     }
 
     /**
-     * checks for differences between .sol and .out filr
+     * checks for differences between .sol and .out file
      *
      * @param solPath path to .sol file
      * @param outPath path to .out file
-     * @return number of differences
      */
     public void diff(String solPath, String outPath) {
         int counter = 0;
+        int line = 1;
+        print("line:\tdifference");
         try {
-            var outReader = new FileReader(outPath);
-            var solReader = new FileReader(solPath);
-            var out = new BufferedReader(outReader);
-            var sol = new BufferedReader(solReader);
+            FileReader outReader = new FileReader(outPath);
+            FileReader solReader = new FileReader(solPath);
+            BufferedReader out = new BufferedReader(outReader);
+            BufferedReader sol = new BufferedReader(solReader);
             String s;
             String o;
             while ((s = sol.readLine()) != null && (o = out.readLine()) != null) {
                 if (!o.equals(s))
                     counter++;
+                print( (line++) + ":\t" + (Integer.parseInt(s) - Integer.parseInt(o) ) ); //TODO: better remove eventually, can cause exception if random file is chosen that can't be converted to int.
             }
             print("There are " + counter + " differences.");
         } catch (IOException e) {

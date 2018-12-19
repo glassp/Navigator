@@ -11,6 +11,9 @@ import java.util.stream.IntStream;
  * 
  */
 public class NodeHeap {
+	/**
+	 * Debug counter - counts how often getAndRemoveNext() is used.
+	 */
 	int debug;
 
 	/**
@@ -47,22 +50,9 @@ public class NodeHeap {
 		
 		
 		this.graph = graph;
-//		this.heapNodes = IntStream.rangeClosed(0, graph.getNodeList().length-1).toArray();
 		this.heapNodes = IntStream.rangeClosed(0, graph.getNodesCount()-1).toArray();
-		
-//		System.out.println("Heap structure upon creation:");
-//		for (int i : heapNodes) {
-//			System.out.println(i);
-//		}
-		
+				
 		this.maxIndex = heapNodes.length - 1;
-		
-		System.out.println("Heap has " + heapNodes.length + " nodes.");
-		System.out.println("maxIndes is " + maxIndex);
-		
-//		this.nodesArray = new int[graph.getNodeList().length];
-//		Arrays.fill(nodesArray, Integer.MAX_VALUE);
-//		nodesArray[0] = 0;
 	
 		
 		// no need to iterate through first length/2 items for making sure heap property is achieved,
@@ -89,15 +79,15 @@ public class NodeHeap {
 		graph.setDistance(node, newDistance);
 		
 		// Find heap item that belongs to the node.
-//		System.out.println("\t   " +node + " gets new distance " + newDistance); //TODO: remove debug code
 		node = nodeLocation[node];
-//		System.out.print("is at position " + node);
+//		System.out.print(heapNodes[node] + " is at position " + node);
+		
 		siftUp(node, newDistance);
 	}
 	
 	
 	/**
-	 * If necessary to maintain the heap property, sifts down a an item.
+	 * If necessary to maintain the heap property, sifts down an item.
 	 * @param heapItem will sift down if associated node distance is greater than any child's
 	 * @return true, if sift was necessary.
 	 */
@@ -154,7 +144,7 @@ public class NodeHeap {
 	 */
 	private boolean siftUp(int heapItem) {
 		if (heapItem > maxIndex)
-			throw new IllegalArgumentException("Node " + heapItem + " does not exist in heap. Max index is " + maxIndex);
+			throw new IllegalArgumentException("Heap item " + heapItem + " does not exist. Max index is " + maxIndex);
 		
 		return siftUp(heapItem, graph.getDistance(heapNodes[heapItem]));
 	}
@@ -196,14 +186,14 @@ public class NodeHeap {
 		if (heapItem == 0) {
 			return 0;
 		}
-		return (heapItem / 2) - (1/2);
+//		return (heapItem / 2) - (1/2);
 		
-//		int temp = heapItem;
-//		
-//		if (temp % 2 == 1) {
-//			temp++;
-//		}
-//		int parent = temp / 2 - 1;
+		int temp = heapItem;
+		
+		if (temp % 2 == 1) {
+			temp++;
+		}
+		return temp / 2 - 1;
 	}
 	/**
 	 * Returns the index of the item's left child, if it exists.
@@ -272,6 +262,15 @@ public class NodeHeap {
 		
 	}
 	
+	
+	/**
+	 * @return a String containing the top 7 nodes in the heap separated by comma
+	 */
+	public String getTopElementsPeek() { 
+		return heapNodes[0] + ", " + heapNodes[1] + ", " + heapNodes[2] + ", " + heapNodes[3] + ", " + heapNodes[4] + ", " + heapNodes[5] + ", " + heapNodes[6];
+	}
+	
+	
 	/**
 	 * removes and returns the root item and determines a new one. Does preserve heap property.
 	 * Returns -1 if no items are on the heap (If so, maxIndex will be -1 as well).
@@ -279,7 +278,7 @@ public class NodeHeap {
 	 */
 	private int removeRoot() {
 		if (maxIndex < 0) {
-			maxIndex = -1;
+//			maxIndex = -1;
 			return -1;
 		}
 		else if (maxIndex == 0) {
@@ -308,11 +307,11 @@ public class NodeHeap {
 		try {
 			if (maxIndex < 10) {
 //				Thread.sleep(1000);
-				graph.verbosePrint("-- return and remove time " + debug);
+				//graph.verbosePrint("-- return and remove time " + debug);
 			}
 			if (maxIndex > heapNodes.length - 35) {
 //				Thread.sleep(500);
-				graph.verbosePrint("-- return and remove time " + debug);
+				//graph.verbosePrint("-- return and remove time " + debug);
 			}
 
 //			Thread.sleep(300);
