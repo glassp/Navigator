@@ -188,9 +188,7 @@ public abstract class CLILogger {
      * @param msg the message
      */
     void debugPrint(String msg) {
-        //TODO test if debugPrint slows down dijkstra algorithm
-        return;
-        //verbosePrint(msg, "Debugging");
+        verbosePrint(msg, "Debugging");
     }
 
     /**
