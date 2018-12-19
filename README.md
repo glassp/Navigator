@@ -17,8 +17,8 @@ A Simple Dijkstra Navigator
 Just download and run the makefile.sh or run.sh
 
 - Will check if JRE is installed
-- Will compile the Java Source code
-- Will run the Programm with a CLI or as terminal script
+- Will compile the Java source code
+- Will run the program with a CLI or as terminal script
 
 ### Manual
 Just follow these steps
@@ -41,36 +41,41 @@ Use the makefile.sh file and run in in Terminal
 #### Import the Graph  
 
 -  Enter ``0``
--  Enter the Path to the .fmi file
+-  Enter the path to the .fmi file
 
-#### Run the Dijkstra Algorithm
+#### Run Dijkstra's algorithm
 
 - Import the Graph
 - Enter ``1``
-- Enter the Start Node
+- Enter the start node
+- Enter any target node
+
+If you want to make multiple inquiries from the same starting point in a row, Dijkstra's algorithm will only be running once.
 
 #### Run a Query
 
 - Import the Graph
 - Enter ``2``
-- Enter the file to the .que file
+- Enter the path to the .que file
 
 #### Check for Differences
 
 - Import the Graph
 - Enter ``3``
-- Enter the file to the .que file
-- Enter the file to the .sol file
+- Enter the path to the .out file
+- Enter the path to the .sol file
+
+NOTE: After having run a query, the path to its .out file is automatically used for the rest of the session. 
 
 #### Logging output
 #####Verbose Logging
-Enter ``v`` to toogle verbose Logging
+Enter ``v`` to toggle verbose logging
 
 #####Debug Logging
-Enter ``d`` to toogle debug Logging
+Enter ``d`` to toggle debug logging
 
 #####Info Logging
-Enter ``i`` to toogle info Logging
+Enter ``i`` to toggle info logging
 
 ###From Terminal  
 
