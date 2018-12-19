@@ -257,6 +257,8 @@ public class NodeHeap extends CLILogger {
         heapNodes[item1] = heapNodes[item2];
         heapNodes[item2] = temp;
 
+//        testHeapProperty();  //since swap doesn't maintain, this test must usually fail
+        
 //		if (maxIndex < 30 || maxIndex > heapNodes.length - 45) {
 //			System.out.println("swap index " + item1 + " and " + item2 + " (Nodes "+heapNodes[item2]+" and "+heapNodes[item1]+") | " + heapNodes[item2]+" is now at " +item2 + ", maxIndex is" + maxIndex);
 //		}
@@ -271,6 +273,59 @@ public class NodeHeap extends CLILogger {
     public String getTopElementsPeek() {
         return heapNodes[0] + ", " + heapNodes[1] + ", " + heapNodes[2] + ", " + heapNodes[3] + ", " + heapNodes[4] + ", " + heapNodes[5] + ", " + heapNodes[6];
     }
+    
+    public void testHeapProperty() {
+//    	print("test "+debug);
+    	int childLeft;
+    	int childRight;
+    	int errors = 0;
+    	
+
+    	double distanceCurr = -2;
+//    	print("test with maxIndex " + maxIndex + ":\n");
+    	for (int i = 0; i < (maxIndex / 2) + 1; i++) {
+        	double distanceLeft = -2;
+        	double distanceRight = -2;
+        	
+    		childLeft = this.getLeftChild(i);
+    		childRight = this.getRightChild(i);
+    		
+    		distanceCurr = graph.getDistance(heapNodes[i]);
+//    		System.out.print("compare "+i+" with "+childLeft+" and "+childRight+" - distances "+distanceCurr);
+    		if (childLeft >= 0)  {
+    			distanceLeft = graph.getDistance(heapNodes[childLeft]);
+//    			System.out.print(", " +distanceLeft );
+    		}
+    		
+    		if (childRight >= 0) {
+    			distanceRight = graph.getDistance(heapNodes[childRight]);
+//    			System.out.print(", "+distanceRight);
+    		}
+    		
+//    		System.out.println();
+    		
+			if ( childLeft != -1 && distanceCurr > distanceLeft) {
+				errors++;
+				print("After " + debug + " removals from heap:");
+				print("\tHeap items " + i + " and its child " + childLeft + " are ordered incorrectly. (Nodes " + heapNodes[i] + "," + heapNodes[childRight] + ", edge weight " + graph.getWeight(graph.getEdge(i, childRight))+", saved distances: " + graph.getDistance(heapNodes[i]) + ", " + graph.getDistance(heapNodes[childLeft]) +")" );
+			}
+			if ( childRight!= -1 && distanceCurr > distanceRight) {
+				errors++;
+				print("After " + debug + " removals from heap:");
+				print("\tHeap items " + i + " and its child " + childRight + " are ordered incorrectly. (Nodes " + heapNodes[i] + "," + heapNodes[childRight] + ", edge weight " + graph.getWeight(graph.getEdge(i, childRight))+", saved distances: " + graph.getDistance(heapNodes[i]) + ", " + graph.getDistance(heapNodes[childRight]) +")" );
+			}
+//			if (childLeft < 0 || childRight < 0) {
+//				print(i + " lacks at least one child.");
+//			}
+			
+		}
+    	
+    	if (errors >= 1) {
+    		print(errors + " errors found in heap.\n");	
+		}
+    	
+    }
+    
 
 
     /**
@@ -291,6 +346,19 @@ public class NodeHeap extends CLILogger {
 
             siftDown(0);
 
+//            print("correct place:");
+//            testHeapProperty();
+//            print("and on..");
+            if (debug == 0) {
+				print ("start test " + System.currentTimeMillis());
+			}
+            if (debug <= 400000 && debug >= 0) {
+            	testHeapProperty();	
+			}
+//            if (debug == 1) {
+//				print ("first test done at" + System.currentTimeMillis());
+//			}
+           
             return heapNodes[maxIndex + 1];
 
         }
@@ -305,11 +373,13 @@ public class NodeHeap extends CLILogger {
     public int getAndRemoveNext() {
         debug++;
 
-        //TODO: does this try catch do anything or can it be deleted
+        //TODO: does this try catch do anything or can it be deleted 
+        //		is for sleeping, can be deleted if small intervals are used in if. Otherwise will flood console and might lose old info.
+        
         try {
             if (maxIndex < 10) {
 //				Thread.sleep(1000);
-
+//            	print("-- return and remove time " + debug);
                 graph.verbosePrint("-- return and remove time " + debug);
             }
             if (maxIndex > heapNodes.length - 35) {
