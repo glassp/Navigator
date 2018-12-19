@@ -1,7 +1,5 @@
 package main;
 
-import java.util.PriorityQueue;
-
 /**
  * 
  * Dijkstra class that can run Dijkstra's algorithm on a given graph.
@@ -54,19 +52,6 @@ public class Dijkstra extends CLILogger {
         this.startTiming();
         
         NodeHeap heap = new NodeHeap(graph, startNode);
-        PriorityQueue<Node> queue = new PriorityQueue<>();
-        
-        Node node;
-        Node nodeArray[] = new Node[graph.getNodesCount()];
-        
-        for (int i = 0; i < graph.getNodesCount(); i++) {
-        	node = new Node(i, graph);
-        	nodeArray[i] = node;
-        	queue.add(node);
-//        	System.out.println("added node " + node.getID() + " to queue");
-		}
-        
-        
         
         //TODO: clean up comments and possible debug sysouts
         
@@ -78,6 +63,8 @@ public class Dijkstra extends CLILogger {
          * offset[n+1] -1 is the last one (can overflow! last edge is last entry. can be -1.)
          * 			is taken care off in new implementation of countOutgoingEdges
          *
+         *  TODO: Might be better implementing the offset array as explained in specification
+         *  TODO: Feel free to change it :)
          */
 
 
@@ -85,17 +72,13 @@ public class Dijkstra extends CLILogger {
         int count = 0; //TODO: remove debug counters
         int countEdges = 0;
 //        debugPrint("Heap Top: " +heap.getTopElementsPeek());
-        
-        
-//        int currentNode = heap.getAndRemoveNext();
-        int currentNode = queue.remove().getID();
+
+
+        int currentNode = heap.getAndRemoveNext();        
         		
         
         while (currentNode >= 0) {
         	count++;
-        	if (count % 50000 == 0) {
-				print("at node " + count + " of " + graph.getNodesCount());
-			}
         	
         	int firstEdge = graph.getOffset(currentNode);
         	
@@ -108,10 +91,6 @@ public class Dijkstra extends CLILogger {
         	
         	for (int i = firstEdge; i < firstEdge + graph.countOutgoingEdges(currentNode); i++) {
         		countEdges++;
-        		
-        		if (countEdges % 50000 == 0) {
-					print("at edge " + countEdges + " of "+ graph.getMaxEdgesCount());
-				}
         		
 //        		if (graph.getWeight(i) >= 0) {
             		// graph.getWeight(i) can be -1 if edge doesn't exist. 
@@ -130,12 +109,7 @@ public class Dijkstra extends CLILogger {
 //            				debugPrint("     decreasing and reheap (" + graph.getDistance( currentDestination ) + ">" + newDistance + ")");
 //            			}
 						//found shorter path to this neighbour. Update distance, predecessor and heap.
-        				
-        				//TODO: added prioqueue instead of heap decreasekey
-        				queue.remove(nodeArray[currentDestination]);
-//        				heap.decreaseDistance(currentDestination, newDistance);
-        				graph.setDistance(currentDestination, newDistance);
-        				queue.add(nodeArray[currentDestination]);
+                        heap.decreaseDistance(currentDestination, newDistance);
         				graph.setPredecessor(currentDestination, currentNode);
 
 //        				if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
@@ -160,14 +134,7 @@ public class Dijkstra extends CLILogger {
 //				debugPrint("location of 3096359 is " + heap.getPositionOf(3096359)  + ". Determine next node now.");
 //				debugPrint("Heap Top: "+ heap.getTopElementsPeek() + "\n");
 //			}
-
-//        	currentNode = heap.getAndRemoveNext();//TODO: replaced heap with prioqueue
-        	try {
-        		currentNode = queue.remove().getID();
-			} catch (Exception e) {
-				currentNode = -1;// end while loop when queue is empty
-			}
-        	
+            currentNode = heap.getAndRemoveNext();
 
         }
 
