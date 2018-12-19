@@ -188,7 +188,7 @@ public class CLI {
             return;
         }
         
-        print("Now, input target node in the same way.");
+        print("Input target node in the same way.");
         sol("$");
         int target;
         if (scanner.hasNextInt()) {

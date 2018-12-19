@@ -70,6 +70,7 @@ public class Dijkstra extends CLILogger {
 
       
         int count = 0; //TODO: remove debug counter and String
+        int countEdges = 0;
         debugPrint("Heap Top: " +heap.getTopElementsPeek());
         
         
@@ -89,6 +90,7 @@ public class Dijkstra extends CLILogger {
 //			}
         	
         	for (int i = firstEdge; i < firstEdge + graph.countOutgoingEdges(currentNode); i++) {
+        		countEdges++;
         		
         		if (graph.getWeight(i) >= 0) {
             		// graph.getWeight(i) can be -1 if edge doesn't exist. 
@@ -122,10 +124,10 @@ public class Dijkstra extends CLILogger {
 
 			}
         	
-        	if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
-				debugPrint("location of 3096359 is " + heap.getPositionOf(3096359)  + ". Determine next node now.");
-				debugPrint("Heap Top: "+ heap.getTopElementsPeek() + "\n");
-			}
+//        	if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
+//				debugPrint("location of 3096359 is " + heap.getPositionOf(3096359)  + ". Determine next node now.");
+//				debugPrint("Heap Top: "+ heap.getTopElementsPeek() + "\n");
+//			}
         	currentNode = heap.getAndRemoveNext();
 
         }
@@ -134,6 +136,9 @@ public class Dijkstra extends CLILogger {
         //passes info to CLI
         this.stop();
         print("Dijkstra's algorithm completed in " + CLILogger.runtimeInSeconds(this.runtime) + " seconds.");
+        
+        print(count + " nodes and " + countEdges + " edges visited.");
+        
 //        print("1: Node 16743651 has distance " + graph.getDistance(16743651));
 //        print("2: Node 16743652 has distance " + graph.getDistance(16743652));
 //        print("3: Node 16743653 has distance " + graph.getDistance(16743653));
