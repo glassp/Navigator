@@ -10,8 +10,13 @@ public class IOHandler extends CLILogger {
 
     private String filename;
     private BufferedWriter outputStream;
-
+    
+    
     private void initStream(Graph graph) {
+    	if (new File(pathToBin() + "out/").mkdir()) {
+			print("Created directory '" + pathToBin() + "out'.\n");
+		}
+    	
         filename = graph.hashCode() + ".out";
         try {
             outputStream = new BufferedWriter(new FileWriter(pathToBin() + "out/" + filename));
