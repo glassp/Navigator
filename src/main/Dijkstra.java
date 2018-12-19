@@ -69,9 +69,9 @@ public class Dijkstra extends CLILogger {
 
 
       
-        int count = 0; //TODO: remove debug counter and String
+        int count = 0; //TODO: remove debug counters
         int countEdges = 0;
-        debugPrint("Heap Top: " +heap.getTopElementsPeek());
+//        debugPrint("Heap Top: " +heap.getTopElementsPeek());
         
         
         int currentNode = heap.getAndRemoveNext();        
@@ -92,7 +92,7 @@ public class Dijkstra extends CLILogger {
         	for (int i = firstEdge; i < firstEdge + graph.countOutgoingEdges(currentNode); i++) {
         		countEdges++;
         		
-        		if (graph.getWeight(i) >= 0) {
+//        		if (graph.getWeight(i) >= 0) {
             		// graph.getWeight(i) can be -1 if edge doesn't exist. 
         			
         			currentDestination = graph.getDestination(i);
@@ -111,17 +111,23 @@ public class Dijkstra extends CLILogger {
 						//found shorter path to this neighbour. Update distance, predecessor and heap.
         				heap.decreaseDistance(currentDestination, newDistance);
         				graph.setPredecessor(currentDestination, currentNode);
+
 //        				if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
 //            				debugPrint("       distance of " + currentDestination + " has been set to " + graph.getDistance(currentDestination));
 //            			}
         				
 					}
+        			
 //        			if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
 //        				debugPrint("\n");//TODO: remove if blocks with extensive debug code
 //        			}
-//        			
-				}
+        			
+        			
+        			
+//				} // von if weight >= 0
 
+        			
+        			
 			}
         	
 //        	if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {

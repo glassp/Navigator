@@ -11,12 +11,10 @@ import java.util.stream.IntStream;
  * 
  */
 public class NodeHeap {
-	int debug;
-	
 	/**
-	 * String that can be updated to have current top 7 nodes separated by comma 
+	 * Debug counter - counts how often getAndRemoveNext() is used.
 	 */
-//	private String heapTop;
+	int debug;
 
 	/**
 	 * Graph instance the nodes of which are represented in the heap.
@@ -53,20 +51,8 @@ public class NodeHeap {
 		
 		this.graph = graph;
 		this.heapNodes = IntStream.rangeClosed(0, graph.getNodesCount()-1).toArray();
-		
-//		System.out.println("Heap structure upon creation:");
-//		for (int i : heapNodes) {
-//			System.out.println(i);
-//		}
-		
+				
 		this.maxIndex = heapNodes.length - 1;
-		
-//		System.out.println("Heap has " + heapNodes.length + " nodes.");
-//		System.out.println("maxIndex is " + maxIndex + "\n"); //TODO: debug code
-		
-//		this.nodesArray = new int[graph.getNodeList().length];
-//		Arrays.fill(nodesArray, Integer.MAX_VALUE);
-//		nodesArray[0] = 0;
 	
 		
 		// no need to iterate through first length/2 items for making sure heap property is achieved,
@@ -79,7 +65,6 @@ public class NodeHeap {
 		nodeLocation = heapNodes.clone();
 		// In the beginning, all nodes are saved at an index equal to their number in the graph, except for the two swapped ones.
 		// Further tracking of locations is done within the swap method.
-//		heapTop = heapNodes[0] + ", " + heapNodes[1] + ", " + heapNodes[2] + ", " + heapNodes[3] + ", " + heapNodes[4] + ", " + heapNodes[5] + ", " + heapNodes[6]; //TODO: debugTool
 	}
 	
 	
@@ -94,15 +79,15 @@ public class NodeHeap {
 		graph.setDistance(node, newDistance);
 		
 		// Find heap item that belongs to the node.
-//		System.out.println("\t   " +node + " gets new distance " + newDistance); //TODO: remove debug code
 		node = nodeLocation[node];
-//		System.out.print("is at position " + node);
+//		System.out.print(heapNodes[node] + " is at position " + node);
+		
 		siftUp(node, newDistance);
 	}
 	
 	
 	/**
-	 * If necessary to maintain the heap property, sifts down a an item.
+	 * If necessary to maintain the heap property, sifts down an item.
 	 * @param heapItem will sift down if associated node distance is greater than any child's
 	 * @return true, if sift was necessary.
 	 */
