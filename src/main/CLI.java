@@ -124,7 +124,7 @@ public class CLI {
         print("0");
         solPrint("Import Graph from .fmi file");
         print("1");
-        solPrint("Run Dijkstra");
+        solPrint("Get Distance between 2 Nodes");
         print("2");
         solPrint("Import Query from .que file");
         print("3");
@@ -177,18 +177,44 @@ public class CLI {
         if (scanner.hasNextInt()) {
             start = this.scanner.nextInt();
         } else {
-            print("Invalid value. Try again");
-            print();
-            runDijkstraDialog();
-            return;
+            print("Invalid value.");
+            start = -1;
+//            print(); //Restart didn't work since input is sometimes still immediately acquired from first time, resulting in exception, so I disabled it for now.
+//            runDijkstraDialog();
+//            return;
         }
         if (start < 0) {
             mainMenu();
             return;
         }
+        
+        print("Now, input target node in the same way.");
+        sol("$");
+        int target;
+        if (scanner.hasNextInt()) {
+            target = this.scanner.nextInt();
+        } else {
+            print("Invalid value.");
+            target = -1;
+//            print();
+//            runDijkstraDialog();
+//            return;
+        }
+        if (target < 0) {
+            mainMenu();
+            return;
+        }
+
+        
+        
         this.graph.runDijkstra(start);
+        print("");
+        print("Distance between " + start + " and " + target + " is " + graph.getDistance(target) + ".");
+        print("");
+        
         mainMenu();
     }
+    
 
     /**
      * prints run query dialog
