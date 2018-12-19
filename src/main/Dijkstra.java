@@ -69,11 +69,11 @@ public class Dijkstra extends CLILogger {
 
 
       
-        debugPrint("Heap Top: " +heap.getTopElementsPeek()); //TODO: debug code
-        int currentNode = heap.getAndRemoveNext();
-        
         int count = 0; //TODO: remove debug counter and String
-//        String heapTop = heap.get 
+        debugPrint("Heap Top: " +heap.getTopElementsPeek());
+        
+        
+        int currentNode = heap.getAndRemoveNext();        
         		
         
         while (currentNode >= 0) {
@@ -84,9 +84,9 @@ public class Dijkstra extends CLILogger {
         	int currentDestination;
         	double newDistance;
         	
-        	if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
-				debugPrint("Node: " + currentNode);
-			}
+//        	if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
+//				debugPrint("Node: " + currentNode);
+//			}
         	
         	for (int i = firstEdge; i < firstEdge + graph.countOutgoingEdges(currentNode); i++) {
         		
@@ -96,29 +96,28 @@ public class Dijkstra extends CLILogger {
         			currentDestination = graph.getDestination(i);
         			newDistance = graph.getDistance(currentNode) + graph.getWeight(i);
         			
-        			if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
-        				debugPrint("\tedge: to " + currentDestination + " (cost " + graph.getWeight(i) + ")");
-        			}
+//        			if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
+//        				debugPrint("\tedge: to " + currentDestination + " (cost " + graph.getWeight(i) + ")");
+//        			}
         			
         			
         			if (graph.getDistance( currentDestination ) > newDistance) {
-//        				TODO: perhaps exceptional case if node has already been seen? prob not since then it will have the lowest distance possible.
         				
-        				if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
-            				debugPrint("     decreasing and reheap (" + graph.getDistance( currentDestination ) + ">" + newDistance + ")");
-            			}
+//        				if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
+//            				debugPrint("     decreasing and reheap (" + graph.getDistance( currentDestination ) + ">" + newDistance + ")");
+//            			}
 						//found shorter path to this neighbour. Update distance, predecessor and heap.
         				heap.decreaseDistance(currentDestination, newDistance);
         				graph.setPredecessor(currentDestination, currentNode);
-        				if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
-            				debugPrint("       distance of " + currentDestination + " has been set to " + graph.getDistance(currentDestination));
-            			}
+//        				if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
+//            				debugPrint("       distance of " + currentDestination + " has been set to " + graph.getDistance(currentDestination));
+//            			}
         				
 					}
-        			if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
-        				debugPrint("\n");//TODO: remove if blocks with extensive debug code
-        			}
-        			
+//        			if (count <= 40 || count > graph.getMaxEdgesCount() - 50) {
+//        				debugPrint("\n");//TODO: remove if blocks with extensive debug code
+//        			}
+//        			
 				}
 
 			}

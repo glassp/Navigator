@@ -14,9 +14,9 @@ public class NodeHeap {
 	int debug;
 	
 	/**
-	 * String that can be updated to have current top 7 nodes seperated by comma 
+	 * String that can be updated to have current top 7 nodes separated by comma 
 	 */
-	public String heapTop;
+//	private String heapTop;
 
 	/**
 	 * Graph instance the nodes of which are represented in the heap.
@@ -52,7 +52,6 @@ public class NodeHeap {
 		
 		
 		this.graph = graph;
-//		this.heapNodes = IntStream.rangeClosed(0, graph.getNodeList().length-1).toArray();
 		this.heapNodes = IntStream.rangeClosed(0, graph.getNodesCount()-1).toArray();
 		
 //		System.out.println("Heap structure upon creation:");
@@ -62,8 +61,8 @@ public class NodeHeap {
 		
 		this.maxIndex = heapNodes.length - 1;
 		
-		System.out.println("Heap has " + heapNodes.length + " nodes.");
-		System.out.println("maxIndex is " + maxIndex + "\n"); //TODO: debug code
+//		System.out.println("Heap has " + heapNodes.length + " nodes.");
+//		System.out.println("maxIndex is " + maxIndex + "\n"); //TODO: debug code
 		
 //		this.nodesArray = new int[graph.getNodeList().length];
 //		Arrays.fill(nodesArray, Integer.MAX_VALUE);
@@ -80,7 +79,7 @@ public class NodeHeap {
 		nodeLocation = heapNodes.clone();
 		// In the beginning, all nodes are saved at an index equal to their number in the graph, except for the two swapped ones.
 		// Further tracking of locations is done within the swap method.
-		heapTop = heapNodes[0] + ", " + heapNodes[1] + ", " + heapNodes[2] + ", " + heapNodes[3] + ", " + heapNodes[4] + ", " + heapNodes[5] + ", " + heapNodes[6]; //TODO: debugTool
+//		heapTop = heapNodes[0] + ", " + heapNodes[1] + ", " + heapNodes[2] + ", " + heapNodes[3] + ", " + heapNodes[4] + ", " + heapNodes[5] + ", " + heapNodes[6]; //TODO: debugTool
 	}
 	
 	
@@ -278,9 +277,12 @@ public class NodeHeap {
 		
 	}
 	
-	public String getTopElementsPeek() {
-		heapTop = heapNodes[0] + ", " + heapNodes[1] + ", " + heapNodes[2] + ", " + heapNodes[3] + ", " + heapNodes[4] + ", " + heapNodes[5] + ", " + heapNodes[6]; //TODO: debugTool
-		return heapTop;
+	
+	/**
+	 * @return a String containing the top 7 nodes in the heap separated by comma
+	 */
+	public String getTopElementsPeek() { 
+		return heapNodes[0] + ", " + heapNodes[1] + ", " + heapNodes[2] + ", " + heapNodes[3] + ", " + heapNodes[4] + ", " + heapNodes[5] + ", " + heapNodes[6];
 	}
 	
 	

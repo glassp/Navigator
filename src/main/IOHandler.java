@@ -20,6 +20,7 @@ public class IOHandler extends CLILogger {
         }
     }
 
+       
     /**
      * returns the path to the bin dir
      *
@@ -134,6 +135,8 @@ public class IOHandler extends CLILogger {
      */
     public void diff(String solPath, String outPath) {
         int counter = 0;
+        int line = 1;
+        print("line:\tdifference");
         try {
             var outReader = new FileReader(outPath);
             var solReader = new FileReader(solPath);
@@ -144,6 +147,7 @@ public class IOHandler extends CLILogger {
             while ((s = sol.readLine()) != null && (o = out.readLine()) != null) {
                 if (!o.equals(s))
                     counter++;
+                print( (line++) + ":\t" + (Integer.parseInt(s) - Integer.parseInt(o) ) ); //TODO: better remove eventually, can cause exception if random file is chosen that can't be converted to int.
             }
             print("There are " + counter + " differences.");
         } catch (IOException e) {
