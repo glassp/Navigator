@@ -1,9 +1,11 @@
 package main;
 
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /**
  * The Class for the User Interface
+ * @version 1.0
  */
 public class CLI {
     Graph graph;
@@ -161,16 +163,37 @@ public class CLI {
             default:
                 break;
         }
+        if (!hasValidGraphPath(path)) {
+            print("This does not seem to be a .fmi file. Try again");
+            print();
+            path = null;
+            graphImportDialog();
+        }
         IOHandler ioHandler = new IOHandler();
-        this.graph = ioHandler.importGraph(path);
+        try {
+            this.graph = ioHandler.importGraph(path);
+        } catch (FileNotFoundException e) {
+            print("O.o There is no such File. Please help me find it.");
+            print();
+            graphImportDialog();
+        } catch (Exception e) {
+            ioHandler.exceptionPrint(e);
+            mainMenu();
+            return;
+        }
+
         mainMenu();
     }
 
     /**
      * prints run Dijkstra dialog
-     * @TODO cleanup
      */
     public void runDijkstraDialog() {
+        if (!hasGraph()) {
+            print("Please import Graph first.");
+            print();
+            mainMenu();
+        }
         print("Input starting node as Integer. Integers smaller than 0 equal to command 'exit'.");
         print("Non-Integer inputs are not allowed");
         sol("$");
@@ -179,10 +202,8 @@ public class CLI {
             start = this.scanner.nextInt();
         } else {
             print("Invalid value.");
+            print();
             start = -1;
-//            print(); //Restart didn't work since input is sometimes still immediately acquired from first time, resulting in exception, so I disabled it for now.
-//            runDijkstraDialog();
-//            return;
         }
         if (start < 0) {
             mainMenu();
@@ -195,7 +216,8 @@ public class CLI {
         if (scanner.hasNextInt()) {
             target = this.scanner.nextInt();
         } else {
-            print("Invalid value.");
+            print("Invalid value. ");
+            print();
             target = -1;
         }
         if (target < 0) {
@@ -219,6 +241,11 @@ public class CLI {
      * prints run query dialog
      */
     public void runQueryDialog() {
+        if (!hasGraph()) {
+            print("Please import Graph first.");
+            print();
+            mainMenu();
+        }
         print("Input path to .que File");
         sol("$");
         String path = this.scanner.next();
@@ -232,8 +259,26 @@ public class CLI {
             default:
                 break;
         }
+        if (!hasValidQueryPath(path)) {
+            print("This does not seem to be a .que file. Try again");
+            print();
+            path = null;
+            runQueryDialog();
+        }
         IOHandler ioHandler = new IOHandler();
-        outPath = ioHandler.runQuery(path, this.graph);
+        try {
+            outPath = ioHandler.runQuery(path, this.graph);
+        } catch (FileNotFoundException e) {
+            print("404 File not found. Do you know where else it could be?");
+            print();
+            runQueryDialog();
+            return;
+        } catch (Exception e) {
+            ioHandler.exceptionPrint(e);
+            mainMenu();
+            return;
+        }
+
         mainMenu();
     }
 
@@ -241,29 +286,42 @@ public class CLI {
      * prints run Diff dialog
      */
     public void runDiffDialog() {
-    	
-        if (outPath == null) {
-        	// No Query with output has been run yet this session. Set own outPath for diff.
-			print("Please input path to a previous output file. (usually [this program's path]\\out\\[numbers].out)");
-			sol("$");
-			
-			String temp = scanner.next();
-	        switch (temp) {
-	            case "die":
-	                die();
-	                return;
-	            case "exit":
-	                mainMenu();
-	                return;
-	            default:
-	                break;
-	        }
-	        outPath = temp;
-		}
-        else {
+        if (!hasGraph()) {
+            print("Please import Graph first.");
+            print();
+            mainMenu();
+        }
+        if (!hasValidOutputPath()) {
+            print("Please run a query from option 1 or 2 first.");
+            print();
+            mainMenu();
+        }
+        //This code is obsolete as there can never be any .out files when running script because bin/out will be created when invoking make.sh or run.sh and previous
+        //within any of bins subdirs will be deleted to ensure there can be no compilation errors.
+//        if (outPath == null) {
+//        	// No Query with output has been run yet this session. Set own outPath for diff.
+//            //
+//			print("Please input path to a previous output file.
+//			(usually Windows: [this program's path]\\bin\\out\\[GraphHash].out)
+//	Linux ./bin/out/[GraphHash].out		");
+//			sol("$");
+//			String temp = scanner.next();
+//	        switch (temp) {
+//	            case "exit":
+//	                mainMenu();
+//	                return;
+//                case "die":
+//                    die();
+//                    return;
+//	            default:
+//	                break;
+//	        }
+//	        outPath = temp;
+//		}
+//        else {
         	print();
         	print("Comparing this sessions most recent query from " + outPath);
-        }
+        //}
         
         print("Input path to .sol File");
         sol("$");
@@ -278,8 +336,24 @@ public class CLI {
             default:
                 break;
         }
+        if (!hasValidSolutionPath(path)) {
+            print("This does not seem to be a .fmisol file. Try again");
+            print();
+            path = null;
+            runDiffDialog();
+        }
         IOHandler ioHandler = new IOHandler();
-        ioHandler.diff(path, outPath);
+        try {
+            ioHandler.diff(path, outPath);
+        } catch (FileNotFoundException e) {
+            print("This file seems to be missing. Any guesses where else it could be?");
+            print();
+            runDiffDialog();
+        } catch (Exception e) {
+            ioHandler.exceptionPrint(e);
+            mainMenu();
+            return;
+        }
         mainMenu();
     }
 
@@ -296,7 +370,7 @@ public class CLI {
     }
 
     /**
-     * automatically calls methods to import graph run query and check for differences when invoced via terminal
+     * automatically calls methods to import graph run query and check for differences when invoked via terminal
      * @param fmiPath path to Graph file
      * @param quePath path to Query file
      * @param solPath path to Solution file
@@ -304,17 +378,51 @@ public class CLI {
     public void fullRun(String fmiPath, String quePath, String solPath) {
         header("0.1 - dev");
         IOHandler ioHandler = new IOHandler();
-        graph = ioHandler.importGraph(fmiPath);
-        String filename = ioHandler.runQuery(quePath, graph);
-        ioHandler.diff(solPath, filename);
+        try {
+            graph = ioHandler.importGraph(fmiPath);
+            String filename = ioHandler.runQuery(quePath, graph);
+            ioHandler.diff(solPath, filename);
+        } catch (FileNotFoundException e) {
+            print();
+            print("Please check the Paths you provided");
+            print("arg1 should be a Path to a existing .fmi file");
+            print("arg2 should be a Path to a existing .que file");
+            print("arg3 should be a Path to a existing .sol file");
+            die();
+        } catch (Exception e) {
+            ioHandler.exceptionPrint(e);
+            print();
+            print("verbose and debug prints are only usable from the CLI with invocation via makefile.sh");
+            die();
+        }
 
     }
     /**
      * Setter for outPath 
-     * @param path
+     * @param path the path for the .out file
      */
     public void setOutPath(String path) {
     	this.outPath = path;
+    }
+
+    public final boolean hasValidOutputPath() {
+        return hasValidFileEnding(this.outPath, ".out");
+    }
+
+    public final boolean hasValidQueryPath(String path) {
+        return hasValidFileEnding(path, ".que");
+    }
+
+    public final boolean hasValidSolutionPath(String path) {
+        return hasValidFileEnding(path, ".sol");
+    }
+
+    public final boolean hasValidGraphPath(String path) {
+        return hasValidFileEnding(path, ".fmi");
+    }
+
+    private boolean hasValidFileEnding(String file, String ending) {
+        return file.endsWith(ending);
     }
     
 }

@@ -1,6 +1,7 @@
 package main;
 
 import java.io.*;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 
 /**
@@ -40,7 +41,7 @@ public class IOHandler extends CLILogger {
         try {
             outputStream = new BufferedWriter(new FileWriter(pathToBin() + "out/" + filename));
         } catch (IOException e) {
-            e.printStackTrace();
+            exceptionPrint(e);
         }
     }
 
@@ -48,9 +49,10 @@ public class IOHandler extends CLILogger {
      * imports the Graph from a graph .fmi file also stops runtime for this task
      *
      * @param path the path to the file
+     * @throws FileNotFoundException let FNFException go up to CLI where it will be handled
      * @return a Graph object or null
      */
-    public Graph importGraph(String path) {
+    public Graph importGraph(String path) throws FileNotFoundException {
         this.print("Reading Graph Data...");
         Graph graph;
         try {
@@ -94,8 +96,10 @@ public class IOHandler extends CLILogger {
             }
             this.stop();
             this.print("Finished Reading Graph Data in " + CLILogger.runtimeInMinutes(this.runtime) + " minutes." + "\r\n" + "Time in Seconds: " + CLILogger.runtimeInSeconds(this.runtime));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (NoSuchFileException | FileNotFoundException e) {
+            throw new FileNotFoundException();
+        } catch (Exception e) {
+            exceptionPrint(e);
             return null;
         }
         if (runtime == 0)
@@ -107,9 +111,10 @@ public class IOHandler extends CLILogger {
      * runs the queries from .que file on the graph and outputs into a .out file
      * @param path the path the .que file
      * @param graph the graph
+     * @throws FileNotFoundException lets FNFException go up to CLI where it will be handled
      * @return the output path of the file as absolute path
      */
-    public String runQuery(String path, Graph graph) {
+    public String runQuery(String path, Graph graph) throws FileNotFoundException {
         try {
             FileReader fileReader = new FileReader(path);
             BufferedReader file = new BufferedReader(fileReader);
@@ -125,8 +130,10 @@ public class IOHandler extends CLILogger {
             }
             outputStream.close();
             file.close();
+        } catch (NoSuchFileException | FileNotFoundException e) {
+            throw new FileNotFoundException();
         } catch (IOException e) {
-            e.printStackTrace();
+            exceptionPrint(e);
         }
 
         return pathToBin() + "out/" + filename;
@@ -137,8 +144,9 @@ public class IOHandler extends CLILogger {
      *
      * @param solPath path to .sol file
      * @param outPath path to .out file
+     * @throws FileNotFoundException lets FNFException go up to CLI where it will be handled
      */
-    public void diff(String solPath, String outPath) {
+    public void diff(String solPath, String outPath) throws FileNotFoundException {
         int counter = 0;
         int line = 1;
 //        print("line:\tdifference");
@@ -155,9 +163,22 @@ public class IOHandler extends CLILogger {
 //                print( (line++) + ":\t" + (Integer.parseInt(s) - Integer.parseInt(o) ) ); 	//useful for debugging, but can cause exception if random file is chosen that can't be converted to int.
             }
             print("There are " + counter + " differences.");
+        } catch (NoSuchFileException | FileNotFoundException e) {
+            throw new FileNotFoundException();
         } catch (IOException e) {
-            e.printStackTrace();
+            exceptionPrint(e);
         }
 
+    }
+
+    public void exceptionPrint(Exception e) {
+        this.print();
+        this.print("Something went wrong. Check verbose and debug prints for more information.");
+        if (debug) {
+            for (StackTraceElement elem : e.getStackTrace()) {
+                debugPrint(elem.toString());
+            }
+        }
+        this.print();
     }
 }

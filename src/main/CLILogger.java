@@ -209,4 +209,8 @@ public abstract class CLILogger {
         CLI.print(msg);
     }
 
+    void print() {
+        CLI.print();
+    }
+
 }
