@@ -24,6 +24,7 @@ public class IOHandler extends CLILogger {
 
     /**
      * returns the path to the projects root dir
+     *
      * @return path to project root dir
      */
     static String pathToProjectRoot() {
@@ -55,8 +56,8 @@ public class IOHandler extends CLILogger {
      * Also computes runtime for this task
      *
      * @param path the path to the file
-     * @throws FileNotFoundException let FNFException go up to CLI where it will be handled
      * @return a Graph object or null
+     * @throws FileNotFoundException let FNFException go up to CLI where it will be handled
      */
     public Graph importGraph(String path) throws FileNotFoundException {
         this.print("Reading Graph Data...");
@@ -96,7 +97,7 @@ public class IOHandler extends CLILogger {
                 int start = Integer.parseInt(data[0]);
                 int dest = Integer.parseInt(data[1]);
                 double cost = Double.parseDouble(data[2]);
-                
+
                 graph.insertEdge(start, dest, cost);
 
             }
@@ -115,10 +116,11 @@ public class IOHandler extends CLILogger {
 
     /**
      * Runs the queries from .que file on the graph and outputs into a .out file
-     * @param path the path the .que file
+     *
+     * @param path  the path the .que file
      * @param graph the graph
-     * @throws FileNotFoundException lets FNFException go up to CLI where it will be handled
      * @return the output path of the file as absolute path
+     * @throws FileNotFoundException lets FNFException go up to CLI where it will be handled
      */
     public String runQuery(String path, Graph graph) throws FileNotFoundException {
         try {
@@ -179,6 +181,7 @@ public class IOHandler extends CLILogger {
 
     /**
      * Prints the stackTrace as debug print
+     *
      * @param e The Exception
      */
     public void exceptionPrint(Exception e) {

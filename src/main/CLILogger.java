@@ -34,6 +34,7 @@ public abstract class CLILogger {
 
     /**
      * Converts the runtime to minutes
+     *
      * @param runtime the runtime in ms
      * @return The runtime in minutes
      */
@@ -220,6 +221,7 @@ public abstract class CLILogger {
 
     /**
      * Prints a empty line
+     *
      * @see CLI#print()
      */
     void print() {

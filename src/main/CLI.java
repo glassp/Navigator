@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 /**
  * The Class for the User Interface
+ *
  * @version 1.0
  */
 public class CLI {
@@ -43,7 +44,8 @@ public class CLI {
 
     /**
      * Prints a message if the printLevel is set to true
-     * @param msg the message
+     *
+     * @param msg        the message
      * @param printLevel if msg should be printed
      */
     public static void print(String msg, boolean printLevel) {
@@ -71,9 +73,10 @@ public class CLI {
 
     /**
      * Prints the message with some space before it.
+     *
+     * @param msg the message
      * @see CLI#sol(String)
      * @see CLI#print(String)
-     * @param msg the message
      */
     public static void solPrint(String msg) {
         sol();
@@ -170,6 +173,7 @@ public class CLI {
     /**
      * Prints the dialog for importing a Graph
      * Also imports Graph from File and attaches it to CLI
+     *
      * @see IOHandler#importGraph(String)
      * @see CLI#hasValidGraphPath(String)
      */
@@ -216,6 +220,7 @@ public class CLI {
     /**
      * Prints the dialog for running a single Query after Dijkstra invocation
      * Also runs Dijkstra and the Query
+     *
      * @see Graph#runDijkstra(int)
      * @see Graph#runQuery(int, int)
      */
@@ -240,7 +245,7 @@ public class CLI {
             mainMenu();
             return;
         }
-        
+
         print("Input target node in the same way.");
         sol("$");
         int target;
@@ -256,20 +261,20 @@ public class CLI {
             return;
         }
 
-        
-        
+
         this.graph.runDijkstra(start);
         print("");
         print("Distance between " + start + " and " + target + " is " + graph.getDistance(target) + ".");
 //      print("Recursive distance according to path is " + graph.getDistanceViaPredecessors(target)); //Method is currently not supported.
         print("");
-        
+
         mainMenu();
     }
 
     /**
      * Prints the dialog for running multiple Queries after Dijkstra invocation
      * Also runs Dijkstra and the Queries
+     *
      * @see IOHandler#runQuery(String, Graph)
      */
     public void runQueryDialog() {
@@ -317,6 +322,7 @@ public class CLI {
     /**
      * Prints the dialog for comparing the calculated Distances to the Solution of .sol
      * Also runs a Difference Analysis between .out and .sol Files
+     *
      * @see IOHandler#diff(String, String)
      */
     public void runDiffDialog() {
@@ -395,6 +401,7 @@ public class CLI {
 
     /**
      * Prints the header for CLI
+     *
      * @param version the version to be displayed
      */
     public void header(String version) {
@@ -407,6 +414,7 @@ public class CLI {
 
     /**
      * Checks if the Path of output points to a valid .out file.
+     *
      * @return true if .out file found
      * @see CLI#hasValidFileEnding(String, String)
      */
@@ -416,6 +424,7 @@ public class CLI {
 
     /**
      * Checks if the provided Path points to a valid .que file.
+     *
      * @return true if .que file found
      * @see CLI#hasValidFileEnding(String, String)
      */
@@ -425,6 +434,7 @@ public class CLI {
 
     /**
      * Checks if the provided Path points to a valid .sol file.
+     *
      * @return true if .sol file found
      * @see CLI#hasValidFileEnding(String, String)
      */
@@ -434,6 +444,7 @@ public class CLI {
 
     /**
      * Checks if the provided Path points to a valid .fmi file.
+     *
      * @return true if .fmi file found
      * @see CLI#hasValidFileEnding(String, String)
      */
@@ -443,6 +454,7 @@ public class CLI {
 
     /**
      * Checks if the given file Path ends with given file extension.
+     *
      * @return true if file has given extension
      */
     private boolean hasValidFileEnding(String file, String ending) {

@@ -429,10 +429,10 @@ public class Graph extends CLILogger {
         //	However, since in practice it is never long until a node with outgoing edges appears, you always get immediate results.
         //	Tests show this method makes up nearly no time at all in running Dijkstra.
         // 	Instead, the lack of redundancy might make reading the graph slightly faster, though still bottlenecked by hard drive.
-        
+
         int lastEdge = -1;
 
-        for (int i = node + 1; i < offset.length; i++) {      	
+        for (int i = node + 1; i < offset.length; i++) {
             lastEdge = getOffset(i);
             if (lastEdge != -1) break;
         }
@@ -529,8 +529,8 @@ public class Graph extends CLILogger {
      * If there is no path or if Dijkstra has not run yet, -1 will be returned!
      *
      * @param node From this node, by going to the returned node and that one's predecessors, you can recursively find the ideal path to the starting node.
-     * @throws IllegalArgumentException if node index is out of bounds
      * @return preceding node on a path to start, or -1
+     * @throws IllegalArgumentException if node index is out of bounds
      */
     public int getPredecessor(int node) throws IllegalArgumentException {
         if (node < 0 || node >= this.predecessor.length)
@@ -622,5 +622,5 @@ public class Graph extends CLILogger {
 //    	
 //    	return distance;
 //    }
-    
+
 }
