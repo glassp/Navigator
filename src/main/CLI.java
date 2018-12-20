@@ -8,20 +8,32 @@ import java.util.Scanner;
  * @version 1.0
  */
 public class CLI {
+    /**
+     * The attached Graph
+     */
     Graph graph;
-    private String outPath;
+    /**
+     * The Scanner used for getting input
+     */
     Scanner scanner = new Scanner(System.in);
-    //print functions
+    /**
+     * The output Path
+     */
+    private String outPath;
+
+    //Getter and Setter
 
     /**
-     * prints an empty line
+     * Prints empty line in Terminal
      */
     public static void print() {
         System.out.println();
     }
 
+    //Print methods
+
     /**
-     * prints msg in a new line
+     * Prints a message and starts a new line afterwards
      *
      * @param msg the message
      */
@@ -30,7 +42,7 @@ public class CLI {
     }
 
     /**
-     * prints msg if printlevel is true
+     * Prints a message if the printLevel is set to true
      * @param msg the message
      * @param printLevel if msg should be printed
      */
@@ -40,18 +52,27 @@ public class CLI {
     }
 
     /**
-     * adds a tab on the start of a line
+     * Adds some space to the start of a line.
+     * Used for styling the output.
      */
     public static void sol() {
         sol("   ");
     }
 
+    /**
+     * Prints a message and adds some space afterwards.
+     * Used for styling the output and marking input lines
+     *
+     * @param msg the message
+     */
     public static void sol(String msg) {
         System.out.print(msg + " ");
     }
 
     /**
-     * prints msg in an indented line
+     * Prints the message with some space before it.
+     * @see CLI#sol(String)
+     * @see CLI#print(String)
      * @param msg the message
      */
     public static void solPrint(String msg) {
@@ -60,16 +81,52 @@ public class CLI {
     }
 
     /**
-     * checks if a Graph was imported
-     * @return if CLI has a Graph
+     * Setter for outPath
+     *
+     * @param path the path for the .out file
      */
-    public boolean hasGraph() {
-        return this.graph != null;
+    public void setOutPath(String path) {
+        this.outPath = path;
     }
-    //menu functions
+
+    //Dialog methods + main handler
 
     /**
-     * prints the main menu dialog in the CLI
+     * Automatically imports Graph, runs Query and compares it to the Solution
+     * This is the main handler method for a Terminal running script
+     * Started via run.sh arg1 arg2 arg3
+     *
+     * @param fmiPath path to Graph file
+     * @param quePath path to Query file
+     * @param solPath path to Solution file
+     */
+    public void fullRun(String fmiPath, String quePath, String solPath) {
+        header("0.1 - dev");
+        IOHandler ioHandler = new IOHandler();
+        try {
+            graph = ioHandler.importGraph(fmiPath);
+            String filename = ioHandler.runQuery(quePath, graph);
+            ioHandler.diff(solPath, filename);
+        } catch (FileNotFoundException e) {
+            print();
+            print("Please check the Paths you provided");
+            print("arg1 should be a Path to a existing .fmi file");
+            print("arg2 should be a Path to a existing .que file");
+            print("arg3 should be a Path to a existing .sol file");
+            die();
+        } catch (Exception e) {
+            ioHandler.exceptionPrint(e);
+            print();
+            print("verbose and debug prints are only usable from the CLI with invocation via makefile.sh");
+            die();
+        }
+
+    }
+
+    /**
+     * Prints the main menu in the terminal
+     * This method is the main handler method for all of CLI
+     * Started via makefile.sh
      */
     public void mainMenu() {
         print("Please select your action.");
@@ -90,11 +147,11 @@ public class CLI {
                 runDiffDialog();
                 return;
             case "v":
-                this.graph.toogleVerbose();
+                this.graph.toggleVerbose();
                 mainMenu();
                 return;
             case "d":
-                this.graph.toogleDebug();
+                this.graph.toggleDebug();
                 mainMenu();
                 return;
             case "exit":
@@ -111,39 +168,10 @@ public class CLI {
     }
 
     /**
-     * kills the script
-     */
-    private void die() {
-        this.scanner.close();
-        print("Script terminated.");
-        System.exit(0);
-    }
-
-    /**
-     * prints list of available commands
-     */
-    public void navigatorCommands() {
-        print("0");
-        solPrint("Import Graph from .fmi file");
-        print("1");
-        solPrint("Get Distance between 2 Nodes");
-        print("2");
-        solPrint("Import Query from .que file");
-        print("3");
-        solPrint("Run Difference Analysis with .sol file");
-        //print("v");
-        //solPrint("Toggle verbose printing");
-        //print("d");
-        //solPrint("Toggle debug printing");
-        print("exit");
-        solPrint("Exits the current menu.");
-        solPrint("When in main menu this will have the same result as 'die'");
-        print("die");
-        solPrint("Terminates the script");
-    }
-
-    /**
-     * prints import graph dialog
+     * Prints the dialog for importing a Graph
+     * Also imports Graph from File and attaches it to CLI
+     * @see IOHandler#importGraph(String)
+     * @see CLI#hasValidGraphPath(String)
      */
     public void graphImportDialog() {
         print("Import Graph from .fmi File");
@@ -186,7 +214,10 @@ public class CLI {
     }
 
     /**
-     * prints run Dijkstra dialog
+     * Prints the dialog for running a single Query after Dijkstra invocation
+     * Also runs Dijkstra and the Query
+     * @see Graph#runDijkstra(int)
+     * @see Graph#runQuery(int, int)
      */
     public void runDijkstraDialog() {
         if (!hasGraph()) {
@@ -235,10 +266,11 @@ public class CLI {
         
         mainMenu();
     }
-    
 
     /**
-     * prints run query dialog
+     * Prints the dialog for running multiple Queries after Dijkstra invocation
+     * Also runs Dijkstra and the Queries
+     * @see IOHandler#runQuery(String, Graph)
      */
     public void runQueryDialog() {
         if (!hasGraph()) {
@@ -283,7 +315,9 @@ public class CLI {
     }
 
     /**
-     * prints run Diff dialog
+     * Prints the dialog for comparing the calculated Distances to the Solution of .sol
+     * Also runs a Difference Analysis between .out and .sol Files
+     * @see IOHandler#diff(String, String)
      */
     public void runDiffDialog() {
         if (!hasGraph()) {
@@ -319,10 +353,10 @@ public class CLI {
 //	        outPath = temp;
 //		}
 //        else {
-        	print();
-        	print("Comparing this sessions most recent query from " + outPath);
+        print();
+        print("Comparing this sessions most recent query from " + outPath);
         //}
-        
+
         print("Input path to .sol File");
         sol("$");
         String path = scanner.next();
@@ -357,8 +391,10 @@ public class CLI {
         mainMenu();
     }
 
+    //Other methods
+
     /**
-     * prints header for CLI
+     * Prints the header for CLI
      * @param version the version to be displayed
      */
     public void header(String version) {
@@ -370,59 +406,93 @@ public class CLI {
     }
 
     /**
-     * automatically calls methods to import graph run query and check for differences when invoked via terminal
-     * @param fmiPath path to Graph file
-     * @param quePath path to Query file
-     * @param solPath path to Solution file
+     * Checks if the Path of output points to a valid .out file.
+     * @return true if .out file found
+     * @see CLI#hasValidFileEnding(String, String)
      */
-    public void fullRun(String fmiPath, String quePath, String solPath) {
-        header("0.1 - dev");
-        IOHandler ioHandler = new IOHandler();
-        try {
-            graph = ioHandler.importGraph(fmiPath);
-            String filename = ioHandler.runQuery(quePath, graph);
-            ioHandler.diff(solPath, filename);
-        } catch (FileNotFoundException e) {
-            print();
-            print("Please check the Paths you provided");
-            print("arg1 should be a Path to a existing .fmi file");
-            print("arg2 should be a Path to a existing .que file");
-            print("arg3 should be a Path to a existing .sol file");
-            die();
-        } catch (Exception e) {
-            ioHandler.exceptionPrint(e);
-            print();
-            print("verbose and debug prints are only usable from the CLI with invocation via makefile.sh");
-            die();
-        }
-
-    }
-    /**
-     * Setter for outPath 
-     * @param path the path for the .out file
-     */
-    public void setOutPath(String path) {
-    	this.outPath = path;
-    }
-
     public final boolean hasValidOutputPath() {
         return hasValidFileEnding(this.outPath, ".out");
     }
 
+    /**
+     * Checks if the provided Path points to a valid .que file.
+     * @return true if .que file found
+     * @see CLI#hasValidFileEnding(String, String)
+     */
     public final boolean hasValidQueryPath(String path) {
         return hasValidFileEnding(path, ".que");
     }
 
+    /**
+     * Checks if the provided Path points to a valid .sol file.
+     * @return true if .sol file found
+     * @see CLI#hasValidFileEnding(String, String)
+     */
     public final boolean hasValidSolutionPath(String path) {
         return hasValidFileEnding(path, ".sol");
     }
 
+    /**
+     * Checks if the provided Path points to a valid .fmi file.
+     * @return true if .fmi file found
+     * @see CLI#hasValidFileEnding(String, String)
+     */
     public final boolean hasValidGraphPath(String path) {
         return hasValidFileEnding(path, ".fmi");
     }
 
+    /**
+     * Checks if the given file Path ends with given file extension.
+     * @return true if file has given extension
+     */
     private boolean hasValidFileEnding(String file, String ending) {
         return file.endsWith(ending);
     }
-    
+
+    /**
+     * Checks if a Graph was imported
+     *
+     * @return if CLI has a Graph attached
+     * @see CLI#graphImportDialog()
+     */
+    public boolean hasGraph() {
+        return this.graph != null;
+    }
+
+    /**
+     * Kills the Script with exit code 0
+     */
+    private void die() {
+        this.scanner.close();
+        print("Script terminated.");
+        System.exit(0);
+    }
+
+    /**
+     * Prints a list of all available commands
+     *
+     * @see CLI#mainMenu()
+     * @see CLI#graphImportDialog()
+     * @see CLI#runQueryDialog()
+     * @see CLI#runDiffDialog()
+     */
+    public void navigatorCommands() {
+        print("0");
+        solPrint("Import Graph from .fmi file");
+        print("1");
+        solPrint("Get Distance between 2 Nodes");
+        print("2");
+        solPrint("Import Query from .que file");
+        print("3");
+        solPrint("Run Difference Analysis with .sol file");
+        //print("v");
+        //solPrint("Toggle verbose printing");
+        //print("d");
+        //solPrint("Toggle debug printing");
+        print("exit");
+        solPrint("Exits the current menu.");
+        solPrint("When in main menu this will have the same result as 'die'");
+        print("die");
+        solPrint("Terminates the script");
+    }
 }

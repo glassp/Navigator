@@ -8,13 +8,9 @@ package main;
  *
  */
 public class Dijkstra extends CLILogger {
-    /**
-     * The time when the algorithm started running. Will be set when using the start() method.
-     */
-	public long startTime;
-	
 	/**
 	 * The graph upon which this Dijkstra instance works
+     * @see Graph
 	 */
     private Graph graph;
     
@@ -30,7 +26,8 @@ public class Dijkstra extends CLILogger {
      * The distances will be saved in the graph through the setDistance method.
      *  
      * @param graph	The graph to operate upon
-     * @param start	Shortest distance from this one to every node of the graph will be found.  
+     * @param start    Shortest distance from this one to every node of the graph will be found.
+     * @see Graph#setDistance(int, double)
      */
     public Dijkstra(Graph graph, int start) {
         this.graph = graph;
@@ -47,7 +44,7 @@ public class Dijkstra extends CLILogger {
      * the shortest distances to the starting node.
      * 
      * Saves the preceding node on a path from start to node n in the graph's array predecessor[]. 
-     * 
+     * @see NodeHeap
      */
     public void start() {
     	print("Dijkstra's algorithm running...");

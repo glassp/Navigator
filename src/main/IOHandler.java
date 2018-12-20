@@ -5,7 +5,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 
 /**
- * The IOHandler
+ * Class for handling all the IO Operations
  */
 public class IOHandler extends CLILogger {
 
@@ -31,6 +31,11 @@ public class IOHandler extends CLILogger {
         return current.split("/src/")[0];
     }
 
+    /**
+     * Initializes output Stream for writing .out file
+     *
+     * @param graph The {@link Graph} for which the output will be created
+     */
     private void initStream(Graph graph) {
 //    	if (new File(pathToBin() + "out/").mkdir()) {
 //			print("Created directory '" + pathToBin() + "out'.\n");
@@ -46,7 +51,8 @@ public class IOHandler extends CLILogger {
     }
 
     /**
-     * imports the Graph from a graph .fmi file also stops runtime for this task
+     * Imports the Graph from a .fmi file
+     * Also computes runtime for this task
      *
      * @param path the path to the file
      * @throws FileNotFoundException let FNFException go up to CLI where it will be handled
@@ -108,7 +114,7 @@ public class IOHandler extends CLILogger {
     }
 
     /**
-     * runs the queries from .que file on the graph and outputs into a .out file
+     * Runs the queries from .que file on the graph and outputs into a .out file
      * @param path the path the .que file
      * @param graph the graph
      * @throws FileNotFoundException lets FNFException go up to CLI where it will be handled
@@ -140,7 +146,7 @@ public class IOHandler extends CLILogger {
     }
 
     /**
-     * checks for differences between .sol and .out file
+     * Checks for differences between .sol and .out file
      *
      * @param solPath path to .sol file
      * @param outPath path to .out file
@@ -171,6 +177,10 @@ public class IOHandler extends CLILogger {
 
     }
 
+    /**
+     * Prints the stackTrace as debug print
+     * @param e The Exception
+     */
     public void exceptionPrint(Exception e) {
         this.print();
         this.print("Something went wrong. Check verbose and debug prints for more information.");

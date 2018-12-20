@@ -56,10 +56,10 @@ public class Graph extends CLILogger {
      * <p>
      * Edges have to be manually added to the graph using the method insertEdge().
      * <p>
-     * TODO: the preferable way to add egdes is insertEdge(...) as it handles unorderedGraphExceptions
      *
      * @param nodes number of nodes that are used in the graph
      * @param edges number of edges that are to be used in the graph
+     * @see Graph#insertEdge(int, int, double)
      */
     public Graph(int nodes, int edges) {
         this.offset = new int[nodes];
@@ -85,6 +85,7 @@ public class Graph extends CLILogger {
      * runs dijkstra on this graph with start as start node
      *
      * @param start the start node
+     * @see Dijkstra#start()
      */
     public void runDijkstra(int start) {
         if (this.start != start) {
@@ -107,6 +108,7 @@ public class Graph extends CLILogger {
      * @param start the start node
      * @param dest  the destination
      * @return the distance from start to dest
+     * @see Graph#runDijkstra(int)
      */
     public double runQuery(int start, int dest) {
         runDijkstra(start);
@@ -174,7 +176,7 @@ public class Graph extends CLILogger {
      * @param start  the start node
      * @param dest   the destination node
      * @param weight the weight
-     * @throws UnorderedGraphException A special Exception which tells caller to try insert method or to die on error if unchecked
+     * @throws UnorderedGraphException A special Exception which tells caller to try insert method
      */
     void addEdge(int start, int dest, double weight) throws UnorderedGraphException {
 //    	print("adding it! from "+ start + " to " + dest + " and weight " + weight);
@@ -241,6 +243,7 @@ public class Graph extends CLILogger {
      * @param dest   the destination node
      * @param weight the weight
      * @param skip   if true skips the test and forces indices to be moved
+     * @see Graph#addEdge(int, int, double)
      */
     public void insertEdge(int start, int dest, double weight, boolean skip) {
 
@@ -284,6 +287,7 @@ public class Graph extends CLILogger {
      * @param start  the start node
      * @param dest   the destination node
      * @param weight the weight
+     * @see Graph#insertEdge(int, int, double)
      */
     public void insertEdge(int start, int dest, double weight) {
         insertEdge(start, dest, weight, false);
@@ -294,6 +298,7 @@ public class Graph extends CLILogger {
      *
      * @param node the node to be checked
      * @return true if has outgoing edge else false
+     * @see Graph#getOffset(int)
      */
     public boolean hasOutgoingEdges(int node) {
 //        return this.offset[node] != -1;
