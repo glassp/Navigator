@@ -32,4 +32,4 @@ javac ./src/main/*.java -d ./bin/
 #start main()
 java -cp ./bin/ main/Main
 
-sleep 5m
+sleep 5s
