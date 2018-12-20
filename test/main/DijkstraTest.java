@@ -45,7 +45,7 @@ public class DijkstraTest {
 //		System.out.println("Graph has maximum of " + graph.getMaxEdgesCount() + " edges");
 //		System.out.println("Graph has " + graph.getNodesCount() + " nodes");
 
-		assertEquals(8, graph.getWeight(graph.getEdge(0, 3)));
+//		assertEquals(8, graph.getWeight(graph.getEdge(0, 3))); //But should never use this method
 		// Test edge just cause
 		
 		Dijkstra dijkstra = new Dijkstra(graph, 0);
