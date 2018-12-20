@@ -10,10 +10,6 @@ import java.util.stream.IntStream;
  * Lowest distance in graph instance means highest priority.
  */
 public class NodeHeap extends CLILogger {
-    /**
-     * Debug counter - counts how often getAndRemoveNext() is used.
-     */
-    int debug;
 
     /**
      * Graph instance the nodes of which are represented in the heap.
@@ -35,7 +31,6 @@ public class NodeHeap extends CLILogger {
      */
     private int[] nodeLocation;
 
-    // min heap: parent's distance has to be less than or equal to any child's
 
     /**
      * Construct a NodeHeap instance.
@@ -44,9 +39,6 @@ public class NodeHeap extends CLILogger {
      * @param startingNode the starting node
      */
     public NodeHeap(Graph graph, int startingNode) {
-        this.debug = 0; //TODO: remove
-
-
         this.graph = graph;
         this.heapNodes = IntStream.rangeClosed(0, graph.getNodesCount() - 1).toArray();
 
@@ -125,7 +117,6 @@ public class NodeHeap extends CLILogger {
 
         if (graph.getDistance(heapNodes[heapItem]) > minChildDist) {
             swap(heapItem, minChild);
-//			System.out.println(" - now swap (sift down) heap items " + heapItem + " and " + minChild); //TODO: remove
             siftDown(minChild);
 
             return true;
@@ -164,7 +155,6 @@ public class NodeHeap extends CLILogger {
         int parent = getParent(heapItem);
 
         if (graph.getDistance(heapNodes[parent]) > distanceOfNode) {
-//			System.out.println(" - now swap heap items " + heapItem + " and " + parent); //TODO: remove
             swap(heapItem, parent);
 
             //Recursion - ending at root or earlier, since getParent(0) = 0
@@ -186,7 +176,6 @@ public class NodeHeap extends CLILogger {
         if (heapItem == 0) {
             return 0;
         }
-//		return (heapItem / 2) - (1/2);
 
         int temp = heapItem;
 
@@ -203,8 +192,6 @@ public class NodeHeap extends CLILogger {
      * @param heapItem index of item on the heap
      */
     private int getLeftChild(int heapItem) {
-//		int temp = 2*(heapItem + 1) - 1;
-
         int temp = 2 * heapItem + 1;
         if (temp <= maxIndex) {
             return temp;
@@ -256,12 +243,6 @@ public class NodeHeap extends CLILogger {
 
         heapNodes[item1] = heapNodes[item2];
         heapNodes[item2] = temp;
-
-//		if (maxIndex < 30 || maxIndex > heapNodes.length - 45) {
-//			System.out.println("swap index " + item1 + " and " + item2 + " (Nodes "+heapNodes[item2]+" and "+heapNodes[item1]+") | " + heapNodes[item2]+" is now at " +item2 + ", maxIndex is" + maxIndex);
-//		}
-
-
     }
 
 
@@ -281,13 +262,12 @@ public class NodeHeap extends CLILogger {
      */
     private int removeRoot() {
         if (maxIndex < 0) {
-//			maxIndex = -1;
             return -1;
         } else if (maxIndex == 0) {
             maxIndex--;
             return heapNodes[0];
         } else {
-            swap(0, maxIndex--);    //0 and maxIndex, then maxIndex is decremented afterwards
+            swap(0, maxIndex--);
 
             siftDown(0);
 
@@ -303,24 +283,6 @@ public class NodeHeap extends CLILogger {
      * @return Node number in graph or -1
      */
     public int getAndRemoveNext() {
-        debug++;
-
-        //TODO: does this try catch do anything or can it be deleted
-        try {
-            if (maxIndex < 10) {
-//				Thread.sleep(1000);
-
-                graph.verbosePrint("-- return and remove time " + debug);
-            }
-            if (maxIndex > heapNodes.length - 35) {
-//				Thread.sleep(500);
-                graph.verbosePrint("-- return and remove time " + debug);
-            }
-
-//			Thread.sleep(300);
-        } catch (Exception e) {
-        }
-
         return removeRoot();
     }
 
