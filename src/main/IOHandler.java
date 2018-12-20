@@ -141,7 +141,7 @@ public class IOHandler extends CLILogger {
     public void diff(String solPath, String outPath) {
         int counter = 0;
         int line = 1;
-        print("line:\tdifference");
+//        print("line:\tdifference");
         try {
             FileReader outReader = new FileReader(outPath);
             FileReader solReader = new FileReader(solPath);
