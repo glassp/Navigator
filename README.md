@@ -43,7 +43,7 @@ Use the makefile.sh file and run in in Terminal
 -  Enter ``0``
 -  Enter the path to the .fmi file
 
-#### Run Dijkstra's algorithm (one-to-all)
+#### Run single Query
 
 - Import the Graph
 - Enter ``1``
@@ -52,7 +52,7 @@ Use the makefile.sh file and run in in Terminal
 
 If you want to make multiple inquiries from the same starting point in a row, Dijkstra's algorithm will only be running once.
 
-#### Run a Query
+#### Run a multiple Queries
 
 - Import the Graph
 - Enter ``2``
@@ -65,19 +65,17 @@ If you want to make multiple inquiries from the same starting point in a row, Di
 - Enter the path to the .out file
 - Enter the path to the .sol file
 
-NOTE: After having run a query, the path to its .out file is automatically used for the rest of the session. 
+NOTE: After having run a query, the path to its .out file is automatically used for this Graph. 
 
-#### Logging output
-#####Verbose Logging
+#### Logging output  
+NOTE: This will increase the runtime
+##### Verbose Logging
 Enter ``v`` to toggle verbose logging
 
-#####Debug Logging
+##### Debug Logging
 Enter ``d`` to toggle debug logging
 
-#####Info Logging
-Enter ``i`` to toggle info logging
-
-###From Terminal  
+### From Terminal  
 
 Use the run.sh from terminal with parameter  
 - `arg1` The Path to the Graph data
