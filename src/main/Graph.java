@@ -245,22 +245,14 @@ public class Graph extends CLILogger {
     public void insertEdge(int start, int dest, double weight, boolean skip) {
 
         if (getOffset(start + 1) == -1 || !skip) {
-//        	if (start == 553958) {
-//				print("trying to add edge from " + start + " to " + dest + " and weight " + weight);
-//			}
             try {
                 this.verbosePrint("trying to add Edge");
                 addEdge(start, dest, weight);
             } catch (UnorderedGraphException e) {
                 this.debugPrint("Exception handled");
-//                print("exception"); //TODO: remove debug
                 insertEdge(start, dest, weight, true);
             }
         } else {
-
-//        	if (start == 553958) {
-//				print("else case");
-//			}
         	
             int index = getOffset(start + 1);
             if (this.edges.length <= current + 1) increase(this.edges);
@@ -326,9 +318,7 @@ public class Graph extends CLILogger {
             throw new IllegalArgumentException("Can't give offset, since node " + node + " doesn't exist. Offset-Array length is " + offset.length);
         if (node == offset.length)
             return -1;
-        // I added exceptions for most non-existent nodes. Making an exception for this exception is a bit of a hack, but so is not using exceptions in any way.
-        // I don't think there was any case implemented for node == offset.length before, which is needed though in my understanding for methods that add edges to the last node and check for node+1 (without increasing array size, but that shouldn't be done if all goes correctly anyways)
-
+        
         return this.offset[node];
     }
 
@@ -351,7 +341,7 @@ public class Graph extends CLILogger {
     }
 
 
-//    /**
+//    /** Should not use this class, can return first of multiple edges between same nodes without checking
 //     * Returns the index of the edge
 //     *
 //     * @param start the start node
@@ -401,16 +391,16 @@ public class Graph extends CLILogger {
         int minIndex = -1;
         int offset = this.getOffset(node);
         if (offset == -1) {
-            //this.debugPrint("no nextNode: offset invalid");
+            this.debugPrint("no nextNode: offset invalid");
             return -1;
         }
         int elem = this.countOutgoingEdges(node);
         if (elem < 1) {
-            //this.debugPrint("no nextNode: zero outgoing Edges");
+            this.debugPrint("no nextNode: zero outgoing Edges");
             return -1;
         }
         for (int i = 0; i < elem; i++) {
-//      	double var = this.getWeight(node, this.edges[offset + i]); 		//should not use this method, can give wrong results
+//      	double var = this.getWeight(node, this.edges[offset + i]); 		//should not use this method, can give wrong results.
         	double var = this.getWeight(offset + i);
             if (var < minVal) {
                 minVal = var;
@@ -431,11 +421,13 @@ public class Graph extends CLILogger {
         if (!this.hasOutgoingEdges(node)) return 0;
 
         //  Has to iterate in O(n), but could be done in O(1) if offset was managed like in specifications
-        // TODO: Feel free to change it :)
+        //	However, since in practice it is never long until a node with outgoing edges appears, you always get immediate results.
+        //	Tests show this method makes up nearly no time at all in running Dijkstra.
+        // 	Instead, the lack of redundancy might make reading the graph slightly faster, though still bottlenecked by hard drive.
+        
         int lastEdge = -1;
-//    	for (int i = node+1; i < this.current; i++) {
-        for (int i = node + 1; i < offset.length; i++) {
-//			lastEdge = offset[i];
+
+        for (int i = node + 1; i < offset.length; i++) {      	
             lastEdge = getOffset(i);
             if (lastEdge != -1) break;
         }
@@ -450,7 +442,7 @@ public class Graph extends CLILogger {
 
 
 //    /**
-//     * Basically never use this method.
+//     * Never use this method, basically.
 //     * Returns the weight of the first edge found between given nodes
 //     *
 //     * @param start the start node
