@@ -34,6 +34,7 @@ public class IOHandler extends CLILogger {
 //    	if (new File(pathToBin() + "out/").mkdir()) {
 //			print("Created directory '" + pathToBin() + "out'.\n");
 //		}
+//    	//Not strictly necessary since makefile already creates path.
 
         filename = graph.hashCode() + ".out";
         try {
@@ -88,15 +89,8 @@ public class IOHandler extends CLILogger {
                 int dest = Integer.parseInt(data[1]);
                 double cost = Double.parseDouble(data[2]);
                 
-//                if (i == 1127833 || i == 1127834) {
-//					print(line + " is the line. Start: " + start + " Dest: " + dest + " Cost: " + cost); //TODO: debug code to be removed
-//				}
-                
                 graph.insertEdge(start, dest, cost);
-//                if (i == 1127833 || i == 1127834) {
-//					print("Graph says: "+ i +" has cost " + graph.getWeight(i)); //TODO: debug code to be removed
-//					print("");
-//				}
+
             }
             this.stop();
             this.print("Finished Reading Graph Data in " + CLILogger.runtimeInMinutes(this.runtime) + " minutes." + "\r\n" + "Time in Seconds: " + CLILogger.runtimeInSeconds(this.runtime));
@@ -158,7 +152,7 @@ public class IOHandler extends CLILogger {
             while ((s = sol.readLine()) != null && (o = out.readLine()) != null) {
                 if (!o.equals(s))
                     counter++;
-                print( (line++) + ":\t" + (Integer.parseInt(s) - Integer.parseInt(o) ) ); //TODO: better remove eventually, can cause exception if random file is chosen that can't be converted to int.
+//                print( (line++) + ":\t" + (Integer.parseInt(s) - Integer.parseInt(o) ) ); 	//useful for debugging, but can cause exception if random file is chosen that can't be converted to int.
             }
             print("There are " + counter + " differences.");
         } catch (IOException e) {
