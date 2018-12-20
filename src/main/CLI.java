@@ -129,10 +129,10 @@ public class CLI {
         solPrint("Import Query from .que file");
         print("3");
         solPrint("Run Difference Analysis with .sol file");
-        print("v");
-        solPrint("Toggle verbose printing");
-        print("d");
-        solPrint("Toggle debug printing");
+        //print("v");
+        //solPrint("Toggle verbose printing");
+        //print("d");
+        //solPrint("Toggle debug printing");
         print("exit");
         solPrint("Exits the current menu.");
         solPrint("When in main menu this will have the same result as 'die'");
