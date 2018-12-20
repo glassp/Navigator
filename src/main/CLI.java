@@ -197,9 +197,6 @@ public class CLI {
         } else {
             print("Invalid value.");
             target = -1;
-//            print();
-//            runDijkstraDialog();
-//            return;
         }
         if (target < 0) {
             mainMenu();
@@ -211,7 +208,7 @@ public class CLI {
         this.graph.runDijkstra(start);
         print("");
         print("Distance between " + start + " and " + target + " is " + graph.getDistance(target) + ".");
-//        print("Recursive distance according to path is " + graph.getDistanceViaPredecessors(target));
+//      print("Recursive distance according to path is " + graph.getDistanceViaPredecessors(target)); //Method is currently not supported.
         print("");
         
         mainMenu();
@@ -242,11 +239,9 @@ public class CLI {
 
     /**
      * prints run Diff dialog
-     * @TODO cleanup
      */
     public void runDiffDialog() {
     	
-//System.out.println(outPath);
         if (outPath == null) {
         	// No Query with output has been run yet this session. Set own outPath for diff.
 			print("Please input path to a previous output file. (usually [this program's path]\\out\\[numbers].out)");
