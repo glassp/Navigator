@@ -88,7 +88,15 @@ public class IOHandler extends CLILogger {
                 int dest = Integer.parseInt(data[1]);
                 double cost = Double.parseDouble(data[2]);
                 
+//                if (i == 1127833 || i == 1127834) {
+//					print(line + " is the line. Start: " + start + " Dest: " + dest + " Cost: " + cost); //TODO: debug code to be removed
+//				}
+                
                 graph.insertEdge(start, dest, cost);
+//                if (i == 1127833 || i == 1127834) {
+//					print("Graph says: "+ i +" has cost " + graph.getWeight(i)); //TODO: debug code to be removed
+//					print("");
+//				}
             }
             this.stop();
             this.print("Finished Reading Graph Data in " + CLILogger.runtimeInMinutes(this.runtime) + " minutes." + "\r\n" + "Time in Seconds: " + CLILogger.runtimeInSeconds(this.runtime));

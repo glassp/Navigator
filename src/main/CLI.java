@@ -211,6 +211,7 @@ public class CLI {
         this.graph.runDijkstra(start);
         print("");
         print("Distance between " + start + " and " + target + " is " + graph.getDistance(target) + ".");
+//        print("Recursive distance according to path is " + graph.getDistanceViaPredecessors(target));
         print("");
         
         mainMenu();
