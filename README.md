@@ -52,7 +52,7 @@ Use the makefile.sh file and run in in Terminal
 
 If you want to make multiple inquiries from the same starting point in a row, Dijkstra's algorithm will only be running once.
 
-#### Run a multiple Queries
+#### Run multiple Queries
 
 - Import the Graph
 - Enter ``2``
