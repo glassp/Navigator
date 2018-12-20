@@ -1,0 +1,664 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: Graph</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">main</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: Graph (main)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">Graph</td>
+            <td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+                <span class="absValue">
+    (1/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+                <span class="absValue">
+    (20/ 30)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    56.2%
+  </span>
+                <span class="absValue">
+    (86/ 153)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package main;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import java.util.Arrays;
+        <i>4</i>&nbsp;
+        <i>5</i>&nbsp;
+        <i>6</i>&nbsp;/**
+        <i>7</i>&nbsp; * A class for a directed graph.
+        <i>8</i>&nbsp; * &lt;p&gt;
+        <i>9</i>&nbsp; * It can be used with the Dijkstra class to find minimum distances from all nodes to one starting
+        node.
+        <i>10</i>&nbsp; */
+        <i>11</i>&nbsp;public class Graph extends CLILogger {
+        <i>12</i>&nbsp;
+        <i>13</i>&nbsp; /**
+        <i>14</i>&nbsp; * stores the destination of an edge
+        <i>15</i>&nbsp; */
+        <i>16</i>&nbsp; private int[] edges;
+        <i>17</i>&nbsp; /**
+        <i>18</i>&nbsp; * stores the offset
+        <i>19</i>&nbsp; */
+        <i>20</i>&nbsp; private int[] offset;
+        <i>21</i>&nbsp; /**
+        <i>22</i>&nbsp; * the first unused index (of edges, it seems)
+        <i>23</i>&nbsp; */
+        <i>24</i>&nbsp; private int current;
+        <i>25</i>&nbsp; /**
+        <i>26</i>&nbsp; * stores the weight of a edge
+        <i>27</i>&nbsp; */
+        <i>28</i>&nbsp; private double[] weight;
+        <i>29</i>&nbsp; /**
+        <i>30</i>&nbsp; * stores the latitude of a node
+        <i>31</i>&nbsp; */
+        <i>32</i>&nbsp; private double[] latitude;
+        <i>33</i>&nbsp; /**
+        <i>34</i>&nbsp; * stores the longitude of a node
+        <i>35</i>&nbsp; */
+        <i>36</i>&nbsp; private double[] longitude;
+        <i>37</i>&nbsp; /**
+        <i>38</i>&nbsp; * stores the distance to a node
+        <i>39</i>&nbsp; */
+        <i>40</i>&nbsp; private double[] distance;
+        <i>41</i>&nbsp;
+        <i>42</i>&nbsp; /**
+        <i>43</i>&nbsp; * stores any node&#39;s preceding node on the ideal path from Dijkstra&#39;s starting node to
+        that node, if Dijkstra&#39;s algorithm has been run.
+        <i>44</i>&nbsp; * Values will be -1 if there is no path or if Dijkstra has not run yet.
+        <i>45</i>&nbsp; */
+        <i>46</i>&nbsp; private int[] predecessor;
+        <i>47</i>&nbsp;
+        <i>48</i>&nbsp; /**
+        <i>49</i>&nbsp; * the starting node
+        <i>50</i>&nbsp; * used to check if dijkstra did run for this node
+        <i>51</i>&nbsp; */
+        <b class="fc"><i>52</i>&nbsp; private int start = -1;</b>
+        <i>53</i>&nbsp;
+        <i>54</i>&nbsp; /**
+        <i>55</i>&nbsp; * Constructor.
+        <i>56</i>&nbsp; * &lt;p&gt;
+        <i>57</i>&nbsp; * Edges have to be manually added to the graph using the method insertEdge().
+        <i>58</i>&nbsp; * &lt;p&gt;
+        <i>59</i>&nbsp; * TODO: the preferable way to add egdes is insertEdge(...) as it handles
+        unorderedGraphExceptions
+        <i>60</i>&nbsp; *
+        <i>61</i>&nbsp; * @param nodes number of nodes that are used in the graph
+        <i>62</i>&nbsp; * @param edges number of edges that are to be used in the graph
+        <i>63</i>&nbsp; */
+        <b class="fc"><i>64</i>&nbsp; public Graph(int nodes, int edges) {</b>
+        <b class="fc"><i>65</i>&nbsp; this.offset = new int[nodes];</b>
+        <b class="fc"><i>66</i>&nbsp; this.predecessor = new int[nodes];</b>
+        <b class="fc"><i>67</i>&nbsp; this.distance = new double[nodes];</b>
+        <i>68</i>&nbsp;
+        <b class="fc"><i>69</i>&nbsp; this.edges = new int[edges];</b>
+        <b class="fc"><i>70</i>&nbsp; this.weight = new double[edges];</b>
+        <i>71</i>&nbsp;
+        <b class="fc"><i>72</i>&nbsp; this.latitude = new double[nodes];</b>
+        <b class="fc"><i>73</i>&nbsp; this.longitude = new double[nodes];</b>
+        <i>74</i>&nbsp;
+        <b class="fc"><i>75</i>&nbsp; this.current = 0;</b>
+        <i>76</i>&nbsp;
+        <i>77</i>&nbsp; //initializes all values in arrays with their default value, if there is one
+        <b class="fc"><i>78</i>&nbsp; Arrays.fill(offset, -1);</b>
+        <b class="fc"><i>79</i>&nbsp; Arrays.fill(predecessor, -1);</b>
+        <b class="fc"><i>80</i>&nbsp; Arrays.fill(distance, Double.POSITIVE_INFINITY);</b>
+        <i>81</i>&nbsp;
+        <b class="fc"><i>82</i>&nbsp; }</b>
+        <i>83</i>&nbsp;
+        <i>84</i>&nbsp; /**
+        <i>85</i>&nbsp; * runs dijkstra on this graph with start as start node
+        <i>86</i>&nbsp; *
+        <i>87</i>&nbsp; * @param start the start node
+        <i>88</i>&nbsp; */
+        <i>89</i>&nbsp; public void runDijkstra(int start) {
+        <b class="fc"><i>90</i>&nbsp; if (this.start != start) {</b>
+        <b class="fc"><i>91</i>&nbsp; if (this.start != -1)</b>
+        <b class="fc"><i>92</i>&nbsp; Arrays.fill(distance, Double.POSITIVE_INFINITY);</b>
+        <b class="fc"><i>93</i>&nbsp; System.out.println(&quot;Starting dijkstra for &quot; + start);</b>
+        <b class="fc"><i>94</i>&nbsp; Dijkstra dijkstra = new Dijkstra(this, start);</b>
+        <b class="fc"><i>95</i>&nbsp; dijkstra.setDebug(this.debug);</b>
+        <b class="fc"><i>96</i>&nbsp; dijkstra.setVerbose(this.verbose);</b>
+        <b class="fc"><i>97</i>&nbsp; dijkstra.start();</b>
+        <i>98</i>&nbsp; }
+        <b class="fc"><i>99</i>&nbsp; this.start = start;</b>
+        <b class="fc"><i>100</i>&nbsp; }</b>
+        <i>101</i>&nbsp;
+        <i>102</i>&nbsp; /**
+        <i>103</i>&nbsp; * runs query on this graph with start as start node and dest as destination
+        <i>104</i>&nbsp; *
+        <i>105</i>&nbsp; * @param start the start node
+        <i>106</i>&nbsp; * @param dest the destination
+        <i>107</i>&nbsp; * @return the distance from start to dest
+        <i>108</i>&nbsp; */
+        <i>109</i>&nbsp; public double runQuery(int start, int dest) {
+        <b class="fc"><i>110</i>&nbsp; runDijkstra(start);</b>
+        <b class="fc"><i>111</i>&nbsp; double dist = getDistance(dest);</b>
+        <b class="fc"><i>112</i>&nbsp; debugPrint(&quot;Distance: &quot; + dist);</b>
+        <b class="fc"><i>113</i>&nbsp; return dist;</b>
+        <i>114</i>&nbsp; }
+        <i>115</i>&nbsp;
+        <i>116</i>&nbsp;
+        <i>117</i>&nbsp; /**
+        <i>118</i>&nbsp; * sets the latitude of a node
+        <i>119</i>&nbsp; *
+        <i>120</i>&nbsp; * @param node the node
+        <i>121</i>&nbsp; * @param latitude the latitude
+        <i>122</i>&nbsp; */
+        <i>123</i>&nbsp; void setLatitude(int node, double latitude) {
+        <b class="fc"><i>124</i>&nbsp; this.latitude[node] = latitude;</b>
+        <b class="fc"><i>125</i>&nbsp; }</b>
+        <i>126</i>&nbsp;
+        <i>127</i>&nbsp; /**
+        <i>128</i>&nbsp; * sets the longitude
+        <i>129</i>&nbsp; *
+        <i>130</i>&nbsp; * @param node the node
+        <i>131</i>&nbsp; * @param longitude the longitude
+        <i>132</i>&nbsp; */
+        <i>133</i>&nbsp; void setLongitude(int node, double longitude) {
+        <b class="fc"><i>134</i>&nbsp; this.longitude[node] = longitude;</b>
+        <b class="fc"><i>135</i>&nbsp; }</b>
+        <i>136</i>&nbsp;
+        <i>137</i>&nbsp; /**
+        <i>138</i>&nbsp; * sets both geo information at once
+        <i>139</i>&nbsp; *
+        <i>140</i>&nbsp; * @param node the node
+        <i>141</i>&nbsp; * @param latitude the latitude
+        <i>142</i>&nbsp; * @param longitude the longitude
+        <i>143</i>&nbsp; */
+        <i>144</i>&nbsp; void setGeo(int node, double latitude, double longitude) {
+        <b class="fc"><i>145</i>&nbsp; this.setLatitude(node, latitude);</b>
+        <b class="fc"><i>146</i>&nbsp; this.setLongitude(node, longitude);</b>
+        <b class="fc"><i>147</i>&nbsp; }</b>
+        <i>148</i>&nbsp;
+        <i>149</i>&nbsp; /**
+        <i>150</i>&nbsp; * returns the latitude
+        <i>151</i>&nbsp; *
+        <i>152</i>&nbsp; * @param node the node
+        <i>153</i>&nbsp; * @return the latitude
+        <i>154</i>&nbsp; */
+        <i>155</i>&nbsp; double getLatitude(int node) {
+        <b class="nc"><i>156</i>&nbsp; return this.latitude[node];</b>
+        <i>157</i>&nbsp; }
+        <i>158</i>&nbsp;
+        <i>159</i>&nbsp; /**
+        <i>160</i>&nbsp; * returns the longitude
+        <i>161</i>&nbsp; *
+        <i>162</i>&nbsp; * @param node the node
+        <i>163</i>&nbsp; * @return the longitude
+        <i>164</i>&nbsp; */
+        <i>165</i>&nbsp; double getLongitude(int node) {
+        <b class="nc"><i>166</i>&nbsp; return this.longitude[node];</b>
+        <i>167</i>&nbsp; }
+        <i>168</i>&nbsp;
+        <i>169</i>&nbsp; /**
+        <i>170</i>&nbsp; * adds a new Edge to the Graph
+        <i>171</i>&nbsp; *
+        <i>172</i>&nbsp; * @param start the start node
+        <i>173</i>&nbsp; * @param dest the destination node
+        <i>174</i>&nbsp; * @param weight the weight
+        <i>175</i>&nbsp; * @throws UnorderedGraphException A special Exception which tells caller to try insert method
+        or to die on error if unchecked
+        <i>176</i>&nbsp; */
+        <i>177</i>&nbsp; void addEdge(int start, int dest, double weight) throws UnorderedGraphException {
+        <i>178</i>&nbsp; //edges are added in right order just append in array
+        <b class="fc"><i>179</i>&nbsp; if (hasOutgoingEdges(start + 1)) {</b>
+        <b class="nc"><i>180</i>&nbsp; throw new UnorderedGraphException(&quot;The next Node has already created Edges
+            please ty to use insertEdge(...)&quot;);</b>
+        <i>181</i>&nbsp; }
+        <b class="fc"><i>182</i>&nbsp; if (this.current &gt;= edges.length) increase(edges);</b>
+        <b class="fc"><i>183</i>&nbsp; if (!hasOutgoingEdges(start)) {</b>
+        <b class="fc"><i>184</i>&nbsp; this.setOffset(start, this.current);</b>
+        <i>185</i>&nbsp; }
+        <b class="fc"><i>186</i>&nbsp; this.edges[this.current] = dest;</b>
+        <b class="fc"><i>187</i>&nbsp; this.weight[getEdge(start, dest)] = weight;</b>
+        <b class="fc"><i>188</i>&nbsp; this.current++;</b>
+        <b class="fc"><i>189</i>&nbsp; }</b>
+        <i>190</i>&nbsp;
+        <i>191</i>&nbsp; /**
+        <i>192</i>&nbsp; * increases the length of a double array
+        <i>193</i>&nbsp; * &lt;p&gt;
+        <i>194</i>&nbsp; * If array is a known array to this class e.g latitude it will automatically be replaced
+        <i>195</i>&nbsp; *
+        <i>196</i>&nbsp; * @param arr the double array to be increased
+        <i>197</i>&nbsp; * @return the increased array
+        <i>198</i>&nbsp; */
+        <i>199</i>&nbsp; private double[] increase(double[] arr) {
+        <b class="nc"><i>200</i>&nbsp; this.debugPrint(&quot;need to increase array&quot;);</b>
+        <b class="nc"><i>201</i>&nbsp; double[] array = new double[arr.length + 2];</b>
+        <i>202</i>&nbsp; //copies array into other array
+        <b class="nc"><i>203</i>&nbsp; System.arraycopy(arr, 0, array, 0, arr.length);</b>
+        <b class="nc"><i>204</i>&nbsp; if (arr == this.weight) this.weight = array;</b>
+        <b class="nc"><i>205</i>&nbsp; else if (arr == this.distance) this.distance = array;</b>
+        <b class="nc"><i>206</i>&nbsp; else if (arr == this.latitude) this.latitude = array;</b>
+        <b class="nc"><i>207</i>&nbsp; else if (arr == this.longitude) this.longitude = array;</b>
+        <b class="nc"><i>208</i>&nbsp; this.debugPrint(&quot;array was increased&quot;);</b>
+        <b class="nc"><i>209</i>&nbsp; return array;</b>
+        <i>210</i>&nbsp;
+        <i>211</i>&nbsp; }
+        <i>212</i>&nbsp;
+        <i>213</i>&nbsp; /**
+        <i>214</i>&nbsp; * increases the length of a int array
+        <i>215</i>&nbsp; * &lt;p&gt;
+        <i>216</i>&nbsp; * If array is a known array to this class e.g. edges it will automatically be replaced
+        <i>217</i>&nbsp; *
+        <i>218</i>&nbsp; * @param arr the int array to be increased
+        <i>219</i>&nbsp; * @return the increased array
+        <i>220</i>&nbsp; */
+        <i>221</i>&nbsp; private int[] increase(int[] arr) {
+        <b class="nc"><i>222</i>&nbsp; this.debugPrint(&quot;need to increase array&quot;);</b>
+        <b class="nc"><i>223</i>&nbsp; int[] array = new int[arr.length + 2];</b>
+        <b class="nc"><i>224</i>&nbsp; System.arraycopy(arr, 0, array, 0, arr.length);</b>
+        <b class="nc"><i>225</i>&nbsp; if (arr == this.edges) this.edges = array;</b>
+        <b class="nc"><i>226</i>&nbsp; else if (arr == this.offset) this.offset = array;</b>
+        <b class="nc"><i>227</i>&nbsp; else if (arr == this.predecessor) this.predecessor = array;</b>
+        <b class="nc"><i>228</i>&nbsp; this.debugPrint(&quot;array was increased&quot;);</b>
+        <b class="nc"><i>229</i>&nbsp; return array;</b>
+        <i>230</i>&nbsp;
+        <i>231</i>&nbsp; }
+        <i>232</i>&nbsp;
+        <i>233</i>&nbsp; /**
+        <i>234</i>&nbsp; * adds a new Edge to the Graph and moves indices if needed
+        <i>235</i>&nbsp; *
+        <i>236</i>&nbsp; * @param start the start node
+        <i>237</i>&nbsp; * @param dest the destination node
+        <i>238</i>&nbsp; * @param weight the weight
+        <i>239</i>&nbsp; * @param skip if true skips the test and forces indices to be moved
+        <i>240</i>&nbsp; */
+        <i>241</i>&nbsp; public void insertEdge(int start, int dest, double weight, boolean skip) {
+        <i>242</i>&nbsp;
+        <b class="fc"><i>243</i>&nbsp; if (getOffset(start + 1) == -1 || !skip) {</b>
+        <i>244</i>&nbsp; try {
+        <b class="fc"><i>245</i>&nbsp; this.verbosePrint(&quot;trying to add Edge&quot;);</b>
+        <b class="fc"><i>246</i>&nbsp; addEdge(start, dest, weight);</b>
+        <b class="nc"><i>247</i>&nbsp; } catch (UnorderedGraphException e) {</b>
+        <b class="nc"><i>248</i>&nbsp; this.debugPrint(&quot;Exception handled&quot;);</b>
+        <b class="nc"><i>249</i>&nbsp; insertEdge(start, dest, weight, true);</b>
+        <b class="fc"><i>250</i>&nbsp; }</b>
+        <i>251</i>&nbsp; } else {
+        <i>252</i>&nbsp;
+        <b class="nc"><i>253</i>&nbsp; int index = getOffset(start + 1);</b>
+        <b class="nc"><i>254</i>&nbsp; if (this.edges.length &lt;= current + 1) increase(this.edges);</b>
+        <b class="nc"><i>255</i>&nbsp; if (this.weight.length &lt;= current + 1) increase(this.weight);</b>
+        <i>256</i>&nbsp;
+        <b class="nc"><i>257</i>&nbsp; if (this.current + 1 - index &gt;= 0)</b>
+        <b class="nc"><i>258</i>&nbsp; System.arraycopy(this.edges, index, this.edges, index + 1, this.current + 1 -
+            index);</b>
+        <i>259</i>&nbsp;
+        <i>260</i>&nbsp;
+        <b class="nc"><i>261</i>&nbsp; if (this.current + 1 - index &gt;= 0)</b>
+        <b class="nc"><i>262</i>&nbsp; System.arraycopy(this.weight, index, this.weight, index + 1, this.current + 1 -
+            index);</b>
+        <i>263</i>&nbsp;
+        <i>264</i>&nbsp;
+        <b class="nc"><i>265</i>&nbsp; for (int i = start + 1; i &lt; offset.length; i++) {</b>
+        <b class="nc"><i>266</i>&nbsp; if (getOffset(i) &gt;= 0) setOffset(i, getOffset(i) + 1);</b>
+        <i>267</i>&nbsp; }
+        <i>268</i>&nbsp;
+        <i>269</i>&nbsp;
+        <b class="nc"><i>270</i>&nbsp; edges[index] = dest;</b>
+        <b class="nc"><i>271</i>&nbsp; this.weight[index] = weight;</b>
+        <b class="nc"><i>272</i>&nbsp; this.current++;</b>
+        <i>273</i>&nbsp;
+        <i>274</i>&nbsp; }
+        <b class="fc"><i>275</i>&nbsp; }</b>
+        <i>276</i>&nbsp;
+        <i>277</i>&nbsp; /**
+        <i>278</i>&nbsp; * adds a new Edge to the Graph and moves indices if needed
+        <i>279</i>&nbsp; *
+        <i>280</i>&nbsp; * @param start the start node
+        <i>281</i>&nbsp; * @param dest the destination node
+        <i>282</i>&nbsp; * @param weight the weight
+        <i>283</i>&nbsp; */
+        <i>284</i>&nbsp; public void insertEdge(int start, int dest, double weight) {
+        <b class="fc"><i>285</i>&nbsp; insertEdge(start, dest, weight, false);</b>
+        <b class="fc"><i>286</i>&nbsp; }</b>
+        <i>287</i>&nbsp;
+        <i>288</i>&nbsp; /**
+        <i>289</i>&nbsp; * Checks if a node has a outgoing edge
+        <i>290</i>&nbsp; *
+        <i>291</i>&nbsp; * @param node the node to be checked
+        <i>292</i>&nbsp; * @return true if has outgoing edge else false
+        <i>293</i>&nbsp; */
+        <i>294</i>&nbsp; public boolean hasOutgoingEdges(int node) {
+        <i>295</i>&nbsp;// return this.offset[node] != -1;
+        <b class="fc"><i>296</i>&nbsp; return getOffset(node) != -1;</b>
+        <i>297</i>&nbsp; }
+        <i>298</i>&nbsp;
+        <i>299</i>&nbsp;
+        <i>300</i>&nbsp; /**
+        <i>301</i>&nbsp; * Returns the Offset of a node.
+        <i>302</i>&nbsp; * Will return -1 if
+        <i>303</i>&nbsp; * A) no edges exist for given node
+        <i>304</i>&nbsp; * B) given node index is the first index beyond the node array (node == offset.length), meaning
+        that node does not exist. This is to simplify iterative operations.
+        <i>305</i>&nbsp; * &lt;p&gt;
+        <i>306</i>&nbsp; * Other non-existent nodes will result in an exception.
+        <i>307</i>&nbsp; *
+        <i>308</i>&nbsp; * @param node the node
+        <i>309</i>&nbsp; * @return the offset or -1 if it has no edges.
+        <i>310</i>&nbsp; * @throws IllegalArgumentException if node index is &lt; 0 or &gt; offset.length
+        <i>311</i>&nbsp; */
+        <i>312</i>&nbsp; public int getOffset(int node) throws IllegalArgumentException {
+        <b class="fc"><i>313</i>&nbsp; if (node &gt; offset.length || node &lt; 0)</b>
+        <b class="nc"><i>314</i>&nbsp; throw new IllegalArgumentException(&quot;Can&#39;t give offset, since node &quot;
+            + node + &quot; doesn&#39;t exist. Offset-Array length is &quot; + offset.length);</b>
+        <b class="fc"><i>315</i>&nbsp; if (node == offset.length)</b>
+        <b class="fc"><i>316</i>&nbsp; return -1;</b>
+        <i>317</i>&nbsp; // I added exceptions for most non-existent nodes. Making an exception for this exception is a
+        bit of a hack, but so is not using exceptions in any way.
+        <i>318</i>&nbsp; // I don&#39;t think there was any case implemented for node == offset.length before, which is
+        needed though in my understanding for methods that add edges to the last node and check for node+1 (without
+        increasing array size, but that shouldn&#39;t be done if all goes correctly anyways)
+        <i>319</i>&nbsp;
+        <b class="fc"><i>320</i>&nbsp; return this.offset[node];</b>
+        <i>321</i>&nbsp; }
+        <i>322</i>&nbsp;
+        <i>323</i>&nbsp;
+        <i>324</i>&nbsp; /**
+        <i>325</i>&nbsp; * Sets the offset of a node,
+        <i>326</i>&nbsp; * does nothing if parameter is 1 above highest node ID.
+        <i>327</i>&nbsp; *
+        <i>328</i>&nbsp; * @param node the node
+        <i>329</i>&nbsp; * @param offset the offset
+        <i>330</i>&nbsp; * @throws IllegalArgumentException only if node does not exist and isn&#39;t equal to
+        offset.length
+        <i>331</i>&nbsp; */
+        <i>332</i>&nbsp; void setOffset(int node, int offset) throws IllegalArgumentException {
+        <b class="fc"><i>333</i>&nbsp; if (node &gt; this.offset.length || node &lt; 0)</b>
+        <b class="nc"><i>334</i>&nbsp; throw new IllegalArgumentException(&quot;Can&#39;t set offset, since node &quot;
+            + node + &quot; doesn&#39;t exist. Offset-Array length is &quot; + this.offset.length);</b>
+        <b class="fc"><i>335</i>&nbsp; if (node == this.offset.length)</b>
+        <b class="nc"><i>336</i>&nbsp; return;</b>
+        <i>337</i>&nbsp;
+        <b class="fc"><i>338</i>&nbsp; this.offset[node] = offset;</b>
+        <b class="fc"><i>339</i>&nbsp; }</b>
+        <i>340</i>&nbsp;
+        <i>341</i>&nbsp;
+        <i>342</i>&nbsp; /**
+        <i>343</i>&nbsp; * Returns the index of the edge
+        <i>344</i>&nbsp; *
+        <i>345</i>&nbsp; * @param start the start node
+        <i>346</i>&nbsp; * @param dest the destination node
+        <i>347</i>&nbsp; * @return the offset of the edge or -1 if it does not exist
+        <i>348</i>&nbsp; */
+        <i>349</i>&nbsp; public int getEdge(int start, int dest) {
+        <i>350</i>&nbsp; //gets all edges starting from start
+        <b class="fc"><i>351</i>&nbsp; int from = this.getOffset(start);</b>
+        <b class="fc"><i>352</i>&nbsp; int to = this.getOffset(start + 1);</b>
+        <i>353</i>&nbsp; //if no such edges return
+        <b class="fc"><i>354</i>&nbsp; if (from == -1) return -1;</b>
+        <b class="fc"><i>355</i>&nbsp; if (to == -1) to = this.edges.length;</b>
+        <i>356</i>&nbsp; //for all those edges search if destination is same
+        <b class="fc"><i>357</i>&nbsp; for (int i = from; i &lt; to; i++) {</b>
+        <i>358</i>&nbsp; //return edge index if found
+        <b class="fc"><i>359</i>&nbsp; if (this.edges[i] == dest) return i;</b>
+        <i>360</i>&nbsp; }
+        <i>361</i>&nbsp; //if nothing found return
+        <i>362</i>&nbsp; //this.verbosePrint(&quot;no Edge found. Exception may be thrown&quot;, &quot;Warning&quot;);
+        <b class="nc"><i>363</i>&nbsp; return -1;</b>
+        <i>364</i>&nbsp; }
+        <i>365</i>&nbsp;
+        <i>366</i>&nbsp;
+        <i>367</i>&nbsp; /**
+        <i>368</i>&nbsp; * Returns the node which is nearest to [node]
+        <i>369</i>&nbsp; *
+        <i>370</i>&nbsp; * @param node the node
+        <i>371</i>&nbsp; * @return the next node or -1 if it does not exist
+        <i>372</i>&nbsp; */
+        <i>373</i>&nbsp; int nextNode(int node) {
+        <b class="nc"><i>374</i>&nbsp; double minVal = Double.POSITIVE_INFINITY;</b>
+        <b class="nc"><i>375</i>&nbsp; int minIndex = -1;</b>
+        <b class="nc"><i>376</i>&nbsp; int offset = this.getOffset(node);</b>
+        <b class="nc"><i>377</i>&nbsp; if (offset == -1) {</b>
+        <i>378</i>&nbsp; //this.debugPrint(&quot;no nextNode: offset invalid&quot;);
+        <b class="nc"><i>379</i>&nbsp; return -1;</b>
+        <i>380</i>&nbsp; }
+        <b class="nc"><i>381</i>&nbsp; int elem = this.countOutgoingEdges(node);</b>
+        <b class="nc"><i>382</i>&nbsp; if (elem &lt; 1) {</b>
+        <i>383</i>&nbsp; //this.debugPrint(&quot;no nextNode: zero outgoing Edges&quot;);
+        <b class="nc"><i>384</i>&nbsp; return -1;</b>
+        <i>385</i>&nbsp; }
+        <b class="nc"><i>386</i>&nbsp; for (int i = 0; i &lt; elem; i++) {</b>
+        <b class="nc"><i>387</i>&nbsp; double var = this.getWeight(node, this.edges[offset + i]);</b>
+        <b class="nc"><i>388</i>&nbsp; if (var &lt; minVal) {</b>
+        <b class="nc"><i>389</i>&nbsp; minVal = var;</b>
+        <b class="nc"><i>390</i>&nbsp; minIndex = i;</b>
+        <i>391</i>&nbsp; }
+        <i>392</i>&nbsp; }
+        <b class="nc"><i>393</i>&nbsp; return this.edges[offset + minIndex];</b>
+        <i>394</i>&nbsp; }
+        <i>395</i>&nbsp;
+        <i>396</i>&nbsp;
+        <i>397</i>&nbsp; /**
+        <i>398</i>&nbsp; * Returns the number of outgoing edges
+        <i>399</i>&nbsp; *
+        <i>400</i>&nbsp; * @param node the node
+        <i>401</i>&nbsp; * @return number of outgoing edges, 0 if none found
+        <i>402</i>&nbsp; */
+        <i>403</i>&nbsp; public int countOutgoingEdges(int node) {
+        <b class="fc"><i>404</i>&nbsp; if (!this.hasOutgoingEdges(node)) return 0;</b>
+        <i>405</i>&nbsp;
+        <i>406</i>&nbsp; // Has to iterate in O(n), but could be done in O(1) if offset was managed like in
+        specifications
+        <i>407</i>&nbsp; // TODO: Feel free to change it :)
+        <b class="fc"><i>408</i>&nbsp; int lastEdge = -1;</b>
+        <i>409</i>&nbsp;// for (int i = node+1; i &lt; this.current; i++) {
+        <b class="fc"><i>410</i>&nbsp; for (int i = node + 1; i &lt; offset.length; i++) {</b>
+        <i>411</i>&nbsp;// lastEdge = offset[i];
+        <b class="fc"><i>412</i>&nbsp; lastEdge = getOffset(i);</b>
+        <b class="fc"><i>413</i>&nbsp; if (lastEdge != -1) break;</b>
+        <i>414</i>&nbsp; }
+        <i>415</i>&nbsp;
+        <b class="fc"><i>416</i>&nbsp; if (lastEdge == -1) {</b>
+        <i>417</i>&nbsp; // no other node after it that has edges
+        <b class="fc"><i>418</i>&nbsp; return this.current - offset[node];</b>
+        <i>419</i>&nbsp; }
+        <i>420</i>&nbsp;
+        <b class="fc"><i>421</i>&nbsp; return lastEdge - offset[node];</b>
+        <i>422</i>&nbsp; }
+        <i>423</i>&nbsp;
+        <i>424</i>&nbsp;
+        <i>425</i>&nbsp; /**
+        <i>426</i>&nbsp; * Returns the weight of the first edge found between given nodes
+        <i>427</i>&nbsp; *
+        <i>428</i>&nbsp; * @param start the start node
+        <i>429</i>&nbsp; * @param dest the destination node
+        <i>430</i>&nbsp; * @return weight of the edge or -1 if it does not exist
+        <i>431</i>&nbsp; */
+        <i>432</i>&nbsp; public double getWeight(int start, int dest) {
+        <b class="nc"><i>433</i>&nbsp; if (!this.hasOutgoingEdges(start)) return -1;</b>
+        <b class="nc"><i>434</i>&nbsp; int edge = this.getEdge(start, dest);</b>
+        <b class="nc"><i>435</i>&nbsp; if (edge &lt; 0 || edge &gt;= this.weight.length) return -1;</b>
+        <b class="nc"><i>436</i>&nbsp; return this.weight[edge];</b>
+        <i>437</i>&nbsp;
+        <i>438</i>&nbsp; }
+        <i>439</i>&nbsp;
+        <i>440</i>&nbsp; /**
+        <i>441</i>&nbsp; * Returns weight of an edge
+        <i>442</i>&nbsp; *
+        <i>443</i>&nbsp; * @param edge the edge
+        <i>444</i>&nbsp; * @return weight or -1 if it doesn&#39;t exist
+        <i>445</i>&nbsp; */
+        <i>446</i>&nbsp; public double getWeight(int edge) {
+        <b class="fc"><i>447</i>&nbsp; if (edge &gt;= this.current || edge &lt; 0) {</b>
+        <b class="nc"><i>448</i>&nbsp; return -1;</b>
+        <i>449</i>&nbsp; }
+        <i>450</i>&nbsp;
+        <b class="fc"><i>451</i>&nbsp; return this.weight[edge];</b>
+        <i>452</i>&nbsp; }
+        <i>453</i>&nbsp;
+        <i>454</i>&nbsp;
+        <i>455</i>&nbsp; /**
+        <i>456</i>&nbsp; * Returns the distance
+        <i>457</i>&nbsp; *
+        <i>458</i>&nbsp; * @param dest the destination node
+        <i>459</i>&nbsp; * @return the distance to a node or POSITIVE_INFINITY if {@link Dijkstra} did not run yet or if
+        unreachable
+        <i>460</i>&nbsp; * @throws IllegalArgumentException if node index is out of bounds
+        <i>461</i>&nbsp; */
+        <i>462</i>&nbsp; public double getDistance(int dest) throws IllegalArgumentException {
+        <b class="fc"><i>463</i>&nbsp; if (dest &lt; 0 || dest &gt;= offset.length)</b>
+        <b class="nc"><i>464</i>&nbsp; throw new IllegalArgumentException(&quot;Given destination &quot; + dest + &quot;
+            is not a node ID in [0,&quot; + (offset.length - 1) + &quot; ]&quot;);</b>
+        <i>465</i>&nbsp;
+        <b class="fc"><i>466</i>&nbsp; return this.distance[dest];</b>
+        <i>467</i>&nbsp; }
+        <i>468</i>&nbsp;
+        <i>469</i>&nbsp;
+        <i>470</i>&nbsp; /**
+        <i>471</i>&nbsp; * Sets the Distance to dest.
+        <i>472</i>&nbsp; *
+        <i>473</i>&nbsp; * @param dest the destination node
+        <i>474</i>&nbsp; * @param dist the distance
+        <i>475</i>&nbsp; * @return true if distance has changed else false
+        <i>476</i>&nbsp; * @throws IllegalArgumentException if dest index is out of bounds
+        <i>477</i>&nbsp; */
+        <i>478</i>&nbsp; public boolean setDistance(int dest, double dist) throws IllegalArgumentException {
+        <b class="fc"><i>479</i>&nbsp; if (dest &lt; 0 || dest &gt;= offset.length)</b>
+        <b class="nc"><i>480</i>&nbsp; throw new IllegalArgumentException(&quot;Given destination &quot; + dest + &quot;
+            is not a node ID in [0,&quot; + (offset.length - 1) + &quot; ]&quot;);</b>
+        <i>481</i>&nbsp;
+        <b class="fc"><i>482</i>&nbsp; if (this.getDistance(dest) == dist) return false;</b>
+        <b class="fc"><i>483</i>&nbsp; this.distance[dest] = dist;</b>
+        <b class="fc"><i>484</i>&nbsp; return true;</b>
+        <i>485</i>&nbsp; }
+        <i>486</i>&nbsp;
+        <i>487</i>&nbsp; /**
+        <i>488</i>&nbsp; * Sets the node&#39;s predecessor on a path from Dijkstra&#39;s starting node to given node.
+        Used by Dijkstra class while the algorithm runs.
+        <i>489</i>&nbsp; *
+        <i>490</i>&nbsp; * @param node The node of which a predecessor gets set.
+        <i>491</i>&nbsp; * @param predecessor The preceding node on a path to Dijkstra&#39;s start.
+        <i>492</i>&nbsp; * @throws IllegalArgumentException if node index is out of bounds
+        <i>493</i>&nbsp; */
+        <i>494</i>&nbsp; public void setPredecessor(int node, int predecessor) throws IllegalArgumentException {
+        <b class="fc"><i>495</i>&nbsp; if (node &lt; 0 || node &gt;= this.predecessor.length)</b>
+        <b class="nc"><i>496</i>&nbsp; throw new IllegalArgumentException(&quot;Given node id &quot; + node + &quot; is
+            not a legal node ID in [0,&quot; + (this.predecessor.length - 1) + &quot; ]. Offset.length is &quot; +
+            offset.length);</b>
+        <i>497</i>&nbsp;
+        <b class="fc"><i>498</i>&nbsp; this.predecessor[node] = predecessor;</b>
+        <b class="fc"><i>499</i>&nbsp; }</b>
+        <i>500</i>&nbsp;
+        <i>501</i>&nbsp; /**
+        <i>502</i>&nbsp; * Returns the node&#39;s predecessor on a path from Dijkstra&#39;s starting node to given node.
+        <i>503</i>&nbsp; * The starting node is set when creating an instance of Dijkstra&#39;s algorithm for this
+        graph.
+        <i>504</i>&nbsp; * If there is no path or if Dijkstra has not run yet, -1 will be returned!
+        <i>505</i>&nbsp; *
+        <i>506</i>&nbsp; * @param node From this node, by going to the returned node and that one&#39;s predecessors,
+        you can recursively find the ideal path to the starting node.
+        <i>507</i>&nbsp; * @throws IllegalArgumentException if node index is out of bounds
+        <i>508</i>&nbsp; * @return preceding node on a path to start, or -1
+        <i>509</i>&nbsp; */
+        <i>510</i>&nbsp; public int getPredecessor(int node) throws IllegalArgumentException {
+        <b class="nc"><i>511</i>&nbsp; if (node &lt; 0 || node &gt;= this.predecessor.length)</b>
+        <b class="nc"><i>512</i>&nbsp; throw new IllegalArgumentException(&quot;Given node id &quot; + node + &quot; is
+            not a legal node ID in [0,&quot; + (this.predecessor.length - 1) + &quot; ]. Offset.length is &quot; +
+            offset.length);</b>
+        <i>513</i>&nbsp;
+        <b class="nc"><i>514</i>&nbsp; return this.predecessor[node];</b>
+        <i>515</i>&nbsp; }
+        <i>516</i>&nbsp;
+        <i>517</i>&nbsp; /**
+        <i>518</i>&nbsp; * Returns list of all nodes with their offsets
+        <i>519</i>&nbsp; *
+        <i>520</i>&nbsp; * @return offset array
+        <i>521</i>&nbsp; */
+        <i>522</i>&nbsp; int[] getNodeList() {
+        <b class="nc"><i>523</i>&nbsp; return this.offset;</b>
+        <i>524</i>&nbsp; }
+        <i>525</i>&nbsp;
+        <i>526</i>&nbsp; /**
+        <i>527</i>&nbsp; * Returns the destination node of edge
+        <i>528</i>&nbsp; *
+        <i>529</i>&nbsp; * @param edge The Edge
+        <i>530</i>&nbsp; * @return destination of given edge
+        <i>531</i>&nbsp; */
+        <i>532</i>&nbsp; public int getDestination(int edge) {
+        <b class="fc"><i>533</i>&nbsp; return this.edges[edge];</b>
+        <i>534</i>&nbsp; }
+        <i>535</i>&nbsp;
+        <i>536</i>&nbsp;
+        <i>537</i>&nbsp; /**
+        <i>538</i>&nbsp; * Returns amount of edges that have been added to this directed graph.
+        <i>539</i>&nbsp; */
+        <i>540</i>&nbsp; public int getCurrentEdgesCount() {
+        <b class="nc"><i>541</i>&nbsp; return this.current;</b>
+        <i>542</i>&nbsp; }
+        <i>543</i>&nbsp;
+        <i>544</i>&nbsp; /**
+        <i>545</i>&nbsp; * Returns maximum number of edges supported in this directed graph.
+        <i>546</i>&nbsp; * &lt;p&gt;
+        <i>547</i>&nbsp; * This value is determined upon construction of a graph instance via parameter &#39;edges&#39;.
+        <i>548</i>&nbsp; */
+        <i>549</i>&nbsp; public int getMaxEdgesCount() {
+        <b class="nc"><i>550</i>&nbsp; return this.edges.length;</b>
+        <i>551</i>&nbsp; }
+        <i>552</i>&nbsp;
+        <i>553</i>&nbsp; /**
+        <i>554</i>&nbsp; * Returns the amount of nodes in the graph.
+        <i>555</i>&nbsp; */
+        <i>556</i>&nbsp; public int getNodesCount() {
+        <b class="fc"><i>557</i>&nbsp; return this.distance.length;</b>
+        <i>558</i>&nbsp; }
+        <i>559</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2018-12-19 22:47</div>
+</div>
+</body>
+</html>

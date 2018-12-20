@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: IOHandler</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">main</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: IOHandler (main)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">IOHandler</td>
+            <td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+                <span class="absValue">
+    (1/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+                <span class="absValue">
+    (7/ 7)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    87.3%
+  </span>
+                <span class="absValue">
+    (69/ 79)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package main;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import java.io.*;
+        <i>4</i>&nbsp;import java.nio.file.Paths;
+        <i>5</i>&nbsp;
+        <i>6</i>&nbsp;/**
+        <i>7</i>&nbsp; * The IOHandler
+        <i>8</i>&nbsp; */
+        <b class="fc"><i>9</i>&nbsp;public class IOHandler extends CLILogger {</b>
+        <i>10</i>&nbsp;
+        <i>11</i>&nbsp; private String filename;
+        <i>12</i>&nbsp; private BufferedWriter outputStream;
+        <i>13</i>&nbsp;
+        <i>14</i>&nbsp;
+        <i>15</i>&nbsp; /**
+        <i>16</i>&nbsp; * returns the path to the bin dir
+        <i>17</i>&nbsp; *
+        <i>18</i>&nbsp; * @return path to bin dir
+        <i>19</i>&nbsp; */
+        <i>20</i>&nbsp; static String pathToBin() {
+        <b class="fc"><i>21</i>&nbsp; return pathToProjectRoot() + &quot;/bin/&quot;;</b>
+        <i>22</i>&nbsp; }
+        <i>23</i>&nbsp;
+        <i>24</i>&nbsp; /**
+        <i>25</i>&nbsp; * returns the path to the projects root dir
+        <i>26</i>&nbsp; * @return path to project root dir
+        <i>27</i>&nbsp; */
+        <i>28</i>&nbsp; static String pathToProjectRoot() {
+        <b class="fc"><i>29</i>&nbsp; String current = Paths.get(&quot;.&quot;).toAbsolutePath().normalize().toString();</b>
+        <b class="fc"><i>30</i>&nbsp; return current.split(&quot;/src/&quot;)[0];</b>
+        <i>31</i>&nbsp; }
+        <i>32</i>&nbsp;
+        <i>33</i>&nbsp; private void initStream(Graph graph) {
+        <i>34</i>&nbsp;// if (new File(pathToBin() + &quot;out/&quot;).mkdir()) {
+        <i>35</i>&nbsp;// print(&quot;Created directory &#39;&quot; + pathToBin() + &quot;out&#39;.\n&quot;);
+        <i>36</i>&nbsp;// }
+        <i>37</i>&nbsp;
+        <b class="fc"><i>38</i>&nbsp; filename = graph.hashCode() + &quot;.out&quot;;</b>
+        <i>39</i>&nbsp; try {
+        <b class="fc"><i>40</i>&nbsp; outputStream = new BufferedWriter(new FileWriter(pathToBin() + &quot;out/&quot; +
+            filename));</b>
+        <b class="nc"><i>41</i>&nbsp; } catch (IOException e) {</b>
+        <b class="nc"><i>42</i>&nbsp; e.printStackTrace();</b>
+        <b class="fc"><i>43</i>&nbsp; }</b>
+        <b class="fc"><i>44</i>&nbsp; }</b>
+        <i>45</i>&nbsp;
+        <i>46</i>&nbsp; /**
+        <i>47</i>&nbsp; * imports the Graph from a graph .fmi file also stops runtime for this task
+        <i>48</i>&nbsp; *
+        <i>49</i>&nbsp; * @param path the path to the file
+        <i>50</i>&nbsp; * @return a Graph object or null
+        <i>51</i>&nbsp; */
+        <i>52</i>&nbsp; public Graph importGraph(String path) {
+        <b class="fc"><i>53</i>&nbsp; this.print(&quot;Reading Graph Data...&quot;);</b>
+        <i>54</i>&nbsp; Graph graph;
+        <i>55</i>&nbsp; try {
+        <b class="fc"><i>56</i>&nbsp; this.startTiming();</b>
+        <b class="fc"><i>57</i>&nbsp; FileReader fileReader = new FileReader(path);</b>
+        <b class="fc"><i>58</i>&nbsp; BufferedReader file = new BufferedReader(fileReader);</b>
+        <i>59</i>&nbsp;
+        <i>60</i>&nbsp; //ignore the 4 comment lines
+        <b class="fc"><i>61</i>&nbsp; file.readLine();</b>
+        <b class="fc"><i>62</i>&nbsp; file.readLine();</b>
+        <b class="fc"><i>63</i>&nbsp; file.readLine();</b>
+        <b class="fc"><i>64</i>&nbsp; file.readLine();</b>
+        <i>65</i>&nbsp; //ignore blank line
+        <b class="fc"><i>66</i>&nbsp; file.readLine();</b>
+        <i>67</i>&nbsp;
+        <b class="fc"><i>68</i>&nbsp; String nodesStr = file.readLine();</b>
+        <b class="fc"><i>69</i>&nbsp; String edgesStr = file.readLine();</b>
+        <i>70</i>&nbsp;
+        <b class="fc"><i>71</i>&nbsp; int nodes = Integer.parseInt(nodesStr);</b>
+        <b class="fc"><i>72</i>&nbsp; int edges = Integer.parseInt(edgesStr);</b>
+        <i>73</i>&nbsp;
+        <b class="fc"><i>74</i>&nbsp; graph = new Graph(nodes, edges);</b>
+        <i>75</i>&nbsp;
+        <b class="fc"><i>76</i>&nbsp; for (int i = 0; i &lt; nodes; i++) {</b>
+        <b class="fc"><i>77</i>&nbsp; String line = file.readLine();</b>
+        <b class="fc"><i>78</i>&nbsp; String[] data = line.split(&quot; &quot;);</b>
+        <b class="fc"><i>79</i>&nbsp; int node = Integer.parseInt(data[0]);</b>
+        <b class="fc"><i>80</i>&nbsp; double latitude = Double.parseDouble(data[2]);</b>
+        <b class="fc"><i>81</i>&nbsp; double longitude = Double.parseDouble(data[3]);</b>
+        <b class="fc"><i>82</i>&nbsp; graph.setGeo(node, latitude, longitude);</b>
+        <i>83</i>&nbsp; }
+        <b class="fc"><i>84</i>&nbsp; for (int i = 0; i &lt; edges; i++) {</b>
+        <b class="fc"><i>85</i>&nbsp; String line = file.readLine();</b>
+        <b class="fc"><i>86</i>&nbsp; String[] data = line.split(&quot; &quot;);</b>
+        <b class="fc"><i>87</i>&nbsp; int start = Integer.parseInt(data[0]);</b>
+        <b class="fc"><i>88</i>&nbsp; int dest = Integer.parseInt(data[1]);</b>
+        <b class="fc"><i>89</i>&nbsp; double cost = Double.parseDouble(data[2]);</b>
+        <i>90</i>&nbsp;
+        <b class="fc"><i>91</i>&nbsp; graph.insertEdge(start, dest, cost);</b>
+        <i>92</i>&nbsp; }
+        <b class="fc"><i>93</i>&nbsp; this.stop();</b>
+        <b class="fc"><i>94</i>&nbsp; this.print(&quot;Finished Reading Graph Data in &quot; +
+            CLILogger.runtimeInMinutes(this.runtime) + &quot; minutes.&quot; + &quot;\r\n&quot; + &quot;Time in Seconds:
+            &quot; + CLILogger.runtimeInSeconds(this.runtime));</b>
+        <b class="nc"><i>95</i>&nbsp; } catch (IOException e) {</b>
+        <b class="nc"><i>96</i>&nbsp; e.printStackTrace();</b>
+        <b class="nc"><i>97</i>&nbsp; return null;</b>
+        <b class="fc"><i>98</i>&nbsp; }</b>
+        <b class="fc"><i>99</i>&nbsp; if (runtime == 0)</b>
+        <b class="nc"><i>100</i>&nbsp; throw new RuntimeException(&quot;Error creating graph&quot;);</b>
+        <b class="fc"><i>101</i>&nbsp; return graph;</b>
+        <i>102</i>&nbsp; }
+        <i>103</i>&nbsp;
+        <i>104</i>&nbsp; /**
+        <i>105</i>&nbsp; * runs the queries from .que file on the graph and outputs into a .out file
+        <i>106</i>&nbsp; * @param path the path the .que file
+        <i>107</i>&nbsp; * @param graph the graph
+        <i>108</i>&nbsp; * @return the output path of the file as absolute path
+        <i>109</i>&nbsp; */
+        <i>110</i>&nbsp; public String runQuery(String path, Graph graph) {
+        <i>111</i>&nbsp; try {
+        <b class="fc"><i>112</i>&nbsp; FileReader fileReader = new FileReader(path);</b>
+        <b class="fc"><i>113</i>&nbsp; BufferedReader file = new BufferedReader(fileReader);</b>
+        <b class="fc"><i>114</i>&nbsp; this.initStream(graph);</b>
+        <i>115</i>&nbsp; String line;
+        <b class="fc"><i>116</i>&nbsp; while ((line = file.readLine()) != null) {</b>
+        <b class="fc"><i>117</i>&nbsp; String[] data = line.split(&quot; &quot;);</b>
+        <b class="fc"><i>118</i>&nbsp; if (data[0] != null &amp;&amp; data[1] != null &amp;&amp; !data[0].isEmpty()
+            &amp;&amp; !data[1].isEmpty()) {</b>
+        <b class="fc"><i>119</i>&nbsp; int result = (int) graph.runQuery(Integer.parseInt(data[0]),
+            Integer.parseInt(data[1]));</b>
+        <b class="fc"><i>120</i>&nbsp; outputStream.write(result + &quot;&quot;);</b>
+        <b class="fc"><i>121</i>&nbsp; outputStream.newLine();</b>
+        <i>122</i>&nbsp; }
+        <b class="fc"><i>123</i>&nbsp; }</b>
+        <b class="fc"><i>124</i>&nbsp; outputStream.close();</b>
+        <b class="fc"><i>125</i>&nbsp; file.close();</b>
+        <b class="nc"><i>126</i>&nbsp; } catch (IOException e) {</b>
+        <b class="nc"><i>127</i>&nbsp; e.printStackTrace();</b>
+        <b class="fc"><i>128</i>&nbsp; }</b>
+        <i>129</i>&nbsp;
+        <b class="fc"><i>130</i>&nbsp; return pathToBin() + &quot;out/&quot; + filename;</b>
+        <i>131</i>&nbsp; }
+        <i>132</i>&nbsp;
+        <i>133</i>&nbsp; /**
+        <i>134</i>&nbsp; * checks for differences between .sol and .out file
+        <i>135</i>&nbsp; *
+        <i>136</i>&nbsp; * @param solPath path to .sol file
+        <i>137</i>&nbsp; * @param outPath path to .out file
+        <i>138</i>&nbsp; */
+        <i>139</i>&nbsp; public void diff(String solPath, String outPath) {
+        <b class="fc"><i>140</i>&nbsp; int counter = 0;</b>
+        <b class="fc"><i>141</i>&nbsp; int line = 1;</b>
+        <b class="fc"><i>142</i>&nbsp; print(&quot;line:\tdifference&quot;);</b>
+        <i>143</i>&nbsp; try {
+        <b class="fc"><i>144</i>&nbsp; FileReader outReader = new FileReader(outPath);</b>
+        <b class="fc"><i>145</i>&nbsp; FileReader solReader = new FileReader(solPath);</b>
+        <b class="fc"><i>146</i>&nbsp; BufferedReader out = new BufferedReader(outReader);</b>
+        <b class="fc"><i>147</i>&nbsp; BufferedReader sol = new BufferedReader(solReader);</b>
+        <i>148</i>&nbsp; String s;
+        <i>149</i>&nbsp; String o;
+        <b class="fc"><i>150</i>&nbsp; while ((s = sol.readLine()) != null &amp;&amp; (o = out.readLine()) != null)
+            {</b>
+        <b class="fc"><i>151</i>&nbsp; if (!o.equals(s))</b>
+        <b class="fc"><i>152</i>&nbsp; counter++;</b>
+        <b class="fc"><i>153</i>&nbsp; print( (line++) + &quot;:\t&quot; + (Integer.parseInt(s) - Integer.parseInt(o) )
+            ); //TODO: better remove eventually, can cause exception if random file is chosen that can&#39;t be
+            converted to int.</b>
+        <i>154</i>&nbsp; }
+        <b class="fc"><i>155</i>&nbsp; print(&quot;There are &quot; + counter + &quot; differences.&quot;);</b>
+        <b class="nc"><i>156</i>&nbsp; } catch (IOException e) {</b>
+        <b class="nc"><i>157</i>&nbsp; e.printStackTrace();</b>
+        <b class="fc"><i>158</i>&nbsp; }</b>
+        <i>159</i>&nbsp;
+        <b class="fc"><i>160</i>&nbsp; }</b>
+        <i>161</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2018-12-19 22:47</div>
+</div>
+</body>
+</html>

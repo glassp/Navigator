@@ -1,0 +1,426 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+    <title>Coverage Report :: NodeHeap</title>
+    <style type="text/css">
+        @import "../../.css/coverage.css";
+    </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+    <div class="breadCrumbs">
+        [ <a href="../../index.html">all classes</a> ]
+        [ <a href="../index.html">main</a> ]
+    </div>
+
+    <h1>Coverage Summary for Class: NodeHeap (main)</h1>
+
+    <table class="coverageStats">
+        <tr>
+            <th class="name">Class</th>
+            <th class="coverageStat
+">
+                Class, %
+            </th>
+            <th class="coverageStat
+">
+                Method, %
+            </th>
+            <th class="coverageStat
+">
+                Line, %
+            </th>
+        </tr>
+        <tr>
+            <td class="name">NodeHeap</td>
+            <td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+                <span class="absValue">
+    (1/ 1)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    85.7%
+  </span>
+                <span class="absValue">
+    (12/ 14)
+  </span>
+            </td>
+            <td class="coverageStat">
+  <span class="percent">
+    90.2%
+  </span>
+                <span class="absValue">
+    (74/ 82)
+  </span>
+            </td>
+        </tr>
+
+    </table>
+
+    <br/>
+    <br/>
+
+
+    <div class="sourceCode"><i>1</i>&nbsp;package main;
+        <i>2</i>&nbsp;
+        <i>3</i>&nbsp;import java.util.stream.IntStream;
+        <i>4</i>&nbsp;
+        <i>5</i>&nbsp;
+        <i>6</i>&nbsp;/**
+        <i>7</i>&nbsp; * A Min Heap to manage priorities of nodes.
+        <i>8</i>&nbsp; * Assumes that upon creation, all distances of nodes in the graph are positive infinity, except
+        for one starting node with distance 0.
+        <i>9</i>&nbsp; * &lt;p&gt;
+        <i>10</i>&nbsp; * Lowest distance in graph instance means highest priority.
+        <i>11</i>&nbsp; */
+        <i>12</i>&nbsp;public class NodeHeap extends CLILogger {
+        <i>13</i>&nbsp; /**
+        <i>14</i>&nbsp; * Debug counter - counts how often getAndRemoveNext() is used.
+        <i>15</i>&nbsp; */
+        <i>16</i>&nbsp; int debug;
+        <i>17</i>&nbsp;
+        <i>18</i>&nbsp; /**
+        <i>19</i>&nbsp; * Graph instance the nodes of which are represented in the heap.
+        <i>20</i>&nbsp; */
+        <i>21</i>&nbsp; private Graph graph;
+        <i>22</i>&nbsp;
+        <i>23</i>&nbsp; /**
+        <i>24</i>&nbsp; * Contains node indices from graph. Represents the heap, so item 0&#39;s node has lowest
+        distance of all.
+        <i>25</i>&nbsp; */
+        <i>26</i>&nbsp; private int[] heapNodes;
+        <i>27</i>&nbsp;
+        <i>28</i>&nbsp; /**
+        <i>29</i>&nbsp; * Maximum index used in graphNodes array. Items beyond are not considered part of the heap
+        anymore.
+        <i>30</i>&nbsp; */
+        <i>31</i>&nbsp; private int maxIndex;
+        <i>32</i>&nbsp;
+        <i>33</i>&nbsp; /**
+        <i>34</i>&nbsp; * Entry n contains the index under which node n from the graph is currently found in heap&#39;s
+        array heapNodes[].
+        <i>35</i>&nbsp; */
+        <i>36</i>&nbsp; private int[] nodeLocation;
+        <i>37</i>&nbsp;
+        <i>38</i>&nbsp; // min heap: parent&#39;s distance has to be less than or equal to any child&#39;s
+        <i>39</i>&nbsp;
+        <i>40</i>&nbsp; /**
+        <i>41</i>&nbsp; * Construct a NodeHeap instance.
+        <i>42</i>&nbsp; *
+        <i>43</i>&nbsp; * @param graph The graph to work with.
+        <i>44</i>&nbsp; * @param startingNode the starting node
+        <i>45</i>&nbsp; */
+        <b class="fc"><i>46</i>&nbsp; public NodeHeap(Graph graph, int startingNode) {</b>
+        <b class="fc"><i>47</i>&nbsp; this.debug = 0; //TODO: remove</b>
+        <i>48</i>&nbsp;
+        <i>49</i>&nbsp;
+        <b class="fc"><i>50</i>&nbsp; this.graph = graph;</b>
+        <b class="fc"><i>51</i>&nbsp; this.heapNodes = IntStream.rangeClosed(0, graph.getNodesCount() -
+            1).toArray();</b>
+        <i>52</i>&nbsp;
+        <b class="fc"><i>53</i>&nbsp; this.maxIndex = heapNodes.length - 1;</b>
+        <i>54</i>&nbsp;
+        <i>55</i>&nbsp;
+        <i>56</i>&nbsp; // no need to iterate through first length/2 items for making sure heap property is achieved,
+        <i>57</i>&nbsp; // since all but one item&#39;s node distance are set to only INFINITY
+        <i>58</i>&nbsp;
+        <b class="fc"><i>59</i>&nbsp; heapNodes[0] = startingNode;</b>
+        <b class="fc"><i>60</i>&nbsp; heapNodes[startingNode] = 0;</b>
+        <i>61</i>&nbsp; //swap starting node with node that has index 0 in graph. May be unnecessary if identical.
+        <i>62</i>&nbsp;
+        <b class="fc"><i>63</i>&nbsp; nodeLocation = heapNodes.clone();</b>
+        <i>64</i>&nbsp; // In the beginning, all nodes are saved at an index equal to their number in the graph, except
+        for the two swapped ones.
+        <i>65</i>&nbsp; // Further tracking of locations is done within the swap method.
+        <b class="fc"><i>66</i>&nbsp; }</b>
+        <i>67</i>&nbsp;
+        <i>68</i>&nbsp;
+        <i>69</i>&nbsp; /**
+        <i>70</i>&nbsp; * Decreases the distance of a node in the original graph, then restores heap condition if
+        necessary.
+        <i>71</i>&nbsp; *
+        <i>72</i>&nbsp; * @param node Index of node from the graph that gets new distance.
+        <i>73</i>&nbsp; * @param newDistance Will be written in graph object.
+        <i>74</i>&nbsp; */
+        <i>75</i>&nbsp; public void decreaseDistance(int node, double newDistance) {
+        <b class="fc"><i>76</i>&nbsp; graph.setDistance(node, newDistance);</b>
+        <i>77</i>&nbsp;
+        <i>78</i>&nbsp; // Find heap item that belongs to the node.
+        <b class="fc"><i>79</i>&nbsp; node = nodeLocation[node];</b>
+        <i>80</i>&nbsp;// System.out.print(heapNodes[node] + &quot; is at position &quot; + node);
+        <i>81</i>&nbsp;
+        <b class="fc"><i>82</i>&nbsp; siftUp(node, newDistance);</b>
+        <b class="fc"><i>83</i>&nbsp; }</b>
+        <i>84</i>&nbsp;
+        <i>85</i>&nbsp;
+        <i>86</i>&nbsp; /**
+        <i>87</i>&nbsp; * If necessary to maintain the heap property, sifts down an item.
+        <i>88</i>&nbsp; *
+        <i>89</i>&nbsp; * @param heapItem will sift down if associated node distance is greater than any child&#39;s
+        <i>90</i>&nbsp; * @return true, if sift was necessary.
+        <i>91</i>&nbsp; */
+        <i>92</i>&nbsp; private boolean siftDown(int heapItem) throws IllegalArgumentException {
+        <b class="fc"><i>93</i>&nbsp; return siftDown(heapItem, graph.getDistance(heapNodes[heapItem]));</b>
+        <i>94</i>&nbsp; }
+        <i>95</i>&nbsp;
+        <i>96</i>&nbsp; /**
+        <i>97</i>&nbsp; * If necessary to maintain the heap property, sifts down a an item.
+        <i>98</i>&nbsp; *
+        <i>99</i>&nbsp; * @param heapItem will sift down if the associated node distance is greater than any child&#39;s
+        <i>100</i>&nbsp; * @param distanceOfNode (optionally) the current distance for this item&#39;s node.
+        <i>101</i>&nbsp; * @return true, if sift was necessary.
+        <i>102</i>&nbsp; */
+        <i>103</i>&nbsp; private boolean siftDown(int heapItem, double distanceOfNode) throws IllegalArgumentException {
+        <b class="fc"><i>104</i>&nbsp; if (heapItem &gt; maxIndex)</b>
+        <b class="nc"><i>105</i>&nbsp; throw new IllegalArgumentException(&quot;Heap item &quot; + heapItem + &quot;
+            does not exist. Max index is &quot; + maxIndex);</b>
+        <i>106</i>&nbsp;
+        <b class="fc"><i>107</i>&nbsp; int minChild = getLeftChild(heapItem);</b>
+        <i>108</i>&nbsp;
+        <b class="fc"><i>109</i>&nbsp; if (minChild &lt; 0)</b>
+        <b class="fc"><i>110</i>&nbsp; return false; // no children exist at all. Can&#39;t sift down.</b>
+        <i>111</i>&nbsp;
+        <b class="fc"><i>112</i>&nbsp; double minChildDist = graph.getDistance(heapNodes[minChild]);</b>
+        <i>113</i>&nbsp;
+        <b class="fc"><i>114</i>&nbsp; int tempR = getRightChild(heapItem);</b>
+        <b class="fc"><i>115</i>&nbsp; if (tempR &gt; 0) {</b>
+        <i>116</i>&nbsp; // Determine which child has smaller distance
+        <b class="fc"><i>117</i>&nbsp; double tempRDist = graph.getDistance(heapNodes[tempR]);</b>
+        <i>118</i>&nbsp;
+        <b class="fc"><i>119</i>&nbsp; if (minChildDist &gt; tempRDist) {</b>
+        <b class="fc"><i>120</i>&nbsp; minChild = tempR;</b>
+        <b class="fc"><i>121</i>&nbsp; minChildDist = tempRDist;</b>
+        <i>122</i>&nbsp; }
+        <i>123</i>&nbsp; }
+        <i>124</i>&nbsp;
+        <i>125</i>&nbsp;
+        <b class="fc"><i>126</i>&nbsp; if (graph.getDistance(heapNodes[heapItem]) &gt; minChildDist) {</b>
+        <b class="fc"><i>127</i>&nbsp; swap(heapItem, minChild);</b>
+        <i>128</i>&nbsp;// System.out.println(&quot; - now swap (sift down) heap items &quot; + heapItem + &quot; and
+        &quot; + minChild); //TODO: remove
+        <b class="fc"><i>129</i>&nbsp; siftDown(minChild);</b>
+        <i>130</i>&nbsp;
+        <b class="fc"><i>131</i>&nbsp; return true;</b>
+        <i>132</i>&nbsp; }
+        <i>133</i>&nbsp;
+        <i>134</i>&nbsp;
+        <b class="fc"><i>135</i>&nbsp; return false;</b>
+        <i>136</i>&nbsp; }
+        <i>137</i>&nbsp;
+        <i>138</i>&nbsp;
+        <i>139</i>&nbsp; /**
+        <i>140</i>&nbsp; * Sift up a node, if necessary to acquire heap condition.
+        <i>141</i>&nbsp; *
+        <i>142</i>&nbsp; * @param heapItem will sift up if associated node distance is less than its parent&#39;s.
+        <i>143</i>&nbsp; * @return true, if sift was necessary.
+        <i>144</i>&nbsp; */
+        <i>145</i>&nbsp; private boolean siftUp(int heapItem) {
+        <b class="fc"><i>146</i>&nbsp; if (heapItem &gt; maxIndex)</b>
+        <b class="nc"><i>147</i>&nbsp; throw new IllegalArgumentException(&quot;Heap item &quot; + heapItem + &quot;
+            does not exist. Max index is &quot; + maxIndex);</b>
+        <i>148</i>&nbsp;
+        <b class="fc"><i>149</i>&nbsp; return siftUp(heapItem, graph.getDistance(heapNodes[heapItem]));</b>
+        <i>150</i>&nbsp; }
+        <i>151</i>&nbsp;
+        <i>152</i>&nbsp;
+        <i>153</i>&nbsp; /**
+        <i>154</i>&nbsp; * Sift up a node, if necessary to acquire heap condition.
+        <i>155</i>&nbsp; *
+        <i>156</i>&nbsp; * @param heapItem will sift up if associated node distance is less than its parent&#39;s.
+        <i>157</i>&nbsp; * @param distanceOfNode (optionally) the current distance for this item&#39;s node.
+        <i>158</i>&nbsp; * @return true, if sift was necessary.
+        <i>159</i>&nbsp; */
+        <i>160</i>&nbsp; private boolean siftUp(int heapItem, double distanceOfNode) {
+        <b class="fc"><i>161</i>&nbsp; if (heapItem &gt; maxIndex)</b>
+        <b class="nc"><i>162</i>&nbsp; throw new IllegalArgumentException(&quot;Heap item &quot; + heapItem + &quot;
+            does not exist. Max index is &quot; + maxIndex);</b>
+        <i>163</i>&nbsp;
+        <b class="fc"><i>164</i>&nbsp; int parent = getParent(heapItem);</b>
+        <i>165</i>&nbsp;
+        <b class="fc"><i>166</i>&nbsp; if (graph.getDistance(heapNodes[parent]) &gt; distanceOfNode) {</b>
+        <i>167</i>&nbsp;// System.out.println(&quot; - now swap heap items &quot; + heapItem + &quot; and &quot; +
+        parent); //TODO: remove
+        <b class="fc"><i>168</i>&nbsp; swap(heapItem, parent);</b>
+        <i>169</i>&nbsp;
+        <i>170</i>&nbsp; //Recursion - ending at root or earlier, since getParent(0) = 0
+        <b class="fc"><i>171</i>&nbsp; siftUp(parent);</b>
+        <b class="fc"><i>172</i>&nbsp; return true;</b>
+        <i>173</i>&nbsp; }
+        <i>174</i>&nbsp;
+        <b class="fc"><i>175</i>&nbsp; return false;</b>
+        <i>176</i>&nbsp; }
+        <i>177</i>&nbsp;
+        <i>178</i>&nbsp; /**
+        <i>179</i>&nbsp; * Returns the index of the parent item in this heap.
+        <i>180</i>&nbsp; * Will return 0, if the item&#39;s index is 0, as the root has no parent.
+        <i>181</i>&nbsp; *
+        <i>182</i>&nbsp; * @param heapItem - the parent of this item will be returned.
+        <i>183</i>&nbsp; * @return index of parent, or 0 for root item
+        <i>184</i>&nbsp; */
+        <i>185</i>&nbsp; private int getParent(int heapItem) {
+        <b class="fc"><i>186</i>&nbsp; if (heapItem == 0) {</b>
+        <b class="fc"><i>187</i>&nbsp; return 0;</b>
+        <i>188</i>&nbsp; }
+        <i>189</i>&nbsp;// return (heapItem / 2) - (1/2);
+        <i>190</i>&nbsp;
+        <b class="fc"><i>191</i>&nbsp; int temp = heapItem;</b>
+        <i>192</i>&nbsp;
+        <b class="fc"><i>193</i>&nbsp; if (temp % 2 == 1) {</b>
+        <b class="fc"><i>194</i>&nbsp; temp++;</b>
+        <i>195</i>&nbsp; }
+        <b class="fc"><i>196</i>&nbsp; return temp / 2 - 1;</b>
+        <i>197</i>&nbsp; }
+        <i>198</i>&nbsp;
+        <i>199</i>&nbsp; /**
+        <i>200</i>&nbsp; * Returns the index of the item&#39;s left child, if it exists.
+        <i>201</i>&nbsp; * Returns -1 if not.
+        <i>202</i>&nbsp; *
+        <i>203</i>&nbsp; * @param heapItem index of item on the heap
+        <i>204</i>&nbsp; */
+        <i>205</i>&nbsp; private int getLeftChild(int heapItem) {
+        <i>206</i>&nbsp;// int temp = 2*(heapItem + 1) - 1;
+        <i>207</i>&nbsp;
+        <b class="fc"><i>208</i>&nbsp; int temp = 2 * heapItem + 1;</b>
+        <b class="fc"><i>209</i>&nbsp; if (temp &lt;= maxIndex) {</b>
+        <b class="fc"><i>210</i>&nbsp; return temp;</b>
+        <i>211</i>&nbsp; }
+        <b class="fc"><i>212</i>&nbsp; return -1;</b>
+        <i>213</i>&nbsp; }
+        <i>214</i>&nbsp;
+        <i>215</i>&nbsp; /**
+        <i>216</i>&nbsp; * Returns the index of the item&#39;s right child, if it exists.
+        <i>217</i>&nbsp; * Returns -1 if not.
+        <i>218</i>&nbsp; *
+        <i>219</i>&nbsp; * @param heapItem index of item on the heap
+        <i>220</i>&nbsp; */
+        <i>221</i>&nbsp; private int getRightChild(int heapItem) {
+        <b class="fc"><i>222</i>&nbsp; int temp = 2 * heapItem + 2;</b>
+        <b class="fc"><i>223</i>&nbsp; if (temp &lt;= maxIndex) {</b>
+        <b class="fc"><i>224</i>&nbsp; return temp;</b>
+        <i>225</i>&nbsp; }
+        <b class="fc"><i>226</i>&nbsp; return -1;</b>
+        <i>227</i>&nbsp; }
+        <i>228</i>&nbsp;
+        <i>229</i>&nbsp;
+        <i>230</i>&nbsp; /**
+        <i>231</i>&nbsp; * @param node a node from the graph
+        <i>232</i>&nbsp; * @return current location of the node in the heap. -1 if out of bounds
+        <i>233</i>&nbsp; */
+        <i>234</i>&nbsp; public int getPositionOf(int node) {
+        <b class="nc"><i>235</i>&nbsp; if (node &lt; 0 || node &gt;= nodeLocation.length) {</b>
+        <b class="nc"><i>236</i>&nbsp; return -1;</b>
+        <i>237</i>&nbsp; }
+        <b class="nc"><i>238</i>&nbsp; return nodeLocation[node];</b>
+        <i>239</i>&nbsp; }
+        <i>240</i>&nbsp;
+        <i>241</i>&nbsp;
+        <i>242</i>&nbsp; /**
+        <i>243</i>&nbsp; * swaps two items in the heap.
+        <i>244</i>&nbsp; * Does not maintain heap property!
+        <i>245</i>&nbsp; * &lt;p&gt;
+        <i>246</i>&nbsp; * also updates location info for the associated graph nodes in this.nodeLocation[]
+        <i>247</i>&nbsp; *
+        <i>248</i>&nbsp; * @param item1 index of first item
+        <i>249</i>&nbsp; * @param item2 index of second item
+        <i>250</i>&nbsp; */
+        <i>251</i>&nbsp; private void swap(int item1, int item2) {
+        <b class="fc"><i>252</i>&nbsp; int temp = heapNodes[item1];</b>
+        <i>253</i>&nbsp;
+        <b class="fc"><i>254</i>&nbsp; nodeLocation[temp] = item2; // item from position &#39;item1&#39; is to be at
+            &#39;item2&#39;</b>
+        <b class="fc"><i>255</i>&nbsp; nodeLocation[heapNodes[item2]] = item1; // vice versa</b>
+        <i>256</i>&nbsp;
+        <b class="fc"><i>257</i>&nbsp; heapNodes[item1] = heapNodes[item2];</b>
+        <b class="fc"><i>258</i>&nbsp; heapNodes[item2] = temp;</b>
+        <i>259</i>&nbsp;
+        <i>260</i>&nbsp;// if (maxIndex &lt; 30 || maxIndex &gt; heapNodes.length - 45) {
+        <i>261</i>&nbsp;// System.out.println(&quot;swap index &quot; + item1 + &quot; and &quot; + item2 + &quot;
+        (Nodes &quot;+heapNodes[item2]+&quot; and &quot;+heapNodes[item1]+&quot;) | &quot; + heapNodes[item2]+&quot; is
+        now at &quot; +item2 + &quot;, maxIndex is&quot; + maxIndex);
+        <i>262</i>&nbsp;// }
+        <i>263</i>&nbsp;
+        <i>264</i>&nbsp;
+        <b class="fc"><i>265</i>&nbsp; }</b>
+        <i>266</i>&nbsp;
+        <i>267</i>&nbsp;
+        <i>268</i>&nbsp; /**
+        <i>269</i>&nbsp; * @return a String containing the top 7 nodes in the heap separated by comma
+        <i>270</i>&nbsp; */
+        <i>271</i>&nbsp; public String getTopElementsPeek() {
+        <b class="nc"><i>272</i>&nbsp; return heapNodes[0] + &quot;, &quot; + heapNodes[1] + &quot;, &quot; +
+            heapNodes[2] + &quot;, &quot; + heapNodes[3] + &quot;, &quot; + heapNodes[4] + &quot;, &quot; + heapNodes[5]
+            + &quot;, &quot; + heapNodes[6];</b>
+        <i>273</i>&nbsp; }
+        <i>274</i>&nbsp;
+        <i>275</i>&nbsp;
+        <i>276</i>&nbsp; /**
+        <i>277</i>&nbsp; * removes and returns the root item and determines a new one. Does preserve heap property.
+        <i>278</i>&nbsp; * Returns -1 if no items are on the heap (If so, maxIndex will be -1 as well).
+        <i>279</i>&nbsp; *
+        <i>280</i>&nbsp; * @return Node number in graph or -1
+        <i>281</i>&nbsp; */
+        <i>282</i>&nbsp; private int removeRoot() {
+        <b class="fc"><i>283</i>&nbsp; if (maxIndex &lt; 0) {</b>
+        <i>284</i>&nbsp;// maxIndex = -1;
+        <b class="fc"><i>285</i>&nbsp; return -1;</b>
+        <b class="fc"><i>286</i>&nbsp; } else if (maxIndex == 0) {</b>
+        <b class="fc"><i>287</i>&nbsp; maxIndex--;</b>
+        <b class="fc"><i>288</i>&nbsp; return heapNodes[0];</b>
+        <i>289</i>&nbsp; } else {
+        <b class="fc"><i>290</i>&nbsp; swap(0, maxIndex--); //0 and maxIndex, then maxIndex is decremented
+            afterwards</b>
+        <i>291</i>&nbsp;
+        <b class="fc"><i>292</i>&nbsp; siftDown(0);</b>
+        <i>293</i>&nbsp;
+        <b class="fc"><i>294</i>&nbsp; return heapNodes[maxIndex + 1];</b>
+        <i>295</i>&nbsp;
+        <i>296</i>&nbsp; }
+        <i>297</i>&nbsp; }
+        <i>298</i>&nbsp;
+        <i>299</i>&nbsp; /**
+        <i>300</i>&nbsp; * Returns the highest priority (= lowest distance) node from the graph, also removing it from
+        this heap.
+        <i>301</i>&nbsp; * -1 if no nodes exist in the heap.
+        <i>302</i>&nbsp; *
+        <i>303</i>&nbsp; * @return Node number in graph or -1
+        <i>304</i>&nbsp; */
+        <i>305</i>&nbsp; public int getAndRemoveNext() {
+        <b class="fc"><i>306</i>&nbsp; debug++;</b>
+        <i>307</i>&nbsp;
+        <i>308</i>&nbsp; //TODO: does this try catch do anything or can it be deleted
+        <i>309</i>&nbsp; try {
+        <b class="fc"><i>310</i>&nbsp; if (maxIndex &lt; 10) {</b>
+        <i>311</i>&nbsp;// Thread.sleep(1000);
+        <i>312</i>&nbsp;
+        <b class="fc"><i>313</i>&nbsp; graph.verbosePrint(&quot;-- return and remove time &quot; + debug);</b>
+        <i>314</i>&nbsp; }
+        <b class="fc"><i>315</i>&nbsp; if (maxIndex &gt; heapNodes.length - 35) {</b>
+        <i>316</i>&nbsp;// Thread.sleep(500);
+        <b class="fc"><i>317</i>&nbsp; graph.verbosePrint(&quot;-- return and remove time &quot; + debug);</b>
+        <i>318</i>&nbsp; }
+        <i>319</i>&nbsp;
+        <i>320</i>&nbsp;// Thread.sleep(300);
+        <b class="nc"><i>321</i>&nbsp; } catch (Exception e) {</b>
+        <b class="fc"><i>322</i>&nbsp; }</b>
+        <i>323</i>&nbsp;
+        <b class="fc"><i>324</i>&nbsp; return removeRoot();</b>
+        <i>325</i>&nbsp; }
+        <i>326</i>&nbsp;
+        <i>327</i>&nbsp;}
+    </div>
+</div>
+
+<div class="footer">
+
+    <div style="float:right;">generated on 2018-12-19 22:47</div>
+</div>
+</body>
+</html>
