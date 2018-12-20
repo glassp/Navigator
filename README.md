@@ -43,7 +43,7 @@ Use the makefile.sh file and run in in Terminal
 -  Enter ``0``
 -  Enter the path to the .fmi file
 
-#### Run Dijkstra's algorithm
+#### Run Dijkstra's algorithm (one-to-all)
 
 - Import the Graph
 - Enter ``1``

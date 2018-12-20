@@ -3,6 +3,8 @@ package main;
 /**
  * 
  * Dijkstra class that can run Dijkstra's algorithm on a given graph.
+ * 
+ * Before running, all distances in graph should be set to Double.INFINITY except for starting node with distance 0.
  *
  */
 public class Dijkstra extends CLILogger {
