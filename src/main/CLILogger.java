@@ -2,29 +2,48 @@ package main;
 
 
 /**
- * abstract class for logging
+ * Abstract Class for logging and calculation runtime
  */
 public abstract class CLILogger {
     /**
-     * the starttime for time tracking
+     * the start time for time tracking
      */
     public double startTime;
     /**
      * the runtime for a certain task
      */
     public double runtime;
+    /**
+     * Setting for verbose output
+     */
+    boolean verbose;
+    /**
+     * Setting for debug output
+     */
+    boolean debug;
 
+    /**
+     * Converts the runtime to seconds
+     *
+     * @param runtime the runtime in ms
+     * @return The runtime in seconds
+     */
     public static double runtimeInSeconds(double runtime) {
         return (runtime / 1000);
     }
 
+    /**
+     * Converts the runtime to minutes
+     *
+     * @param runtime the runtime in ms
+     * @return The runtime in minutes
+     */
     public static double runtimeInMinutes(double runtime) {
         return (double) Math.round((runtimeInSeconds(runtime) / 60) * 1000d) / 1000d;
     }
 
-
     /**
-     * starts the timer
+     * Starts the Timing
      */
     public void startTiming() {
         //reset runtime
@@ -33,25 +52,14 @@ public abstract class CLILogger {
     }
 
     /**
-     * stops the times and calculates runtime
+     * Stops the times and calculates runtime
      */
     public void stop() {
         this.runtime = System.currentTimeMillis() - startTime;
     }
 
     /**
-     * setting for verbose output
-     */
-    boolean verbose;
-
-    /**
-     * display debug level
-     */
-    boolean debug;
-
-
-    /**
-     * changes verbose to a certain setting
+     * Changes verbose to a certain setting
      *
      * @param verbose the setting
      */
@@ -60,23 +68,23 @@ public abstract class CLILogger {
     }
 
     /**
-     * sets verbose to true
+     * Sets verbose to true
      */
     public void enableVerbose() {
         setVerbose(true);
     }
 
     /**
-     * sets verbose to false
+     * Sets verbose to false
      */
     public void disableVerbose() {
         setVerbose(false);
     }
 
     /**
-     * toogles verbose setting
+     * Toggles verbose setting
      */
-    public void toogleVerbose() {
+    public void toggleVerbose() {
         if (this.verbose) {
             disableVerbose();
         } else
@@ -84,7 +92,7 @@ public abstract class CLILogger {
     }
 
     /**
-     * changes debug to a certain setting
+     * Changes debug to a certain setting
      *
      * @param debug the setting
      */
@@ -93,23 +101,23 @@ public abstract class CLILogger {
     }
 
     /**
-     * sets debug to true
+     * Sets debug to true
      */
     public void enableDebug() {
         setDebug(true);
     }
 
     /**
-     * sets debug to false
+     * Sets debug to false
      */
     public void disableDebug() {
         setDebug(false);
     }
 
     /**
-     * toogles debug setting
+     * Toggles debug setting
      */
-    public void toogleDebug() {
+    public void toggleDebug() {
         if (this.debug) {
             disableDebug();
         } else
@@ -117,9 +125,8 @@ public abstract class CLILogger {
     }
 
 
-
     /**
-     * changes all settings to a certain setting
+     * Changes all settings to a certain setting
      *
      * @param option the setting
      */
@@ -129,7 +136,7 @@ public abstract class CLILogger {
     }
 
     /**
-     * sets all settings to true
+     * Sets all settings to true
      */
     public void enableAll() {
         enableDebug();
@@ -137,7 +144,7 @@ public abstract class CLILogger {
     }
 
     /**
-     * sets all settings to false
+     * Sets all settings to false
      */
     public void disableAll() {
         disableDebug();
@@ -145,17 +152,18 @@ public abstract class CLILogger {
     }
 
     /**
-     * toogles all settings
+     * Toggles all settings
      */
-    public void toogleAll() {
-        toogleDebug();
-        toogleVerbose();
+    public void toggleAll() {
+        toggleDebug();
+        toggleVerbose();
     }
 
     /**
-     * prints a message if verbose is enabled
+     * Prints a message if verbose is enabled
      *
      * @param msg the message
+     * @see CLI#print(String)
      */
     void verbosePrint(String msg) {
         if (this.verbose)
@@ -163,10 +171,11 @@ public abstract class CLILogger {
     }
 
     /**
-     * prints a formated message if verbose is enabled
+     * Prints a formated message if verbose is enabled
      *
      * @param msg   the message
      * @param level the logging level
+     * @see CLI#print(String, boolean)
      */
     void verbosePrint(String msg, String level) {
         if (this.verbose) {
@@ -182,19 +191,17 @@ public abstract class CLILogger {
     }
 
     /**
-     * prints a formated message if verbose is enabled
+     * Prints a formated message if verbose is enabled
      * Usage: only use to see execution order and exit point
      *
      * @param msg the message
      */
     void debugPrint(String msg) {
-        //TODO test if debugPrint slows down dijkstra algorithm
-        return;
-        //verbosePrint(msg, "Debugging");
+        verbosePrint(msg, "Debugging");
     }
 
     /**
-     * prints a formated message if verbose is enabled
+     * Prints a formated message if verbose is enabled
      *
      * @param msg the message
      */
@@ -203,12 +210,22 @@ public abstract class CLILogger {
     }
 
     /**
-     * prints a message
+     * Prints a message
      *
      * @param msg the message
+     * @see CLI#print(String)
      */
     void print(String msg) {
         CLI.print(msg);
+    }
+
+    /**
+     * Prints a empty line
+     *
+     * @see CLI#print()
+     */
+    void print() {
+        CLI.print();
     }
 
 }

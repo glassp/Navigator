@@ -56,10 +56,10 @@ public class Graph extends CLILogger {
      * <p>
      * Edges have to be manually added to the graph using the method insertEdge().
      * <p>
-     * TODO: the preferable way to add egdes is insertEdge(...) as it handles unorderedGraphExceptions
      *
      * @param nodes number of nodes that are used in the graph
      * @param edges number of edges that are to be used in the graph
+     * @see Graph#insertEdge(int, int, double)
      */
     public Graph(int nodes, int edges) {
         this.offset = new int[nodes];
@@ -85,18 +85,21 @@ public class Graph extends CLILogger {
      * runs dijkstra on this graph with start as start node
      *
      * @param start the start node
+     * @see Dijkstra#start()
      */
     public void runDijkstra(int start) {
         if (this.start != start) {
+
             if (this.start != -1)
                 Arrays.fill(distance, Double.POSITIVE_INFINITY);
-            System.out.println("Starting dijkstra for " + start);
+
+            this.start = start;
+            System.out.println("Starting Dijkstra for " + start);
             Dijkstra dijkstra = new Dijkstra(this, start);
             dijkstra.setDebug(this.debug);
             dijkstra.setVerbose(this.verbose);
             dijkstra.start();
         }
-        this.start = start;
     }
 
     /**
@@ -105,6 +108,7 @@ public class Graph extends CLILogger {
      * @param start the start node
      * @param dest  the destination
      * @return the distance from start to dest
+     * @see Graph#runDijkstra(int)
      */
     public double runQuery(int start, int dest) {
         runDijkstra(start);
@@ -172,19 +176,21 @@ public class Graph extends CLILogger {
      * @param start  the start node
      * @param dest   the destination node
      * @param weight the weight
-     * @throws UnorderedGraphException A special Exception which tells caller to try insert method or to die on error if unchecked
+     * @throws UnorderedGraphException A special Exception which tells caller to try insert method
      */
     void addEdge(int start, int dest, double weight) throws UnorderedGraphException {
+//    	print("adding it! from "+ start + " to " + dest + " and weight " + weight);
         //edges are added in right order just append in array
         if (hasOutgoingEdges(start + 1)) {
-            throw new UnorderedGraphException("The next Node has already created Edges please ty to use insertEdge(...)");
+            throw new UnorderedGraphException("The next Node has already established edges. Please ty to use insertEdge(...) instead");
         }
         if (this.current >= edges.length) increase(edges);
         if (!hasOutgoingEdges(start)) {
             this.setOffset(start, this.current);
         }
         this.edges[this.current] = dest;
-        this.weight[getEdge(start, dest)] = weight;
+//        this.weight[getEdge(start, dest)] = weight; //Need to use real index. Can use this.current
+        this.weight[this.current] = weight;
         this.current++;
     }
 
@@ -237,6 +243,7 @@ public class Graph extends CLILogger {
      * @param dest   the destination node
      * @param weight the weight
      * @param skip   if true skips the test and forces indices to be moved
+     * @see Graph#addEdge(int, int, double)
      */
     public void insertEdge(int start, int dest, double weight, boolean skip) {
 
@@ -280,6 +287,7 @@ public class Graph extends CLILogger {
      * @param start  the start node
      * @param dest   the destination node
      * @param weight the weight
+     * @see Graph#insertEdge(int, int, double)
      */
     public void insertEdge(int start, int dest, double weight) {
         insertEdge(start, dest, weight, false);
@@ -290,6 +298,7 @@ public class Graph extends CLILogger {
      *
      * @param node the node to be checked
      * @return true if has outgoing edge else false
+     * @see Graph#getOffset(int)
      */
     public boolean hasOutgoingEdges(int node) {
 //        return this.offset[node] != -1;
@@ -314,8 +323,6 @@ public class Graph extends CLILogger {
             throw new IllegalArgumentException("Can't give offset, since node " + node + " doesn't exist. Offset-Array length is " + offset.length);
         if (node == offset.length)
             return -1;
-        // I added exceptions for most non-existent nodes. Making an exception for this exception is a bit of a hack, but so is not using exceptions in any way.
-        // I don't think there was any case implemented for node == offset.length before, which is needed though in my understanding for methods that add edges to the last node and check for node+1 (without increasing array size, but that shouldn't be done if all goes correctly anyways)
 
         return this.offset[node];
     }
@@ -339,29 +346,43 @@ public class Graph extends CLILogger {
     }
 
 
-    /**
-     * Returns the index of the edge
-     *
-     * @param start the start node
-     * @param dest  the destination node
-     * @return the offset of the edge or -1 if it does not exist
-     */
-    public int getEdge(int start, int dest) {
-        //gets all edges starting from start
-        int from = this.getOffset(start);
-        int to = this.getOffset(start + 1);
-        //if no such edges return
-        if (from == -1) return -1;
-        if (to == -1) to = this.edges.length;
-        //for all those edges search if destination is same
-        for (int i = from; i < to; i++) {
-            //return edge index if found
-            if (this.edges[i] == dest) return i;
-        }
-        //if nothing found return
-        //this.verbosePrint("no Edge found. Exception may be thrown", "Warning");
-        return -1;
-    }
+//    /** Should not use this class, can return first of multiple edges between same nodes without checking
+//     * Returns the index of the edge
+//     *
+//     * @param start the start node
+//     * @param dest  the destination node
+//     * @return the offset of the edge or -1 if it does not exist
+//     */
+//    public int getEdge(int start, int dest) {
+//        //gets all edges starting from start
+//        int from = this.getOffset(start);
+//        int to = this.getOffset(start + 1);
+//        //if no such edges return
+//        if (from == -1) return -1;
+//        if (to == -1) to = this.edges.length;
+//        //for all those edges search if destination is same
+//        for (int i = from; i < to; i++) {
+//            //return edge index if found
+//            if (this.edges[i] == dest) return i;
+//        }
+//        //if nothing found return
+//        //this.verbosePrint("no Edge found. Exception may be thrown", "Warning");
+//        return -1;
+//    }
+
+    //ATTEMPT to reimplement could be
+
+//  edge = -2;
+//	for (int i = getOffset(preNode); i < countOutgoingEdges(preNode); i++) {
+//		if (getDestination(i) ==  dest) {
+//			if (edge == -2) {
+//				edge = i; //Didn't have a value yet	
+//			}
+//			else if (getWeight(edge) > getWeight(i)) {
+//				edge = i;
+//			} 
+//		}
+//	}
 
 
     /**
@@ -375,16 +396,17 @@ public class Graph extends CLILogger {
         int minIndex = -1;
         int offset = this.getOffset(node);
         if (offset == -1) {
-            //this.debugPrint("no nextNode: offset invalid");
+            this.debugPrint("no nextNode: offset invalid");
             return -1;
         }
         int elem = this.countOutgoingEdges(node);
         if (elem < 1) {
-            //this.debugPrint("no nextNode: zero outgoing Edges");
+            this.debugPrint("no nextNode: zero outgoing Edges");
             return -1;
         }
         for (int i = 0; i < elem; i++) {
-            double var = this.getWeight(node, this.edges[offset + i]);
+//      	double var = this.getWeight(node, this.edges[offset + i]); 		//should not use this method, can give wrong results.
+            double var = this.getWeight(offset + i);
             if (var < minVal) {
                 minVal = var;
                 minIndex = i;
@@ -404,11 +426,13 @@ public class Graph extends CLILogger {
         if (!this.hasOutgoingEdges(node)) return 0;
 
         //  Has to iterate in O(n), but could be done in O(1) if offset was managed like in specifications
-        // TODO: Feel free to change it :)
+        //	However, since in practice it is never long until a node with outgoing edges appears, you always get immediate results.
+        //	Tests show this method makes up nearly no time at all in running Dijkstra.
+        // 	Instead, the lack of redundancy might make reading the graph slightly faster, though still bottlenecked by hard drive.
+
         int lastEdge = -1;
-//    	for (int i = node+1; i < this.current; i++) {
+
         for (int i = node + 1; i < offset.length; i++) {
-//			lastEdge = offset[i];
             lastEdge = getOffset(i);
             if (lastEdge != -1) break;
         }
@@ -422,20 +446,21 @@ public class Graph extends CLILogger {
     }
 
 
-    /**
-     * Returns the weight of the first edge found between given nodes
-     *
-     * @param start the start node
-     * @param dest  the destination node
-     * @return weight of the edge or -1 if it does not exist
-     */
-    public double getWeight(int start, int dest) {
-        if (!this.hasOutgoingEdges(start)) return -1;
-        int edge = this.getEdge(start, dest);
-        if (edge < 0 || edge >= this.weight.length) return -1;
-        return this.weight[edge];
-
-    }
+//    /**
+//     * Never use this method, basically.
+//     * Returns the weight of the first edge found between given nodes
+//     *
+//     * @param start the start node
+//     * @param dest  the destination node
+//     * @return weight of the edge or -1 if it does not exist
+//     */
+//    public double getWeight(int start, int dest) {
+//        if (!this.hasOutgoingEdges(start)) return -1;
+//        int edge = this.getEdge(start, dest);
+//        if (edge < 0 || edge >= this.weight.length) return -1;
+//        return this.weight[edge];
+//
+//    }
 
     /**
      * Returns weight of an edge
@@ -504,8 +529,8 @@ public class Graph extends CLILogger {
      * If there is no path or if Dijkstra has not run yet, -1 will be returned!
      *
      * @param node From this node, by going to the returned node and that one's predecessors, you can recursively find the ideal path to the starting node.
-     * @throws IllegalArgumentException if node index is out of bounds
      * @return preceding node on a path to start, or -1
+     * @throws IllegalArgumentException if node index is out of bounds
      */
     public int getPredecessor(int node) throws IllegalArgumentException {
         if (node < 0 || node >= this.predecessor.length)
@@ -556,4 +581,46 @@ public class Graph extends CLILogger {
     public int getNodesCount() {
         return this.distance.length;
     }
+
+//    /**	//DISABLED THIS METHOD, is now not usable without getEdge(start, dest).
+//     * To test whether the saved distance is correct, this method can accumulate the costs of all edges on the path from start to given node
+//     * @param dest	The distance of which will be calculated
+//     * @return distance according to predecessors
+//     */
+//    public double getDistanceViaPredecessors(int dest) {
+//    	double distance = 0.0;
+//    	if (dest == start) return 0.0;
+//    	
+//    	int preNode = getPredecessor(dest);
+//    	int edge;
+//    	
+//    	do {
+//    		if (preNode == -1) {
+//				//unreachable node
+//    			return Double.POSITIVE_INFINITY;
+//			}
+////    		print("[VIAPREC] get distance between " + preNode + " and " + dest);
+////    		print("[VIAPREC] Start node is " + start);
+//    		edge = -2;
+//    		for (int i = getOffset(preNode); i < countOutgoingEdges(preNode); i++) {
+//    			if (getDestination(i) ==  dest) {
+//    				if (edge == -2) {
+//    					edge = i; //Didn't have a value yet	
+//					}
+//    				else if (getWeight(edge) > getWeight(i)) {
+//    					edge = i;
+//					} 
+//				}
+//			}
+//    		
+//    		
+//			distance += getWeight(edge);
+//			dest = preNode;
+//			preNode = getPredecessor(dest);
+//		} while (dest != start);
+//    
+//    	
+//    	return distance;
+//    }
+
 }

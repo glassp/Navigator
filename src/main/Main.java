@@ -1,13 +1,13 @@
 package main;
 
 /**
- * entry point for class
+ * The entry point for Script
  */
 public class Main {
     /**
-     * the main method
+     * The main method
      *
-     * @param args the arguments
+     * @param args the arguments passed via terminal
      */
     public static void main(String[] args) {
         CLI cli = new CLI();
