@@ -36,7 +36,8 @@ public class NodeHeap extends CLILogger {
 
 
     /**
-     * Construct a NodeHeap instance.
+     * Construct a NodeHeap instance. Starting node is automatically added to heap,
+     * others have to be added with addNode() while having infinite distance, e.g. when found in Dijkstra's algorithm.
      *
      * @param graph        The graph to work with.
      * @param startingNode the starting node
