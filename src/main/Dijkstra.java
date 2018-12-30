@@ -53,25 +53,36 @@ public class Dijkstra extends CLILogger {
 
         int currentNode = heap.getAndRemoveNext();
 
+        int firstEdge;
+        
+        int currentDestination;
+        double newDistance;
+        
 
         while (currentNode >= 0) {
 
-            int firstEdge = graph.getOffset(currentNode);
+//            int firstEdge = graph.getOffset(currentNode);
+        	firstEdge = graph.getOffset(currentNode);
 
-            int currentDestination;
-            double newDistance;
+//            int currentDestination;
+//            double newDistance;
 
             for (int i = firstEdge; i < firstEdge + graph.countOutgoingEdges(currentNode); i++) {
 
 
                 currentDestination = graph.getDestination(i);
                 newDistance = graph.getDistance(currentNode) + graph.getWeight(i);
+                
+                if (graph.getDistance(currentDestination) == Double.POSITIVE_INFINITY) {
+                	heap.addNode(currentDestination);
+				}
 
                 if (graph.getDistance(currentDestination) > newDistance) {
 
                     //found shorter path to this neighbour. Update distance, predecessor and heap.
                     heap.decreaseDistance(currentDestination, newDistance);
                     graph.setPredecessor(currentDestination, currentNode);
+                    
 
                 }
 
