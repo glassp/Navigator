@@ -1,8 +1,6 @@
 package main;
 
-import java.nio.channels.OverlappingFileLockException;
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
 
 
@@ -121,14 +119,7 @@ public class NodeHeap extends CLILogger {
     public boolean contains(int node) {
     	if (node >= heapNodes.length || node < 0)
     		return false;
-    	if (nodeLocation[node] == null) {
-			return false;
-		}
-    	
-//    	if (graph.getDistance(node) == Double.POSITIVE_INFINITY)
-//    		return false; //This might work in practise, but requires any class using this heap to set a distance != INFINITY to a node before checking whether it is contained. 
-
-    	return true;
+        return nodeLocation[node] != null;
     }
 
     /**

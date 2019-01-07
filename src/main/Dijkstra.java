@@ -13,11 +13,6 @@ public class Dijkstra extends CLILogger {
      */
     private Graph graph;
 
-    /**
-     * From this node to every node of the graph, the shortest distance is searched in the algorithm.
-     */
-    private int startNode;
-    
     private NodeHeap heap;
 
     /**
@@ -33,7 +28,6 @@ public class Dijkstra extends CLILogger {
      */
     public Dijkstra(Graph graph, int start, NodeHeap heap) {
         this.graph = graph;
-        this.startNode = start;
         this.heap = heap;
         
         graph.setDistance(start, 0.0);

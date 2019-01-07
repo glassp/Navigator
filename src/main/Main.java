@@ -14,7 +14,7 @@ public class Main {
         if (args.length == 3) {
             cli.fullRun(args[0], args[1], args[2]);
         } else {
-            cli.header("0.1 - dev build");
+            cli.header("1.0 - beta version");
             cli.mainMenu();
         }
     }
