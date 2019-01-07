@@ -17,6 +17,8 @@ public class Dijkstra extends CLILogger {
      * From this node to every node of the graph, the shortest distance is searched in the algorithm.
      */
     private int startNode;
+    
+    private NodeHeap heap;
 
     /**
      * Create instance of Dijkstra's algorithm. When using start() method, it will find the shortest distances
@@ -26,12 +28,14 @@ public class Dijkstra extends CLILogger {
      *
      * @param graph The graph to operate upon
      * @param start Shortest distance from this one to every node of the graph will be found.
+     * @param heap a NodeHeap object that uses the same graph, can later be reset from within other classes
      * @see Graph#setDistance(int, double)
      */
-    public Dijkstra(Graph graph, int start) {
+    public Dijkstra(Graph graph, int start, NodeHeap heap) {
         this.graph = graph;
         this.startNode = start;
-
+        this.heap = heap;
+        
         graph.setDistance(start, 0.0);
     }
 
@@ -49,7 +53,8 @@ public class Dijkstra extends CLILogger {
         print("Dijkstra's algorithm running...");
         this.startTiming();
 
-        NodeHeap heap = new NodeHeap(graph, startNode);
+        //Starting node now gets updated in runDijkstra-Method in graph class, where heap is created
+//        NodeHeap heap = new NodeHeap(graph, startNode);
 
         int currentNode = heap.getAndRemoveNext();
 

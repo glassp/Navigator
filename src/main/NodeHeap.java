@@ -67,6 +67,13 @@ public class NodeHeap extends CLILogger {
         // Further tracking of locations is done within the swap method.
     }
 
+    public void resetHeap(int startingNode) {
+    	Arrays.fill(heapNodes, 0);
+    	heapNodes[0] = startingNode;
+    	this.maxIndex = 0;
+    	Arrays.fill(nodeLocation, null);
+    	nodeLocation[startingNode] = 0;
+    }
 
     /**
      * Decreases the distance of a node in the original graph, then restores heap condition if necessary.

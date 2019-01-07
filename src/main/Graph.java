@@ -50,6 +50,11 @@ public class Graph extends CLILogger {
      * used to check if dijkstra did run for this node
      */
     private int start = -1;
+    
+    /**
+     * Heap to be given to Dijkstra class. Musz be reset and given new starting node before running Dijkstra again.
+     */
+    private NodeHeap heap;
 
     /**
      * Constructor.
@@ -73,6 +78,8 @@ public class Graph extends CLILogger {
         this.longitude = new double[nodes];
 
         this.current = 0;
+        
+        this.heap = new NodeHeap(this, 0);
 
         //initializes all values in arrays with their default value, if there is one
         Arrays.fill(offset, -1);
@@ -94,8 +101,9 @@ public class Graph extends CLILogger {
                 Arrays.fill(distance, Double.POSITIVE_INFINITY);
 
             this.start = start;
+            heap.resetHeap(start);
             System.out.println("Starting Dijkstra for " + start);
-            Dijkstra dijkstra = new Dijkstra(this, start);
+            Dijkstra dijkstra = new Dijkstra(this, start, heap);
             dijkstra.setDebug(this.debug);
             dijkstra.setVerbose(this.verbose);
             dijkstra.start();
