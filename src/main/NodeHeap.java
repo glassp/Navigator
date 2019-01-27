@@ -1,6 +1,9 @@
 package main;
 
+import java.nio.channels.OverlappingFileLockException;
+import java.util.Arrays;
 import java.util.stream.IntStream;
+
 
 
 /**
@@ -29,30 +32,37 @@ public class NodeHeap extends CLILogger {
     /**
      * Entry n contains the index under which node n from the graph is currently found in heap's array heapNodes[].
      */
-    private int[] nodeLocation;
+    private Integer[] nodeLocation;
 
 
     /**
-     * Construct a NodeHeap instance.
+     * Construct a NodeHeap instance. Starting node is automatically added to heap,
+     * others have to be added with addNode() while having infinite distance, e.g. when found in Dijkstra's algorithm.
      *
      * @param graph        The graph to work with.
      * @param startingNode the starting node
      */
     public NodeHeap(Graph graph, int startingNode) {
         this.graph = graph;
-        this.heapNodes = IntStream.rangeClosed(0, graph.getNodesCount() - 1).toArray();
+//        this.heapNodes = IntStream.rangeClosed(0, graph.getNodesCount() - 1).toArray(); //Now, start with empty array of correct size.
+        this.heapNodes = new int[graph.getNodesCount()];
 
-        this.maxIndex = heapNodes.length - 1;
-
-
+        // If items were even on the heap:
         // no need to iterate through first length/2 items for making sure heap property is achieved,
         // since all but one item's node distance are set to only INFINITY
 
         heapNodes[0] = startingNode;
-        heapNodes[startingNode] = 0;
-        //swap starting node with node that has index 0 in graph. May be unnecessary if identical.
+//        heapNodes[startingNode] = 0;
+//        //swap starting node with node that has index 0 in graph. May be unnecessary if identical.
 
-        nodeLocation = heapNodes.clone();
+//      this.maxIndex = heapNodes.length - 1;
+      this.maxIndex = 0;
+        
+        nodeLocation = new Integer[graph.getNodesCount()]; 	//Integer instead of int, so it starts as null
+        nodeLocation[startingNode] = 0; 
+//        nodeLocation = new int[graph.getNodesCount()];
+//        Arrays.fill(nodeLocation, -1);
+//        nodeLocation[startingNode] = 0;
         // In the beginning, all nodes are saved at an index equal to their number in the graph, except for the two swapped ones.
         // Further tracking of locations is done within the swap method.
     }
@@ -74,6 +84,45 @@ public class NodeHeap extends CLILogger {
         siftUp(node, newDistance);
     }
 
+    
+    /**
+     * Adds the given node to the heap, unless it already exists.
+     * Distance value in the graph must be Double.POSITIVE_INFINITY when using this method - use decreaseDistance() to set a new distance later.
+     * <p>
+     * The heap can only contain as many nodes as specified upon construction, which must be numbered between 0 and the max amount minus 1
+     * 
+     * @param node Index of node in the graph.
+     * @throws IllegalArgumentException if node ID is not between 0 and the amount of specified nodes minus 1.
+     */
+    public void addNode(int node) throws IllegalArgumentException {
+    	if (node >= heapNodes.length || node < 0)
+    		throw new IllegalArgumentException("node " + node + " is not between 0 and " + (heapNodes.length-1) );
+    	
+    	if (!contains(node)) {
+			heapNodes[++maxIndex] = node;
+			nodeLocation[node] = maxIndex;
+		}
+    	
+    }
+    
+    /**
+     * checks whether a node has been added to the heap previously.
+     * 
+     * @param node Index of node in the graph.
+     * @return True, if node exists in heap.
+     */
+    public boolean contains(int node) {
+    	if (node >= heapNodes.length || node < 0)
+    		return false;
+    	if (nodeLocation[node] == null) {
+			return false;
+		}
+    	
+//    	if (graph.getDistance(node) == Double.POSITIVE_INFINITY)
+//    		return false; //This might work in practise, but requires any class using this heap to set a distance != INFINITY to a node before checking whether it is contained. 
+
+    	return true;
+    }
 
     /**
      * If necessary to maintain the heap property, sifts down an item.
@@ -238,6 +287,8 @@ public class NodeHeap extends CLILogger {
     private void swap(int item1, int item2) {
         int temp = heapNodes[item1];
 
+        //TODO: Is it shure that these items always have been added to the heap before? 
+        
         nodeLocation[temp] = item2;    // item from position 'item1' is to be at 'item2'
         nodeLocation[heapNodes[item2]] = item1;    // vice versa
 
