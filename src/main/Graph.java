@@ -2,7 +2,6 @@ package main;
 
 import java.util.Arrays;
 
-
 /**
  * A class for a directed graph.
  * <p>

@@ -1,4 +1,6 @@
 *.fmi
+*.sol
+*.que
 /bin/
 *.core.prefs
 .classpath
