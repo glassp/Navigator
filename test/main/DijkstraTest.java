@@ -48,7 +48,7 @@ public class DijkstraTest {
 //		assertEquals(8, graph.getWeight(graph.getEdge(0, 3))); //But should never use this method
 		// Test edge just cause
 		
-		Dijkstra dijkstra = new Dijkstra(graph, 0);
+		Dijkstra dijkstra = new Dijkstra(graph, 0, new NodeHeap(graph, 0));
 
 //		System.out.println("Entfernungen:");
 //		System.out.println("Knoten\tEntfernung von Knoten 0");

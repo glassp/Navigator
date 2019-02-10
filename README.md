@@ -6,7 +6,13 @@ A Simple Dijkstra Navigator
 ![](https://img.shields.io/github/status/s/pulls/badges/shields/1110.svg)  
 [goto](https://drive.google.com/drive/folders/18Yi9jL2jzjAOlSKQE7uswRldwCoxtzc1?usp=sharing)
 
-
+## TODO
+Rearange dir structure
+```
+root
+| + public (Server, should be listed to a port and accessible by browser)
+| + protected (Backend, inaccessible to browser)
+```
 
 ## Requirements
 

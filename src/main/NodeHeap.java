@@ -1,8 +1,6 @@
 package main;
 
-import java.nio.channels.OverlappingFileLockException;
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
 
 
@@ -67,6 +65,13 @@ public class NodeHeap extends CLILogger {
         // Further tracking of locations is done within the swap method.
     }
 
+    public void resetHeap(int startingNode) {
+    	Arrays.fill(heapNodes, 0);
+    	heapNodes[0] = startingNode;
+    	this.maxIndex = 0;
+    	Arrays.fill(nodeLocation, null);
+    	nodeLocation[startingNode] = 0;
+    }
 
     /**
      * Decreases the distance of a node in the original graph, then restores heap condition if necessary.
@@ -114,14 +119,7 @@ public class NodeHeap extends CLILogger {
     public boolean contains(int node) {
     	if (node >= heapNodes.length || node < 0)
     		return false;
-    	if (nodeLocation[node] == null) {
-			return false;
-		}
-    	
-//    	if (graph.getDistance(node) == Double.POSITIVE_INFINITY)
-//    		return false; //This might work in practise, but requires any class using this heap to set a distance != INFINITY to a node before checking whether it is contained. 
-
-    	return true;
+        return nodeLocation[node] != null;
     }
 
     /**
