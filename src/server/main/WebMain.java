@@ -14,15 +14,39 @@ public class WebMain {
      * @param args the arguments passed via terminal
      */
     public static void main(String[] args) {
-        if (args.length == 0) {
+
+        new Server(initPort(args), new File(initWebRoot(args)), true, new File("log.txt"));
+        //TODO: run GeoJsonBuilder and store file as geo.json within webRoot (args[0])
+        //TODO: use initFmiPath(args) to get path to .fmi file as provided via terminal
+    }
+
+
+    private static String initWebRoot(String[] args) {
+        try {
+            return args[1];
+        } catch (IndexOutOfBoundsException e) {
             Path currentRelativePath = Paths.get("");
             String path = currentRelativePath.toAbsolutePath().toString();
             path = path.substring(0, path.indexOf("Navigator"));
             path += "Navigator/www/";
-            args = new String[1];
-            args[0] = path;
+            return path;
         }
-        new Server(8080, new File(args[0]), true, new File("log.txt"));
-        //TODO: run GeoJsonBuilder and store file as geo.json within webRoot (args[0])
     }
+
+    private static String initFmiPath(String[] args) {
+        try {
+            return args[0];
+        } catch (IndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("Must supply one argument");
+        }
+    }
+
+    private static int initPort(String[] args) {
+        try {
+            return Integer.parseInt(args[2]);
+        } catch (IndexOutOfBoundsException e) {
+            return 8080;
+        }
+    }
+
 }

@@ -38,12 +38,15 @@ mkdir ./bin/out
 javac ./src/main/*.java -d ./bin/
 javac ./src/server/*/*.java -d ./bin/
 
+
 #if param 1 empty exit
 if [[ -z $1 ]]; then
-echo -e "\nPlease call $0 <arg1> to run this command!\n"
+echo -e "\nPlease call $0 <arg1> [OPTIONAL: <arg2> <arg3>] to run this command!\n"
 sleep 3s
 exit 1;
 fi
 
-#run main(arg1, arg2, arg3)
-java -cp ./bin/ server/main/WebMain ${1}
+#run main(arg1, arg2, arg3, arg4)
+java -cp ./bin/ server/main/WebMain ${1} ${2} ${3}
+
+sleep 3s;

@@ -32,8 +32,8 @@ makefile.sh will run the programm as a CLI within the Terminal
 
 - Import the Graph
 - Enter ``1``
-- Enter the start node
-- Enter any target node
+- Enter the start node ![](https://img.shields.io/badge/Datatype-Integer-important.svg)
+- Enter any target node ![](https://img.shields.io/badge/Datatype-Integer-important.svg)
 
 If you want to make multiple inquiries from the same starting point in a row, Dijkstra's algorithm will only be running once.
 
@@ -64,4 +64,20 @@ The Script will import the graph, run the query and compare it to the solution.
 
 ### Via Webrunner.sh
 
-TODO
+Use the webrunner.sh with following parameter
+- `arg1` The path to the .fmi Graph file
+- `arg2` ![](https://img.shields.io/badge/Optional-True-green.svg) The path to the webroot dir
+- `arg3` ![](https://img.shields.io/badge/Optional-True-green.svg) ![](https://img.shields.io/badge/Datatype-Integer-important.svg) The port you want the server to run on
+ 
+After running the terminal should output a message like the following  
+```
+[2019-02-13 19:39:22] [SYS] Starting server...
+#################################
+### HTTP-Server               ###
+### http://YOUR_LOCAL_IP:8080 ###
+#################################
+```
+
+After that you can go to the provided like and use the files provided
+
+To Terminate the server you just need to close the Terminal window.
