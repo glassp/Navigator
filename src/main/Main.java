@@ -5,7 +5,7 @@ package main;
  */
 public class Main {
     /**
-     * The main method
+     * The main method for Standalone mode
      *
      * @param args the arguments passed via terminal
      */

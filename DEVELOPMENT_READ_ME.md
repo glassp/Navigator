@@ -1,7 +1,5 @@
 # Server component
-- Install Tomcat via `sudo apt` and start service with attachment to localhost:8080
-- Let server load data from ./src/java/main/AppResource.java (or rather .class)
-- Handle AJAX-POST Requests with same class
+- Implement AJAX Handler
 
 
 # Client componente
