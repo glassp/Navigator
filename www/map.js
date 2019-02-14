@@ -10,6 +10,7 @@
 var mapVar;
 var popupVar;
 
+// to store coordinates:
 var start;
 var dest;
 var startMarker;
@@ -38,7 +39,7 @@ function initMap() {
     // Activate Listener
     mapVar.on('click', onMapClick); 
     
-    document.getElementById('helperLine').innerHTML="";
+    //document.getElementById('helperLine').innerHTML=""; //Can be used for feedback
 } 
 
 
@@ -56,6 +57,8 @@ function onMapClick(e) {
         }
         start = e;
         startMarker = mark(e.latlng.lat, e.latlng.lng, "Start - ");
+        
+        toggleSelectStart();
     }
     
     if (selectDest) {
@@ -64,6 +67,8 @@ function onMapClick(e) {
         }
         dest = e;
         destMarker = mark(e.latlng.lat, e.latlng.lng, "Destination - ");
+        
+        toggleSelectDest()
     }
 }
 
@@ -87,7 +92,7 @@ function toggleSelectStart(){
     }
     else {
         selectStart = true;
-        document.getElementById('btnSelectStart').innerHTML= "Finish Start Selection";
+        document.getElementById('btnSelectStart').innerHTML= "Cancel Start Selection";
     }
 }
 
@@ -100,7 +105,7 @@ function toggleSelectDest(){
     }
     else {
         selectDest = true;
-        document.getElementById('btnSelectDest').innerHTML= "Finish Destination Selection";
+        document.getElementById('btnSelectDest').innerHTML= "Cancel Destination Selection";
     }
 }
 //    if (mapVar.listens('click')) {
@@ -124,9 +129,4 @@ function mark(x, y, label) {
 
 function removeMarker(m) {
     m.remove();
-}
-
-
-function selectStart(){
-    
 }
