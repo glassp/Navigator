@@ -1,6 +1,8 @@
 package server.util;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
@@ -21,6 +23,7 @@ public class FileManager {
         mimeMap.put(".js", "text/js");
 
         mimeMap.put(".json", "text/json");
+        mimeMap.put(".api", "test/plain");
         mimeMap.put(".txt", "text/plain");
         mimeMap.put(".log", "text/plain");
         mimeMap.put(".java", "text/plain");
@@ -69,7 +72,26 @@ public class FileManager {
     public static String getFileName(File file) {
         String filename = file.getName();
         int pos = filename.lastIndexOf(".");
-        if (pos >= 0) return filename.substring(0, pos).toLowerCase();
+        if (pos >= 0) return filename.substring(0, pos);
         return "";
+    }
+
+    public static String getProjectRoot() {
+        Path currentRelativePath = Paths.get("");
+        String path = currentRelativePath.toAbsolutePath().toString();
+        path = path.substring(0, path.indexOf("Navigator"));
+        path += "Navigator/";
+        return path;
+    }
+
+    public static String getFileDir(File file) {
+        String path = file.getPath();
+        int pos = path.lastIndexOf("/");
+        if (pos >= 0) return path.substring(0, pos);
+        return "";
+    }
+
+    public static String packageNameToPath(String packageName) {
+        return packageName.replace(".", "/");
     }
 }

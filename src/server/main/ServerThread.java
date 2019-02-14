@@ -1,6 +1,6 @@
 package server.main;
 
-import server.api.main.ApiHandler;
+import server.api.ApiHandler;
 import server.util.FileLogger;
 import server.util.FileManager;
 import server.util.ServerHelper;
@@ -112,6 +112,7 @@ public class ServerThread extends Thread {
 
         // remove GET-parameters from filename
         if (!isPostRequest && request.get(0).contains("?")) {
+            param = wantedFile.substring(wantedFile.lastIndexOf("?"));
             path = wantedFile.substring(0, wantedFile.indexOf("?"));
         } else {
             path = wantedFile;
@@ -133,7 +134,6 @@ public class ServerThread extends Thread {
 
                 // append "/index.html" to URL and move GET-parameters after it
                 if (wantedFile.contains("?")) {
-                    param = wantedFile.substring(wantedFile.indexOf("?"));
                     wantedFile = wantedFile.substring(0, wantedFile.indexOf("?")) + "/index.html" + param;
                 }
             }
@@ -264,12 +264,21 @@ public class ServerThread extends Thread {
             //check if api handable
 
 
-            ApiHandler apiHandler = new ApiHandler();
-            String tmp;
+            ApiHandler apiHandler = new ApiHandler(webRoot);
+            String tmp = "";
             if (apiHandler.canHandle(file))
                 tmp = apiHandler.handle(file, param);
 
-            //TODO: file = tmp ?? file
+            FileLogger.syslog("tmp: " + tmp);
+
+            if (tmp != null && !tmp.equals("&nbsp;")) {
+                File fileFallback = file;
+                try {
+                    file = new File(webRoot, URLDecoder.decode(tmp, StandardCharsets.UTF_8)).getCanonicalFile();
+                } catch (IOException e) {
+                    file = fileFallback;
+                }
+            }
 
             //TODO: END API HANDLER
 
@@ -291,7 +300,8 @@ public class ServerThread extends Thread {
             // if contentType not predefined send as download stream
             String contentType = FileManager.getContentType(file);
             if (contentType == null) {
-                contentType = "application/octet-stream";
+                //contentType = "application/octet-stream";
+                contentType = "text/plain";
             }
 
             // send data and content

@@ -1,8 +1,8 @@
 package server.main;
 
+import server.util.FileManager;
+
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * The entry point for Script
@@ -25,11 +25,7 @@ public class WebMain {
         try {
             return args[1];
         } catch (IndexOutOfBoundsException e) {
-            Path currentRelativePath = Paths.get("");
-            String path = currentRelativePath.toAbsolutePath().toString();
-            path = path.substring(0, path.indexOf("Navigator"));
-            path += "Navigator/www/";
-            return path;
+            return FileManager.getProjectRoot() + "www/";
         }
     }
 
@@ -48,5 +44,6 @@ public class WebMain {
             return 8080;
         }
     }
+
 
 }
