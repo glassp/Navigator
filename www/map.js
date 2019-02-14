@@ -130,3 +130,19 @@ function mark(x, y, label) {
 function removeMarker(m) {
     m.remove();
 }
+
+function getRouteAjax() {
+    console.log("Not yet implementd");
+    //TODO
+}
+
+//////////////////////////////
+//   Click Event Listner   //
+document.addEventListener('DOMContentLoaded', initMap);
+html.addEventListener("DOMContentLoaded", "initMap");
+document.querySelector("#btnPopup").addEventListener('click', toggleShowCoordinates);
+document.querySelector("#btnSelectStart").addEventListener('click', toggleSelectStart);
+document.querySelector("#btnSelectDest").addEventListener('click', toggleSelectDest);
+
+//TODO add functionality for find Route Button
+document.querySelector("#bteFindRoute").addEventListener('click', getRouteAjax);

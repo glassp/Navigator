@@ -11,7 +11,7 @@
     <script defer="" src="map.js" type="text/javascript"></script>
     <title>Navigator</title>
 </head>
-<body onload=initMap()>
+<body>
     
     <h1>Navigator</h1>
     
@@ -22,12 +22,17 @@
 
 
     <!-- <button onclick="initMap()">Init Map Manually</button> -->
-    
-    <button onclick="toggleShowCoordinates()" id="btnPopup">Show Coordinates On Click</button>
+
+    <!--
+    removed onclick property for Content-Security-Policy compatibility
+    better use javascripts addEventListner function on DOMElement see map.js at Bottom
+    -->
+
+    <button id="btnPopup">Show Coordinates On Click</button>
     <p></p>
-    <button onclick="toggleSelectStart()" id="btnSelectStart">Select Starting Point</button>
-    <button onclick="toggleSelectDest()" id="btnSelectDest">Select Destination</button>
-    <button onclick="">Find Route</button>
+    <button id="btnSelectStart">Select Starting Point</button>
+    <button id="btnSelectDest">Select Destination</button>
+    <button id="btwFindRoute">Find Route</button>
     
 </body>
 </html>
