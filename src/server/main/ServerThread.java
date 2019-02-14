@@ -209,7 +209,7 @@ public class ServerThread extends Thread {
                     parentDirectory = "/";
                 }
 
-                content += "<tr><td class=\"center\"><div class=\"back\">&nbsp;</div></td>" +
+                content += "<tr><td class=\"center\"><img src=\".res/back.png\" alt=\"back\" height=\"20px\" width=\"20px\"></td>" +
                         "<td><a href=\"" + parentDirectory.replace(" ", "%20") + "\">Parent Directory</a></td>" +
                         "<td></td>" +
                         "<td></td></tr>";
@@ -228,10 +228,10 @@ public class ServerThread extends Thread {
                 //hide files and dirs that start with "." from listing.
                 if (!filename.startsWith(".")) {
                     if (myFile.isDirectory()) {
-                        img = "<div class=\"folder\">&nbsp;</div>";
+                        img = "<img src=\".res/folder.png\" alt=\"back\" height=\"20px\" width=\"20px\">";
                         fileSize = "";
                     } else {
-                        img = "<div class=\"file\">&nbsp;</div>";
+                        img = "<img src=\".res/file.png\" alt=\"back\" height=\"20px\" width=\"20px\">";
                     }
                     // build table entry
                     contentBuilder.append("<tr><td class=\"center\">").append(img).append("</td>").append("<td><a href=\"").append(path.replace(" ", "%20")).append("/").append(filename.replace(" ", "%20")).append("\">").append(filename).append("</a></td>").append("<td>").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(myFile.lastModified())).append("</td>").append("<td class=\"center\">").append(fileSize).append("</td></tr>");
