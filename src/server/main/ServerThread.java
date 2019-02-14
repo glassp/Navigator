@@ -261,18 +261,19 @@ public class ServerThread extends Thread {
             // access to file within webDir
 
             ApiHandler apiHandler = new ApiHandler(webRoot);
-            String tmp = "";
-            if (apiHandler.canHandle(file))
-                tmp = apiHandler.handle(file, param);
+            if (apiHandler.canHandle(file)) {
+                String tmp = apiHandler.handle(file, param);
 
-            FileLogger.syslog("tmp: " + tmp);
+                FileLogger.syslog("tmp: " + tmp);
 
-            if (tmp != null && !tmp.equals("&nbsp;")) {
-                File fileFallback = file;
-                try {
-                    file = new File(webRoot, URLDecoder.decode(tmp, StandardCharsets.UTF_8)).getCanonicalFile();
-                } catch (IOException e) {
-                    file = fileFallback;
+                if (tmp != null && !tmp.equals("&nbsp;")) {
+                    File tmpFile = null;
+                    try {
+                        tmpFile = new File(webRoot, URLDecoder.decode(tmp, StandardCharsets.UTF_8)).getCanonicalFile();
+                        file = tmpFile;
+                    } catch (IOException e) {
+                        //Ignore
+                    }
                 }
             }
 

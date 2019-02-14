@@ -139,7 +139,6 @@ function getRouteAjax() {
 //////////////////////////////
 //   Click Event Listner   //
 document.addEventListener('DOMContentLoaded', initMap);
-html.addEventListener("DOMContentLoaded", "initMap");
 document.querySelector("#btnPopup").addEventListener('click', toggleShowCoordinates);
 document.querySelector("#btnSelectStart").addEventListener('click', toggleSelectStart);
 document.querySelector("#btnSelectDest").addEventListener('click', toggleSelectDest);
