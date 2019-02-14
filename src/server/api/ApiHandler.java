@@ -13,16 +13,11 @@ public class ApiHandler {
     }
 
     public boolean canHandle(File file) {
-        return isApiFile(file) && hasApiResource(file);
+        return isApiFile(file);
     }
 
     private boolean isApiFile(File file) {
         return FileManager.getFileExtension(file).equals(".api");
-    }
-
-    private boolean hasApiResource(File file) {
-        String className = FileManager.getFileName(file);
-        return true;
     }
 
     public String handle(File file, String param) {

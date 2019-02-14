@@ -23,7 +23,7 @@ public class FileManager {
         mimeMap.put(".js", "text/js");
 
         mimeMap.put(".json", "text/json");
-        mimeMap.put(".api", "test/plain");
+        mimeMap.put(".api", "test/html");
         mimeMap.put(".txt", "text/plain");
         mimeMap.put(".log", "text/plain");
         mimeMap.put(".java", "text/plain");

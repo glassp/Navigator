@@ -20,7 +20,7 @@ public class TestResource extends ApiResource {
             if (args.length < 2)
                 return null;
             else {
-                return webRoot.getPath() + "ok.html";
+                return "./.ok.html";
             }
         } catch (Exception e) {
             e.printStackTrace();

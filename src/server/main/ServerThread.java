@@ -16,9 +16,9 @@ import java.util.Arrays;
 import java.util.Date;
 
 public class ServerThread extends Thread {
+    private boolean allowDirectoryListing;
     private Socket socket;
     private File webRoot;
-    private boolean allowDirectoryListing;
 
     /**
      * Constructor
@@ -329,30 +329,6 @@ public class ServerThread extends Thread {
     }
 
     /**
-     * Sends a HTTP 1.1 header
-     *
-     * @param out           used output stream
-     * @param code          HTTP Status-Code (e.g. 200)
-     * @param codeMessage   HTTP Status-Message of HTTP Status-Code (e.g. Ok)
-     * @param contentType   Content-Type Header
-     * @param contentLength Content-Length Header
-     * @param lastModified  Last modified Meta-Data (used for caching)
-     */
-    private void sendHeader(BufferedOutputStream out, int code, String codeMessage, String contentType, long contentLength, long lastModified) {
-        try {
-            out.write(("HTTP/1.1 " + code + " " + codeMessage + "\r\n" +
-                    "Date: " + new Date().toString() + "\r\n" +
-                    "Server: Marvins HTTP-Server\r\n" +
-                    "Content-Type: " + contentType + "; charset=utf-8\r\n" +
-                    ((contentLength != -1) ? "Content-Length: " + contentLength + "\r\n" : "") +
-                    "Last-modified: " + new Date(lastModified).toString() + "\r\n" +
-                    "\r\n").getBytes());
-        } catch (IOException e) {
-            FileLogger.exception(e.getMessage());
-        }
-    }
-
-    /**
      * Sends a Error Landing Page
      *
      * @param out     used output stream
@@ -374,6 +350,30 @@ public class ServerThread extends Thread {
 
             // close socket. No keep-alive.
             socket.close();
+        } catch (IOException e) {
+            FileLogger.exception(e.getMessage());
+        }
+    }
+
+    /**
+     * Sends a HTTP 1.1 header
+     *
+     * @param out           used output stream
+     * @param code          HTTP Status-Code (e.g. 200)
+     * @param codeMessage   HTTP Status-Message of HTTP Status-Code (e.g. Ok)
+     * @param contentType   Content-Type Header
+     * @param contentLength Content-Length Header
+     * @param lastModified  Last modified Meta-Data (used for caching)
+     */
+    private void sendHeader(BufferedOutputStream out, int code, String codeMessage, String contentType, long contentLength, long lastModified) {
+        try {
+            out.write(("HTTP/1.1 " + code + " " + codeMessage + "\r\n" +
+                    "Date: " + new Date().toString() + "\r\n" +
+                    "Server: Marvins HTTP-Server\r\n" +
+                    "Content-Type: " + contentType + "; charset=utf-8\r\n" +
+                    ((contentLength != -1) ? "Content-Length: " + contentLength + "\r\n" : "") +
+                    "Last-modified: " + new Date(lastModified).toString() + "\r\n" +
+                    "\r\n").getBytes());
         } catch (IOException e) {
             FileLogger.exception(e.getMessage());
         }
