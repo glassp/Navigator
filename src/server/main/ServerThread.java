@@ -260,10 +260,6 @@ public class ServerThread extends Thread {
         } else {
             // access to file within webDir
 
-            //TODO: API HANDLER
-            //check if api handable
-
-
             ApiHandler apiHandler = new ApiHandler(webRoot);
             String tmp = "";
             if (apiHandler.canHandle(file))
@@ -279,8 +275,6 @@ public class ServerThread extends Thread {
                     file = fileFallback;
                 }
             }
-
-            //TODO: END API HANDLER
 
             // initialize InputStream
             InputStream reader = null;

@@ -22,6 +22,8 @@ public class ApiHandler {
 
     public String handle(File file, String param) {
         String className = FileManager.getFileName(file);
+        if (className.startsWith("."))
+            className = className.substring(1);
         JavaClassLoader classLoader = new JavaClassLoader();
         Object instance = classLoader.getInstance(className, webRoot);
 
