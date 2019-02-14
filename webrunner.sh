@@ -1,12 +1,6 @@
-#check param for .fmi
-#start server
-#attach Main to server
-#have it run import graph
-#output all points as geoJson into ./bin/out
-#attach index.html to server
+#have it run import graph (WebMain.java)
+#output all points as geoJson into WEBROOT as geo.json
 #forward click/form-submit events to Graph as Query
-#keep running until terminal input "quit" or system.exit(...)
-#stop server
 
 #!/bin/bash
 echo -n "Checking for dependencies..."

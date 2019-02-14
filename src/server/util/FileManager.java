@@ -20,6 +20,7 @@ public class FileManager {
         mimeMap.put(".css", "text/css");
         mimeMap.put(".js", "text/js");
 
+        mimeMap.put(".json", "text/json");
         mimeMap.put(".txt", "text/plain");
         mimeMap.put(".log", "text/plain");
         mimeMap.put(".java", "text/plain");
@@ -58,10 +59,17 @@ public class FileManager {
      * @param file the file in question
      * @return file extension of file
      */
-    private static String getFileExtension(File file) {
+    public static String getFileExtension(File file) {
         String filename = file.getName();
         int pos = filename.lastIndexOf(".");
         if (pos >= 0) return filename.substring(pos).toLowerCase();
+        return "";
+    }
+
+    public static String getFileName(File file) {
+        String filename = file.getName();
+        int pos = filename.lastIndexOf(".");
+        if (pos >= 0) return filename.substring(0, pos).toLowerCase();
         return "";
     }
 }

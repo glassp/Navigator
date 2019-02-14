@@ -1,5 +1,6 @@
 package server.main;
 
+import server.api.main.ApiHandler;
 import server.util.FileLogger;
 import server.util.FileManager;
 import server.util.ServerHelper;
@@ -103,6 +104,7 @@ public class ServerThread extends Thread {
         String wantedFile;
         String path;
         File file;
+        String param = "";
 
         // check filename
         wantedFile = request.get(0).substring(4, request.get(0).length() - 9);
@@ -124,14 +126,15 @@ public class ServerThread extends Thread {
         }
 
         // check if dir should be accessed and redirect to index.html
-        if (file.isDirectory()) {
+        if (file.isDirectory() && !allowDirectoryListing) {
             File indexFile = new File(file, "index.html");
-            if (indexFile.exists() && !indexFile.isDirectory() && !allowDirectoryListing) {
+            if (indexFile.exists() && !indexFile.isDirectory()) {
                 file = indexFile;
 
                 // append "/index.html" to URL and move GET-parameters after it
                 if (wantedFile.contains("?")) {
-                    wantedFile = wantedFile.substring(0, wantedFile.indexOf("?")) + "/index.html" + wantedFile.substring(wantedFile.indexOf("?"));
+                    param = wantedFile.substring(wantedFile.indexOf("?"));
+                    wantedFile = wantedFile.substring(0, wantedFile.indexOf("?")) + "/index.html" + param;
                 }
             }
         }
@@ -160,6 +163,7 @@ public class ServerThread extends Thread {
                 sendError(out, 403, "Forbidden");
                 FileLogger.error(403, wantedFile, socket.getInetAddress().toString());
                 return;
+
             }
 
             // replace "%20" spaces with real spaces
@@ -220,15 +224,20 @@ public class ServerThread extends Thread {
                 String filename = myFile.getName();
                 String img;
                 String fileSize = FileManager.getReadableFileSize(myFile.length());
-                if (myFile.isDirectory()) {
-                    img = "<div class=\"folder\">&nbsp;</div>";
-                    fileSize = "";
-                } else {
-                    img = "<div class=\"file\">&nbsp;</div>";
+
+                //hide files and dirs that start with "." from listing.
+                if (!filename.startsWith(".")) {
+                    if (myFile.isDirectory()) {
+                        img = "<div class=\"folder\">&nbsp;</div>";
+                        fileSize = "";
+                    } else {
+                        img = "<div class=\"file\">&nbsp;</div>";
+                    }
+                    // build table entry
+                    contentBuilder.append("<tr><td class=\"center\">").append(img).append("</td>").append("<td><a href=\"").append(path.replace(" ", "%20")).append("/").append(filename.replace(" ", "%20")).append("\">").append(filename).append("</a></td>").append("<td>").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(myFile.lastModified())).append("</td>").append("<td class=\"center\">").append(fileSize).append("</td></tr>");
+
                 }
 
-                // build table entry
-                contentBuilder.append("<tr><td class=\"center\">").append(img).append("</td>").append("<td><a href=\"").append(path.replace(" ", "%20")).append("/").append(filename.replace(" ", "%20")).append("\">").append(filename).append("</a></td>").append("<td>").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(myFile.lastModified())).append("</td>").append("<td class=\"center\">").append(fileSize).append("</td></tr>");
             }
             content = contentBuilder.toString();
 
@@ -250,6 +259,19 @@ public class ServerThread extends Thread {
             }
         } else {
             // access to file within webDir
+
+            //TODO: API HANDLER
+            //check if api handable
+
+
+            ApiHandler apiHandler = new ApiHandler();
+            String tmp;
+            if (apiHandler.canHandle(file))
+                tmp = apiHandler.handle(file, param);
+
+            //TODO: file = tmp ?? file
+
+            //TODO: END API HANDLER
 
             // initialize InputStream
             InputStream reader = null;
