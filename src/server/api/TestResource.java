@@ -13,18 +13,6 @@ public class TestResource extends ApiResource {
     @Override
     public String run(String arg) {
         FileLogger.syslog("TestResource did run");
-        try {
-            String[] args = arg.split("&");
-            FileLogger.syslog("" + args.length);
-            FileLogger.syslog(args[0]);
-            if (args.length < 2)
-                return null;
-            else {
-                return "./.ok.html";
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return "./.ok.html";
     }
 }

@@ -369,7 +369,7 @@ public class ServerThread extends Thread {
         try {
             out.write(("HTTP/1.1 " + code + " " + codeMessage + "\r\n" +
                     "Date: " + new Date().toString() + "\r\n" +
-                    "Server: Marvins HTTP-Server\r\n" +
+                    "Server: HTTP-Server\r\n" +
                     "Content-Type: " + contentType + "; charset=utf-8\r\n" +
                     ((contentLength != -1) ? "Content-Length: " + contentLength + "\r\n" : "") +
                     "Last-modified: " + new Date(lastModified).toString() + "\r\n" +
