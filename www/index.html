@@ -11,9 +11,23 @@
     <script defer="" src="map.js" type="text/javascript"></script>
     <title>Navigator</title>
 </head>
-<body>
-I am Index
-<div id="map"></div>
+<body onload=initMap()>
+    
+    <h1>Navigator</h1>
+    
+    <div id="map"></div>
+    
+    
+    <p id="helperLine"></p>
 
+
+    <!-- <button onclick="initMap()">Init Map Manually</button> -->
+    
+    <button onclick="toggleShowCoordinates()" id="btnPopup">Show Coordinates On Click</button>
+    <p></p>
+    <button onclick="toggleSelectStart()" id="btnSelectStart">Select Starting Point</button>
+    <button onclick="toggleSelectDest()" id="btnSelectDest">Select Destination</button>
+    <button onclick="">Find Route</button>
+    
 </body>
 </html>
