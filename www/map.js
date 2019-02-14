@@ -1,33 +1,132 @@
-//TODO: init map
+//Implemented:
+//init map
+//function mark(x,y) to set Markers at Point(lat:x,long:y)
+//handleClick(e) -> Snackbar("You clicked at e.lat, e.long")
+//addEventlistner DOMContentLoader->init, click->handleClick
+
 //TODO: load GeoJson via AJAX
-//TODO: function mark(x,y) to set Markers at Point(lat:x,long:y)
-//TODO: handleClick(e) -> Snackbar("You clicked at e.lat, e.long")
-//TODO: addEventlistner DOMContentLoader->init, click->handleClick
 //TODO: function getRoute(startLat, startLong, destLat, destLong) and helper functions
 
+var mapVar;
+var popupVar;
 
-// Init map
+var start;
+var dest;
+var startMarker;
+var destMarker;
 
-// uing default lat/lon for Uni Stuttgart, IT building
-// 48.7451 9.1067
-
+var selectStart = false;
+var selectDest = false;
+var showCoordinates = false;
 
 function initMap() {
-    document.getElementById('helperLine').innerHTML = 'Initializing map now.';    
-    var mapVar = L.map('map', {
+    // Init map to lat/lon for Uni Stuttgart, IT building
+    // 48.7451, 9.1067
+    
+    mapVar = L.map('map', {
         center: [48.7451, 9.1067],
         zoom: 15
     });
     
-    // .setView([48.7451, 9.1067], 12) alternatively, as used in quick start guide
-
-    
-    // using Open Street Map tiles.
+        
+    // use Open Street Map tiles for map
     L.tileLayer( 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         subdomains: ['a', 'b', 'c']
     }).addTo( mapVar );
 
-    document.getElementById('helperLine').innerHTML='Map initialization successfull.';
-
+    // Activate Listener
+    mapVar.on('click', onMapClick); 
+    
+    document.getElementById('helperLine').innerHTML="";
 } 
+
+
+function onMapClick(e) {
+    if (showCoordinates) {
+         popupVar = L.popup()
+        .setLatLng(e.latlng)
+        .setContent("You clicked at<br>Latitude: " + e.latlng.lat + "<br>Longitude: "+ e.latlng.lng)
+        .openOn(mapVar);   
+    }
+    
+    if (selectStart) {
+        if (startMarker != undefined) {
+            removeMarker(startMarker);
+        }
+        start = e;
+        startMarker = mark(e.latlng.lat, e.latlng.lng, "Start - ");
+    }
+    
+    if (selectDest) {
+        if (destMarker != undefined) {
+            removeMarker(destMarker);
+        }
+        dest = e;
+        destMarker = mark(e.latlng.lat, e.latlng.lng, "Destination - ");
+    }
+}
+
+function toggleShowCoordinates(){
+    if (showCoordinates) {
+        showCoordinates = false;
+        document.getElementById('btnPopup').innerHTML= "Show Coordinates On Click";
+    }
+    else {
+        showCoordinates = true;
+        document.getElementById('btnPopup').innerHTML= "Stop Showing Coordinates On Click";
+    }
+}
+
+function toggleSelectStart(){
+    if (selectDest) {return}
+    
+    if (selectStart) {
+        selectStart = false;
+        document.getElementById('btnSelectStart').innerHTML= "Select Starting Point";
+    }
+    else {
+        selectStart = true;
+        document.getElementById('btnSelectStart').innerHTML= "Finish Start Selection";
+    }
+}
+
+function toggleSelectDest(){
+    if (selectStart) {return}
+    
+    if (selectDest) {
+        selectDest = false;
+        document.getElementById('btnSelectDest').innerHTML= "Select Destination";
+    }
+    else {
+        selectDest = true;
+        document.getElementById('btnSelectDest').innerHTML= "Finish Destination Selection";
+    }
+}
+//    if (mapVar.listens('click')) {
+//        mapVar.off('click', onMapClick); 
+//        document.getElementById('btnPopup').innerHTML= "Show Coordinates On Click";
+//    }
+//    else {
+//        mapVar.on('click', onMapClick); 
+//        document.getElementById('btnPopup').innerHTML= "Stop Showing Coordinates On Click";
+//    }
+//}
+
+
+function mark(x, y, label) {
+    if (label === undefined) { label = ""}
+    
+    var marker = L.marker([x,y]).addTo(mapVar);
+    marker.bindPopup(label + "Marker Position: <br> Latitude: " + x + "<br>Longitude: " + y);
+    return marker;
+}
+
+function removeMarker(m) {
+    m.remove();
+}
+
+
+function selectStart(){
+    
+}
