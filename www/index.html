@@ -12,7 +12,27 @@
     <title>Navigator</title>
 </head>
 <body>
-<div id="map"></div>
+    
+    <h1>Navigator</h1>
+    
+    <div id="map"></div>
+    
+    
+    <p id="helperLine"></p>
 
+
+    <!-- <button onclick="initMap()">Init Map Manually</button> -->
+
+    <!--
+    removed onclick property for Content-Security-Policy compatibility
+    better use javascripts addEventListner function on DOMElement see map.js at Bottom
+    -->
+
+    <button id="btnPopup">Show Coordinates On Click</button>
+    <p></p>
+    <button id="btnSelectStart">Select Starting Point</button>
+    <button id="btnSelectDest">Select Destination</button>
+    <button id="btwFindRoute">Find Route</button>
+    
 </body>
 </html>

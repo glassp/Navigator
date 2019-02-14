@@ -1,12 +1,6 @@
-#check param for .fmi
-#start server
-#attach Main to server
-#have it run import graph
-#output all points as geoJson into ./bin/out
-#attach index.html to server
+#have it run import graph (WebMain.java)
+#output all points as geoJson into WEBROOT as geo.json
 #forward click/form-submit events to Graph as Query
-#keep running until terminal input "quit" or system.exit(...)
-#stop server
 
 #!/bin/bash
 echo -n "Checking for dependencies..."
@@ -38,12 +32,16 @@ mkdir ./bin/out
 javac ./src/main/*.java -d ./bin/
 javac ./src/server/*/*.java -d ./bin/
 
+
+
 #if param 1 empty exit
 if [[ -z $1 ]]; then
-echo -e "\nPlease call $0 <arg1> to run this command!\n"
+echo -e "\nPlease call $0 <arg1> [OPTIONAL: <arg2>] to run this command!\n"
 sleep 3s
 exit 1;
 fi
 
 #run main(arg1, arg2, arg3)
-java -cp ./bin/ server/main/WebMain ${1}
+java -cp ./bin/ server/main/WebMain ${1} ${2} ${3}
+
+sleep 3s;
