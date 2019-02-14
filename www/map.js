@@ -52,7 +52,7 @@ function onMapClick(e) {
     }
     
     if (selectStart) {
-        if (startMarker != undefined) {
+        if (startMarker !== undefined) {
             removeMarker(startMarker);
         }
         start = e;
@@ -62,7 +62,7 @@ function onMapClick(e) {
     }
     
     if (selectDest) {
-        if (destMarker != undefined) {
+        if (destMarker !== undefined) {
             removeMarker(destMarker);
         }
         dest = e;
