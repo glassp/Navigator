@@ -144,4 +144,4 @@ document.querySelector("#btnSelectStart").addEventListener('click', toggleSelect
 document.querySelector("#btnSelectDest").addEventListener('click', toggleSelectDest);
 
 //TODO add functionality for find Route Button
-document.querySelector("#bteFindRoute").addEventListener('click', getRouteAjax);
+document.querySelector("#btnFindRoute").addEventListener('click', getRouteAjax);
