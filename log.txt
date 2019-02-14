@@ -53,3 +53,74 @@
 [2019-02-13 19:52:56] [EXC] Read timed out
 [2019-02-13 19:53:04] [EXC] Read timed out
 [2019-02-13 19:53:04] [EXC] Read timed out
+[2019-02-14 10:34:54] [SYS] Starting server...
+[2019-02-14 10:34:55] [EXC] Address already in use (Bind failed)
+[2019-02-14 10:34:55] [EXC] Terminating...
+[2019-02-14 10:36:02] [SYS] Starting server...
+[2019-02-14 10:36:02] [EXC] Address already in use (Bind failed)
+[2019-02-14 10:36:02] [EXC] Terminating...
+[2019-02-14 10:37:16] [SYS] Starting server...
+[2019-02-14 10:37:17] [EXC] Address already in use (Bind failed)
+[2019-02-14 10:37:17] [EXC] Terminating...
+[2019-02-14 10:37:35] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 10:38:05] [EXC] Read timed out
+[2019-02-14 10:38:05] [EXC] Read timed out
+[2019-02-14 10:45:03] [SYS] Starting server...
+[2019-02-14 10:45:19] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 10:45:49] [EXC] Read timed out
+[2019-02-14 10:48:45] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 10:49:15] [EXC] Read timed out
+[2019-02-14 10:49:42] [SYS] Starting server...
+[2019-02-14 10:49:42] [SYS] Server is ready to use. Check the above URL to access
+[2019-02-14 10:50:01] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 10:50:23] [SYS] Starting server...
+[2019-02-14 10:50:23] [SYS] Server is ready to use. Check the above URL to access
+[2019-02-14 10:50:26] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 10:50:28] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 10:50:29] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 10:50:30] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 10:51:00] [EXC] Read timed out
+[2019-02-14 10:51:43] [SYS] Starting server...
+[2019-02-14 10:51:43] [SYS] Server is ready to use. Check the above URL to access
+[2019-02-14 10:51:48] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 10:51:48] [200] [0:0:0:0:0:0:0:1] /stylesheet.css
+[2019-02-14 10:51:48] [200] [0:0:0:0:0:0:0:1] /map.js
+[2019-02-14 10:58:06] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 10:58:08] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 10:58:09] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 10:58:39] [EXC] Read timed out
+[2019-02-14 10:58:39] [EXC] Read timed out
+[2019-02-14 11:07:02] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 11:07:32] [EXC] Read timed out
+[2019-02-14 11:08:14] [SYS] Starting server...
+[2019-02-14 11:08:14] [SYS] Server is ready to use. Check the above URL to access
+[2019-02-14 11:08:18] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 11:08:48] [EXC] Read timed out
+[2019-02-14 11:10:21] [403] [0:0:0:0:0:0:0:1] /test
+[2019-02-14 11:10:56] [SYS] Starting server...
+[2019-02-14 11:10:56] [SYS] Server is ready to use. Check the above URL to access
+[2019-02-14 11:10:56] [403] [0:0:0:0:0:0:0:1] /test/
+[2019-02-14 11:11:26] [EXC] Read timed out
+[2019-02-14 11:11:35] [403] [0:0:0:0:0:0:0:1] /test/
+[2019-02-14 11:11:41] [200] [0:0:0:0:0:0:0:1] /test/bla.html
+[2019-02-14 11:12:02] [EXC] The request was empty
+[2019-02-14 11:12:02] [200] [0:0:0:0:0:0:0:1] /test/bla.html
+[2019-02-14 11:12:32] [EXC] Read timed out
+[2019-02-14 11:13:40] [200] [0:0:0:0:0:0:0:1] /test/bla.html
+[2019-02-14 11:13:43] [403] [0:0:0:0:0:0:0:1] /test
+[2019-02-14 11:14:13] [EXC] Read timed out
+[2019-02-14 11:14:16] [EXC] Read timed out
+[2019-02-14 11:15:13] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 11:15:48] [SYS] Starting server...
+[2019-02-14 11:15:48] [SYS] Server is ready to use. Check the above URL to access
+[2019-02-14 11:15:55] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 11:15:57] [200] [0:0:0:0:0:0:0:1] /test/
+[2019-02-14 11:16:01] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 12:13:05] [SYS] Starting server...
+[2019-02-14 12:13:05] [SYS] Server is ready to use. Check the above URL to access
+[2019-02-14 12:13:27] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 12:13:57] [EXC] Read timed out
+[2019-02-14 12:15:24] [SYS] Starting server...
+[2019-02-14 12:15:24] [SYS] Server is ready to use. Check the above URL to access
+[2019-02-14 12:41:09] [200] [0:0:0:0:0:0:0:1] /
+[2019-02-14 12:41:39] [EXC] Read timed out

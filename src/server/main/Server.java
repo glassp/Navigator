@@ -66,7 +66,7 @@ public class Server {
             FileLogger.exception("Terminating...");
             System.exit(1);
         }
-
+        FileLogger.syslog("Server is ready to use. Check the above URL to access");
         // thread awaits incoming connection and 'redirects' it to ServerThread instance
         final ServerSocket finalSocket = socket;
         Thread connectionListener = new Thread(() -> {
