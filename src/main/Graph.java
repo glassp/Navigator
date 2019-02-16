@@ -527,4 +527,62 @@ public class Graph extends CLILogger {
     public int getNodesCount() {
         return this.distance.length;
     }
+    
+    /**
+     * Returns the node in this graph that is the closest to the given coordinates.
+     * 
+     * @param latitide	latitude in degrees
+     * @param longitude	longitude in degrees
+     * @return	node as an integer number between 0 and getNodesCount()
+     */
+    public int getClosestNode(double latitide, double longitude) {
+    	
+    	int tempNode = 0;
+    	double tempDist = getGeoDistance(latitide, longitude, this.getLatitude(0), this.getLongitude(0));
+    	double tempDist2;
+    	
+    	for (int i = 1; i < latitude.length; i++) {
+			tempDist2 = getGeoDistance(latitide, longitude, this.getLatitude(i), this.getLongitude(i));
+			
+			if (tempDist2 < tempDist) {
+				tempDist = tempDist2;
+				tempNode = i;
+			}
+		}
+    	
+    	return tempNode;
+    }
+    
+    /**
+     * Calculates rough distance in m between two points on earth given as latitude and longitude.
+     * 
+     * This is a helper method for getClosestNode() in the Graph class.
+     * 
+     * @param lat1 Latitude of point 1
+     * @param lng1 Longitude of point 1
+     * @param lat2 Latitude of point 2
+     * @param lng2 Longitude of point 2
+     * @return distance in meters as double
+     */
+    public static double getGeoDistance(double lat1, double lng1, double lat2, double lng2) {
+    	
+    	// Using approximation - might even be good enough to interpret lat/lng as 2D coordinates, especially when limited to positive values on the Germany map
+    	// but haversine formula gives more accurate approximation relatively cheaply
+    	
+    	double deltaLat = Math.toRadians(lat2 - lat1);
+    	double deltaLng = Math.toRadians(lng2 - lng1);
+    	lat1 = Math.toRadians(lat1);
+    	lat2 = Math.toRadians(lat2);
+    	
+    	double a = Math.sin(deltaLat/2) * Math.sin(deltaLat/2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLng/2) * Math.sin(deltaLng/2);
+    	double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    	// use 6371000 as  earth radius assuming perfect sphere
+    	double dist = 6371000 * c;  
+    	
+    	
+    	return dist;
+    }
+    
+    
 }
