@@ -163,7 +163,7 @@ public class Graph extends CLILogger {
      * @param node the node
      * @return the latitude
      */
-    double getLatitude(int node) {
+    public double getLatitude(int node) {
         return this.latitude[node];
     }
 
@@ -173,7 +173,7 @@ public class Graph extends CLILogger {
      * @param node the node
      * @return the longitude
      */
-    double getLongitude(int node) {
+    public double getLongitude(int node) {
         return this.longitude[node];
     }
 
@@ -526,6 +526,14 @@ public class Graph extends CLILogger {
      */
     public int getNodesCount() {
         return this.distance.length;
+    }
+    
+    /**
+     * returns most recently set starting node for this graph, which is the start of a route when running Dijkstra
+     * @return start as integer between 0 and getNodesCount()
+     */
+    public int getStartingNode() {
+    	return start;
     }
     
     /**
