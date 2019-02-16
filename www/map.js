@@ -119,6 +119,17 @@ function toggleSelectDest(){
 //}
 
 
+function getRouteAjax() {
+    console.log("Not yet implementd");
+    
+    //var contentGeoJ = jQuery.getJSON("geoTest.JSON", displayGeo(contentGeoJ));
+}
+function displayGeo(paramGe) {
+    L.geoJSON(paramGe).addTo(mapVar);
+}
+
+
+
 function mark(x, y, label) {
     if (label === undefined) { label = ""}
     
@@ -131,10 +142,6 @@ function removeMarker(m) {
     m.remove();
 }
 
-function getRouteAjax() {
-    console.log("Not yet implementd");
-    //TODO
-}
 
 //////////////////////////////
 //   Click Event Listner   //
