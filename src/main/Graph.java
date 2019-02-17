@@ -591,6 +591,27 @@ public class Graph extends CLILogger {
     	
     	return dist;
     }
-    
-    
+
+    public double[] getLatitude() {
+        return latitude;
+    }
+
+    public double[] getLongitude() {
+        return longitude;
+    }
+
+    /**
+     * Returns node for given geoLocations
+     *
+     * @param latitude  The latitude
+     * @param longitude The longitude
+     * @return The node number or -1
+     */
+    public int getNode(double latitude, double longitude) {
+        for (int i = 0; i < this.latitude.length; i++) {
+            if (this.latitude[i] == latitude && this.longitude[i] == longitude)
+                return i;
+        }
+        return -1;
+    }
 }

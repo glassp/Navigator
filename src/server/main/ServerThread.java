@@ -1,5 +1,6 @@
 package server.main;
 
+import main.Graph;
 import server.api.ApiHandler;
 import server.util.FileLogger;
 import server.util.FileManager;
@@ -19,6 +20,7 @@ public class ServerThread extends Thread {
     private boolean allowDirectoryListing;
     private Socket socket;
     private File webRoot;
+    private Graph graph;
 
     /**
      * Constructor
@@ -27,10 +29,11 @@ public class ServerThread extends Thread {
      * @param webRoot               path to webRoot dir
      * @param allowDirectoryListing if fileListing should be allowed
      */
-    ServerThread(Socket socket, File webRoot, boolean allowDirectoryListing) {
+    ServerThread(Socket socket, File webRoot, boolean allowDirectoryListing, Graph graph) {
         this.socket = socket;
         this.webRoot = webRoot;
         this.allowDirectoryListing = allowDirectoryListing;
+        this.graph = graph;
     }
 
     /**
@@ -228,10 +231,10 @@ public class ServerThread extends Thread {
                 //hide files and dirs that start with "." from listing.
                 if (!filename.startsWith(".")) {
                     if (myFile.isDirectory()) {
-                        img = "<img src=\".res/folder.png\" alt=\"back\" height=\"20px\" width=\"20px\">";
+                        img = "<img src=\".res/folder.png\" alt=\"folder\" height=\"20px\" width=\"20px\">";
                         fileSize = "";
                     } else {
-                        img = "<img src=\".res/file.png\" alt=\"back\" height=\"20px\" width=\"20px\">";
+                        img = "<img src=\".res/file.png\" alt=\"file\" height=\"20px\" width=\"20px\">";
                     }
                     // build table entry
                     contentBuilder.append("<tr><td class=\"center\">").append(img).append("</td>").append("<td><a href=\"").append(path.replace(" ", "%20")).append("/").append(filename.replace(" ", "%20")).append("\">").append(filename).append("</a></td>").append("<td>").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(myFile.lastModified())).append("</td>").append("<td class=\"center\">").append(fileSize).append("</td></tr>");
@@ -260,7 +263,7 @@ public class ServerThread extends Thread {
         } else {
             // access to file within webDir
 
-            ApiHandler apiHandler = new ApiHandler(webRoot);
+            ApiHandler apiHandler = new ApiHandler(webRoot, graph);
             if (apiHandler.canHandle(file)) {
                 String tmp = apiHandler.handle(file, param);
 

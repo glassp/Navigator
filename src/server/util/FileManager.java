@@ -1,6 +1,9 @@
 package server.util;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
@@ -93,5 +96,26 @@ public class FileManager {
 
     public static String packageNameToPath(String packageName) {
         return packageName.replace(".", "/");
+    }
+
+    public static void file_put_contents(File path, String data) {
+        path.delete();
+        if (!path.exists()) {
+            try {
+                if (!path.createNewFile()) {
+                    throw new IOException("Could not create File.");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            PrintWriter printWriter = new PrintWriter(new FileOutputStream(path));
+            printWriter.flush();
+            printWriter.append(data).append("\r\n");
+            printWriter.close();
+        } catch (IOException e) {
+            //ignored
+        }
     }
 }
