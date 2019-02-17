@@ -23,6 +23,7 @@ public class WebMain {
             graph = new IOHandler().importGraph(initFmiPath(args));
         } catch (FileNotFoundException e) {
             FileLogger.syslog("The file was not found. Cannot start Server");
+            System.exit(1);
             return;
         }
         new Server(initPort(args), new File(initWebRoot(args)), true, new File("log.txt"), graph);

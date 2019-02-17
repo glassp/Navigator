@@ -48,11 +48,11 @@ public class PathResource extends ApiResource {
 
                 String fname = graph.hashCode() + "-" + start + "-" + dest + ".json";
 
-                File file = new File(webRoot + fname);
+                File file = new File(webRoot + "/.build/" + fname);
 
                 FileManager.file_put_contents(file, json);
 
-                return "./" + fname;
+                return file.getCanonicalPath();
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -28,11 +28,11 @@ public class PointsResource extends ApiResource {
 
             String fname = graph.hashCode() + "-points.json";
 
-            File file = new File(webRoot + fname);
+            File file = new File(webRoot + "/.build/" + fname);
 
             FileManager.file_put_contents(file, json);
 
-            return "./" + fname;
+            return "/.build/" + fname;
 
         } catch (Exception e) {
             e.printStackTrace();

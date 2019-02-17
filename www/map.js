@@ -121,8 +121,10 @@ function toggleSelectDest(){
 
 function getRouteAjax() {
     console.log("Not yet implementd");
-    
-    //var contentGeoJ = jQuery.getJSON("geoTest.JSON", displayGeo(contentGeoJ));
+
+    //Hope this works via jQuery else we have to use pure JS
+    var contentGeoJ = jQuery.getJSON(".server.api.PathResource.api", displayGeo(contentGeoJ));
+    console.log(contentGeoJ);
 }
 function displayGeo(paramGe) {
     L.geoJSON(paramGe).addTo(mapVar);
