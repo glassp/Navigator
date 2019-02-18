@@ -1,4 +1,21 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
 #map {
     height: 600px;
     width: 1500px;
+}
+
+.red p {
+    color: red;
+}
+
+.red button {
+    background-color: red;
+    font-size: 14pt;
+}
+
+.greenn p {
+    color: green;
 }

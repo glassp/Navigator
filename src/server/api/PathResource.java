@@ -20,29 +20,34 @@ public class PathResource extends ApiResource {
         FileLogger.syslog("PathResource did run");
         try {
             String[] args = arg.split("&");
-            if (args.length < 4)
+            if (args.length < 4) {
+
+                FileLogger.exception("Too few Arguments supplied.");
                 return null;
-            else {
-                double startLat = Double.parseDouble(args[0]);
-                double startLong = Double.parseDouble(args[1]);
-                double destLat = Double.parseDouble(args[2]);
-                double destLong = Double.parseDouble(args[3]);
+            } else {
+                double startLat = Double.parseDouble(args[0].split("=")[1]);
+                double startLong = Double.parseDouble(args[1].split("=")[1]);
+                double destLat = Double.parseDouble(args[2].split("=")[1]);
+                double destLong = Double.parseDouble(args[3].split("=")[1]);
 
                 int start = graph.getNode(startLat, startLong);
                 int dest = graph.getNode(destLat, destLong);
 
-                if (start < 0 || dest < 0)
-                    return null;
+                if (start < 0 || dest < 0) {
+                    start = graph.getClosestNode(startLat, startLong);
+                    dest = graph.getClosestNode(destLat, destLong);
+                }
 
                 graph.runQuery(start, dest);
 
+                //TODO: bugfix: get Path will output a empty geoJson
                 int temp = dest;
-                GeoJsonBuilder builder = new GeoJsonBuilder();
+                GeoJsonBuilder builder = new GeoJsonBuilder(GeoJsonBuilder.LINE_STRING);
 
-                while (temp != graph.getStartingNode()) {
+                do {
                     builder.addGeo(graph.getLatitude(temp), graph.getLongitude(temp));
                     temp = graph.getPredecessor(temp);
-                }
+                } while (temp != graph.getStartingNode() && temp >= 0);
 
                 String json = builder.build();
 
@@ -52,7 +57,7 @@ public class PathResource extends ApiResource {
 
                 FileManager.file_put_contents(file, json);
 
-                return file.getCanonicalPath();
+                return "/.build/" + fname;
             }
         } catch (Exception e) {
             e.printStackTrace();

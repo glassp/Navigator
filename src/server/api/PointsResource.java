@@ -24,7 +24,7 @@ public class PointsResource extends ApiResource {
             double[] latitudes = graph.getLatitude();
             double[] longitudes = graph.getLongitude();
 
-            String json = GeoJsonBuilder.run(latitudes, longitudes);
+            String json = GeoJsonBuilder.run(latitudes, longitudes, GeoJsonBuilder.POINT);
 
             String fname = graph.hashCode() + "-points.json";
 

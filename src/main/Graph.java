@@ -164,7 +164,11 @@ public class Graph extends CLILogger {
      * @return the latitude
      */
     public double getLatitude(int node) {
-        return this.latitude[node];
+        try {
+            return this.latitude[node];
+        } catch (IndexOutOfBoundsException e) {
+            return 0;
+        }
     }
 
     /**
@@ -174,7 +178,11 @@ public class Graph extends CLILogger {
      * @return the longitude
      */
     public double getLongitude(int node) {
-        return this.longitude[node];
+        try {
+            return this.longitude[node];
+        } catch (IndexOutOfBoundsException e) {
+            return 0;
+        }
     }
 
     /**

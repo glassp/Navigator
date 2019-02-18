@@ -115,7 +115,7 @@ public class ServerThread extends Thread {
 
         // remove GET-parameters from filename
         if (!isPostRequest && request.get(0).contains("?")) {
-            param = wantedFile.substring(wantedFile.lastIndexOf("?"));
+            param = wantedFile.substring(wantedFile.indexOf("?"));
             path = wantedFile.substring(0, wantedFile.indexOf("?"));
         } else {
             path = wantedFile;
@@ -270,7 +270,7 @@ public class ServerThread extends Thread {
                 FileLogger.syslog("tmp: " + tmp);
 
                 if (tmp != null && !tmp.equals("&nbsp;")) {
-                    File tmpFile = null;
+                    File tmpFile;
                     try {
                         tmpFile = new File(webRoot, URLDecoder.decode(tmp, StandardCharsets.UTF_8)).getCanonicalFile();
                         file = tmpFile;

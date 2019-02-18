@@ -21,8 +21,12 @@ public class WebMain {
         Graph graph;
         try {
             graph = new IOHandler().importGraph(initFmiPath(args));
-        } catch (FileNotFoundException e) {
+        } catch (NullPointerException | FileNotFoundException e) {
             FileLogger.syslog("The file was not found. Cannot start Server");
+            System.exit(1);
+            return;
+        } catch (IllegalArgumentException e) {
+            FileLogger.syslog("Cannot start Server.\r\n" + e.getMessage());
             System.exit(1);
             return;
         }

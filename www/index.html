@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link href="stylesheet.css" rel="stylesheet" type="text/css">
     <link crossorigin="" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
           integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
@@ -34,6 +34,10 @@
     <button id="btnSelectStart">Select Starting Point</button>
     <button id="btnSelectDest">Select Destination</button>
     <button id="btnFindRoute">Find Route</button>
+    <div class="red">
+        <p>The following Function can crush the site if your Graph is very big. Use at own risk:</p>
+        <button id="btnShowPoints">Show Graph Points</button>
+    </div>
     
 </body>
 </html>

@@ -2,5 +2,6 @@
 *.sol
 *.que
 /bin/
+/res/
 *.core.prefs
 .classpath
