@@ -217,4 +217,3 @@ document.querySelector("#btnSelectStart").addEventListener('click', toggleSelect
 document.querySelector("#btnSelectDest").addEventListener('click', toggleSelectDest);
 
 document.querySelector("#btnFindRoute").addEventListener('click', getRouteAjax);
-document.querySelector("#btnShowPoints").addEventListener('click', showGraphPoints);
