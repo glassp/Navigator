@@ -108,26 +108,21 @@ function toggleSelectDest(){
         document.getElementById('btnSelectDest').innerHTML= "Cancel Destination Selection";
     }
 }
-//    if (mapVar.listens('click')) {
-//        mapVar.off('click', onMapClick); 
-//        document.getElementById('btnPopup').innerHTML= "Show Coordinates On Click";
-//    }
-//    else {
-//        mapVar.on('click', onMapClick); 
-//        document.getElementById('btnPopup').innerHTML= "Stop Showing Coordinates On Click";
-//    }
-//}
 
 
 function getRouteAjax() {
     console.log("Not yet implementd");
 
     //Hope this works via jQuery else we have to use pure JS
-    var contentGeoJ = jQuery.getJSON(".server.api.PathResource.api", displayGeo(contentGeoJ));
-    console.log(contentGeoJ);
+    //jQuery.getJSON(".server.api.PathResource.api", displayGeo(contentGeoJ));
+    
+    $.getJSON(".server.api.PathResource.api", displayGeo);
+    //$.getJSON("geoTest.json", displayGeo);
 }
-function displayGeo(paramGe) {
-    L.geoJSON(paramGe).addTo(mapVar);
+function displayGeo(geoJson) {
+    //console.log(geoJson);
+    //console.log(JSON.stringify(geoJson));
+    L.geoJSON(geoJson).addTo(mapVar);
 }
 
 
