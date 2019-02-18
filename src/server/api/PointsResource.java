@@ -7,10 +7,19 @@ import server.util.FileManager;
 
 import java.io.File;
 
+/**
+ * class to get all points of graph as geoJson
+ */
 public class PointsResource extends ApiResource {
 
     private Graph graph;
 
+    /**
+     * Constructor
+     *
+     * @param webRoot path to webroot
+     * @param graph   the graph
+     */
     public PointsResource(File webRoot, Graph graph) {
         super(webRoot);
         this.graph = graph;

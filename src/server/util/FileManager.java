@@ -72,32 +72,13 @@ public class FileManager {
         return "";
     }
 
-    public static String getFileName(File file) {
-        String filename = file.getName();
-        int pos = filename.lastIndexOf(".");
-        if (pos >= 0) return filename.substring(0, pos);
-        return "";
-    }
-
-    public static String getProjectRoot() {
-        Path currentRelativePath = Paths.get("");
-        String path = currentRelativePath.toAbsolutePath().toString();
-        path = path.substring(0, path.indexOf("Navigator"));
-        path += "Navigator/";
-        return path;
-    }
-
-    public static String getFileDir(File file) {
-        String path = file.getPath();
-        int pos = path.lastIndexOf("/");
-        if (pos >= 0) return path.substring(0, pos);
-        return "";
-    }
-
-    public static String packageNameToPath(String packageName) {
-        return packageName.replace(".", "/");
-    }
-
+    /**
+     * writes into file and creates file is it did not exist
+     * inspired by file_put_contents in php
+     *
+     * @param path the file to write into
+     * @param data the data to write into the file
+     */
     public static void file_put_contents(File path, String data) {
         path.delete();
         if (!path.exists()) {
@@ -117,5 +98,55 @@ public class FileManager {
         } catch (IOException e) {
             //ignored
         }
+    }
+
+    /**
+     * returns path to dir in which the file is
+     *
+     * @param file the file
+     * @return path
+     */
+    public static String getFileDir(File file) {
+        String path = file.getPath();
+        int pos = path.lastIndexOf("/");
+        if (pos >= 0) return path.substring(0, pos);
+        return "";
+    }
+
+    /**
+     * returns filename
+     *
+     * @param file the file
+     * @return the filename of file
+     */
+    public static String getFileName(File file) {
+        String filename = file.getName();
+        int pos = filename.lastIndexOf(".");
+        if (pos >= 0) return filename.substring(0, pos);
+        return "";
+    }
+
+    /**
+     * returns path to projectRoot
+     *
+     * @return path
+     */
+    public static String getProjectRoot() {
+        Path currentRelativePath = Paths.get("");
+        String path = currentRelativePath.toAbsolutePath().toString();
+        path = path.substring(0, path.indexOf("Navigator"));
+        path += "Navigator/";
+        return path;
+    }
+
+    /**
+     * returns path to java class file from a .api file
+     * Inspired by autoloading with namespaces in php
+     *
+     * @param packageName the full qualified class name packages+classname
+     * @return path
+     */
+    static String packageNameToPath(String packageName) {
+        return packageName.replace(".", "/");
     }
 }

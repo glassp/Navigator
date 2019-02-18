@@ -7,9 +7,18 @@ import server.util.FileManager;
 
 import java.io.File;
 
+/**
+ * class to determine the path from start latitude,longitude to destination latitude, longitude
+ */
 public class PathResource extends ApiResource {
     private Graph graph;
 
+    /**
+     * Constructor
+     *
+     * @param webRoot path to webroot
+     * @param graph   the graph
+     */
     public PathResource(File webRoot, Graph graph) {
         super(webRoot);
         this.graph = graph;

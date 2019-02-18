@@ -6,9 +6,18 @@ import server.util.FileManager;
 
 import java.io.File;
 
+/**
+ * A Resource to determine the nextNode to given latitude and longitude
+ */
 public class NextNodeResource extends ApiResource {
     private Graph graph;
 
+    /**
+     * Constructor
+     *
+     * @param webRoot path to webroot
+     * @param graph   the graph
+     */
     public NextNodeResource(File webRoot, Graph graph) {
         super(webRoot);
         this.graph = graph;
