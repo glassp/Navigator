@@ -9,7 +9,20 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+/**
+ * class for compiling and loading at runtime (dynamic loading)
+ * inspired by autoloading in php
+ */
 public class JavaClassLoader extends ClassLoader {
+
+    /**
+     * returns a object of given class
+     *
+     * @param fullClassName the qualified class name
+     * @param webRoot       the path to webroot
+     * @param graph         the graph
+     * @return instance of class
+     */
     public Object getInstance(String fullClassName, File webRoot, Graph graph) {
 
         String sourcePath = FileManager.getProjectRoot() + "src/" + FileManager.packageNameToPath(fullClassName) + ".java";
@@ -35,6 +48,14 @@ public class JavaClassLoader extends ClassLoader {
         }
     }
 
+    /**
+     * invokes method on given class instance
+     *
+     * @param instance   the instance to invoke the method on
+     * @param methodName the method name without ()
+     * @param param      the parameter as Object e.g String
+     * @return
+     */
     public Object invokeMethod(Object instance, String methodName, Object param) {
         FileLogger.syslog("Try to load " + methodName + " on Object " + instance);
         Class<?> cls = instance.getClass();

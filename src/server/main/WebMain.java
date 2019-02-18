@@ -33,15 +33,11 @@ public class WebMain {
         new Server(initPort(args), new File(initWebRoot(args)), true, new File("log.txt"), graph);
     }
 
-
-    private static String initWebRoot(String[] args) {
-        try {
-            return args[1];
-        } catch (IndexOutOfBoundsException e) {
-            return FileManager.getProjectRoot() + "www/";
-        }
-    }
-
+    /**
+     * @param args the arguments of the terminal
+     * @return args[0]
+     * @throws IllegalArgumentException if args[0] is not set
+     */
     private static String initFmiPath(String[] args) {
         try {
             return args[0];
@@ -50,11 +46,27 @@ public class WebMain {
         }
     }
 
+    /**
+     * @param args the arguments of the terminal
+     * @return args[2] or 8080
+     */
     private static int initPort(String[] args) {
         try {
             return Integer.parseInt(args[2]);
         } catch (IndexOutOfBoundsException e) {
             return 8080;
+        }
+    }
+
+    /**
+     * @param args the arguments of the terminal
+     * @return args[1] or "www/"
+     */
+    private static String initWebRoot(String[] args) {
+        try {
+            return args[1];
+        } catch (IndexOutOfBoundsException e) {
+            return FileManager.getProjectRoot() + "www/";
         }
     }
 

@@ -16,6 +16,13 @@ class WebResource {
                     "tr:hover td { background: #e9edf1 }" +
                     "td.center { text-align: center; }";
 
+    /**
+     * html code for directory output
+     *
+     * @param title   title of the page
+     * @param content the content
+     * @return html code
+     */
     static String getDirectoryTemplate(String title, String content) {
         return "<!DOCTYPE html>" +
                 "<html>" +
@@ -31,6 +38,12 @@ class WebResource {
                 "</html>";
     }
 
+    /**
+     * html code for error landing page
+     *
+     * @param error the error
+     * @return html code
+     */
     static String getErrorTemplate(String error) {
         return "<!DOCTYPE html>" +
                 "<html>" +
