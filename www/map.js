@@ -19,6 +19,7 @@ var destMarker;
 var selectStart = false;
 var selectDest = false;
 var showCoordinates = false;
+var findClosestNode = false;
 
 function initMap() {
     // Init map to lat/lon for Uni Stuttgart, IT building
@@ -50,6 +51,16 @@ function onMapClick(e) {
         .setContent("You clicked at<br>Latitude: " + e.latlng.lat + "<br>Longitude: "+ e.latlng.lng)
         .openOn(mapVar);   
     }
+    if (findClosestNode) {
+        popupVar = L.popup()
+            .setLatLng(e.latlng)
+            .setContent("Inquiring closest node.<br>Please stand by.")
+            .openOn(mapVar);  
+            
+         // Inquire Node from Server by sending lat/lng
+        $.get(".server.api.PointsResource", [e.latitude, e.longitude], popupClosestNode);
+            
+    }
     
     if (selectStart) {
         if (startMarker !== undefined) {
@@ -72,7 +83,18 @@ function onMapClick(e) {
     }
 }
 
-function toggleShowCoordinates(){
+function popupClosestNode(data) {
+    // Expects server to answer with Latitude, Longitude and node ID
+    // TODO: Implement answer either as JSON or as String that reads as below
+    
+    popupVar = L.popup()
+            .setLatLng(e.latlng)
+            .setContent("Closest node with id " + data[0] + "<br>Latitude: " + data[1] + "<br>Longitude: " + data[2])
+            .openOn(mapVar);  
+    
+}
+
+function toggleShowCoordinates(){        
     if (showCoordinates) {
         showCoordinates = false;
         document.getElementById('btnPopup').innerHTML= "Show Coordinates On Click";
@@ -80,6 +102,24 @@ function toggleShowCoordinates(){
     else {
         showCoordinates = true;
         document.getElementById('btnPopup').innerHTML= "Stop Showing Coordinates On Click";
+        
+          if (findClosestNode) {
+            toggleFindNode();
+        }
+    }
+}
+function toggleFindNode() {
+    if (findClosestNode) {
+        findClosestNode = false;
+        document.getElementById('btnFindNode').innerHTML= "Find Closest Node On Click";
+    }
+    else {
+        findClosestNode = true;
+        document.getElementById('btnFindNode').innerHTML= "Stop Finding Closest Node On Click";
+        
+        if (showCoordinates) {
+            toggleShowCoordinates();
+        }
     }
 }
 
@@ -110,6 +150,7 @@ function toggleSelectDest(){
 }
 
 
+
 function getRouteAjax() {
     console.log("Not yet implementd");
 
@@ -124,6 +165,7 @@ function displayGeo(geoJson) {
     //console.log(JSON.stringify(geoJson));
     L.geoJSON(geoJson).addTo(mapVar);
 }
+
 
 
 
@@ -144,6 +186,7 @@ function removeMarker(m) {
 //   Click Event Listner   //
 document.addEventListener('DOMContentLoaded', initMap);
 document.querySelector("#btnPopup").addEventListener('click', toggleShowCoordinates);
+document.querySelector("#btnFindNode").addEventListener('click', toggleFindNode);
 document.querySelector("#btnSelectStart").addEventListener('click', toggleSelectStart);
 document.querySelector("#btnSelectDest").addEventListener('click', toggleSelectDest);
 
