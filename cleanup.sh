@@ -6,4 +6,5 @@ rm -r  ./log.txt
 rm -r  ./src/server/api/TestResource.class
 rm -r  ./src/server/api/PathResource.class
 rm -r  ./src/server/api/PointsResource.class
-
+rm -r ./www/.build/
+mkdir ./www/.build/

@@ -1,7 +1,3 @@
-#have it run import graph (WebMain.java)
-#output all points as geoJson into WEBROOT as geo.json
-#forward click/form-submit events to Graph as Query
-
 #!/bin/bash
 echo -n "Checking for dependencies..."
 for name in java
@@ -29,8 +25,11 @@ mkdir ./bin
 mkdir ./bin/out
 
 #compile code
-javac ./src/main/*.java -d ./bin/
-javac ./src/server/*/*.java -d ./bin/
+javac -cp ./bin/ ./src/geoJson/*.java -d ./bin/
+javac -cp ./bin/ ./src/main/*.java -d ./bin/
+javac -cp ./bin/ ./src/server/util/*.java -d ./bin/
+javac -cp ./bin/ ./src/server/api/*.java -d ./bin/
+javac -cp ./bin/ ./src/server/main/*.java -d ./bin/
 
 
 

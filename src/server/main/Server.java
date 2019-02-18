@@ -1,5 +1,6 @@
 package server.main;
 
+import main.Graph;
 import server.util.FileLogger;
 import server.util.ServerHelper;
 
@@ -17,7 +18,7 @@ public class Server {
      * @param allowDirectoryListing if directoryListing should be enabled
      * @param logfile               the path to the Logfile
      */
-    public Server(int port, final File webRoot, final boolean allowDirectoryListing, File logfile) {
+    public Server(int port, final File webRoot, final boolean allowDirectoryListing, File logfile, Graph graph) {
         FileLogger.setLogfile(logfile);
 
         FileLogger.syslog("Starting server...");
@@ -72,7 +73,7 @@ public class Server {
         Thread connectionListener = new Thread(() -> {
             while (true) {
                 try {
-                    ServerThread thread = new ServerThread(finalSocket.accept(), webRoot, allowDirectoryListing);
+                    ServerThread thread = new ServerThread(finalSocket.accept(), webRoot, allowDirectoryListing, graph);
                     thread.start();
                 } catch (IOException e) {
                     FileLogger.exception(e.getMessage());

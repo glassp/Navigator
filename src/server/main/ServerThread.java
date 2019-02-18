@@ -1,5 +1,6 @@
 package server.main;
 
+import main.Graph;
 import server.api.ApiHandler;
 import server.util.FileLogger;
 import server.util.FileManager;
@@ -16,9 +17,10 @@ import java.util.Arrays;
 import java.util.Date;
 
 public class ServerThread extends Thread {
+    private boolean allowDirectoryListing;
     private Socket socket;
     private File webRoot;
-    private boolean allowDirectoryListing;
+    private Graph graph;
 
     /**
      * Constructor
@@ -27,10 +29,11 @@ public class ServerThread extends Thread {
      * @param webRoot               path to webRoot dir
      * @param allowDirectoryListing if fileListing should be allowed
      */
-    ServerThread(Socket socket, File webRoot, boolean allowDirectoryListing) {
+    ServerThread(Socket socket, File webRoot, boolean allowDirectoryListing, Graph graph) {
         this.socket = socket;
         this.webRoot = webRoot;
         this.allowDirectoryListing = allowDirectoryListing;
+        this.graph = graph;
     }
 
     /**
@@ -112,7 +115,7 @@ public class ServerThread extends Thread {
 
         // remove GET-parameters from filename
         if (!isPostRequest && request.get(0).contains("?")) {
-            param = wantedFile.substring(wantedFile.lastIndexOf("?"));
+            param = wantedFile.substring(wantedFile.indexOf("?"));
             path = wantedFile.substring(0, wantedFile.indexOf("?"));
         } else {
             path = wantedFile;
@@ -209,7 +212,7 @@ public class ServerThread extends Thread {
                     parentDirectory = "/";
                 }
 
-                content += "<tr><td class=\"center\"><div class=\"back\">&nbsp;</div></td>" +
+                content += "<tr><td class=\"center\"><img src=\".res/back.png\" alt=\"back\" height=\"20px\" width=\"20px\"></td>" +
                         "<td><a href=\"" + parentDirectory.replace(" ", "%20") + "\">Parent Directory</a></td>" +
                         "<td></td>" +
                         "<td></td></tr>";
@@ -228,10 +231,10 @@ public class ServerThread extends Thread {
                 //hide files and dirs that start with "." from listing.
                 if (!filename.startsWith(".")) {
                     if (myFile.isDirectory()) {
-                        img = "<div class=\"folder\">&nbsp;</div>";
+                        img = "<img src=\".res/folder.png\" alt=\"folder\" height=\"20px\" width=\"20px\">";
                         fileSize = "";
                     } else {
-                        img = "<div class=\"file\">&nbsp;</div>";
+                        img = "<img src=\".res/file.png\" alt=\"file\" height=\"20px\" width=\"20px\">";
                     }
                     // build table entry
                     contentBuilder.append("<tr><td class=\"center\">").append(img).append("</td>").append("<td><a href=\"").append(path.replace(" ", "%20")).append("/").append(filename.replace(" ", "%20")).append("\">").append(filename).append("</a></td>").append("<td>").append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(myFile.lastModified())).append("</td>").append("<td class=\"center\">").append(fileSize).append("</td></tr>");
@@ -260,27 +263,22 @@ public class ServerThread extends Thread {
         } else {
             // access to file within webDir
 
-            //TODO: API HANDLER
-            //check if api handable
+            ApiHandler apiHandler = new ApiHandler(webRoot, graph);
+            if (apiHandler.canHandle(file)) {
+                String tmp = apiHandler.handle(file, param);
 
+                FileLogger.syslog("tmp: " + tmp);
 
-            ApiHandler apiHandler = new ApiHandler(webRoot);
-            String tmp = "";
-            if (apiHandler.canHandle(file))
-                tmp = apiHandler.handle(file, param);
-
-            FileLogger.syslog("tmp: " + tmp);
-
-            if (tmp != null && !tmp.equals("&nbsp;")) {
-                File fileFallback = file;
-                try {
-                    file = new File(webRoot, URLDecoder.decode(tmp, StandardCharsets.UTF_8)).getCanonicalFile();
-                } catch (IOException e) {
-                    file = fileFallback;
+                if (tmp != null && !tmp.equals("&nbsp;")) {
+                    File tmpFile;
+                    try {
+                        tmpFile = new File(webRoot, URLDecoder.decode(tmp, StandardCharsets.UTF_8)).getCanonicalFile();
+                        file = tmpFile;
+                    } catch (IOException e) {
+                        //Ignore
+                    }
                 }
             }
-
-            //TODO: END API HANDLER
 
             // initialize InputStream
             InputStream reader = null;
@@ -329,30 +327,6 @@ public class ServerThread extends Thread {
     }
 
     /**
-     * Sends a HTTP 1.1 header
-     *
-     * @param out           used output stream
-     * @param code          HTTP Status-Code (e.g. 200)
-     * @param codeMessage   HTTP Status-Message of HTTP Status-Code (e.g. Ok)
-     * @param contentType   Content-Type Header
-     * @param contentLength Content-Length Header
-     * @param lastModified  Last modified Meta-Data (used for caching)
-     */
-    private void sendHeader(BufferedOutputStream out, int code, String codeMessage, String contentType, long contentLength, long lastModified) {
-        try {
-            out.write(("HTTP/1.1 " + code + " " + codeMessage + "\r\n" +
-                    "Date: " + new Date().toString() + "\r\n" +
-                    "Server: Marvins HTTP-Server\r\n" +
-                    "Content-Type: " + contentType + "; charset=utf-8\r\n" +
-                    ((contentLength != -1) ? "Content-Length: " + contentLength + "\r\n" : "") +
-                    "Last-modified: " + new Date(lastModified).toString() + "\r\n" +
-                    "\r\n").getBytes());
-        } catch (IOException e) {
-            FileLogger.exception(e.getMessage());
-        }
-    }
-
-    /**
      * Sends a Error Landing Page
      *
      * @param out     used output stream
@@ -374,6 +348,30 @@ public class ServerThread extends Thread {
 
             // close socket. No keep-alive.
             socket.close();
+        } catch (IOException e) {
+            FileLogger.exception(e.getMessage());
+        }
+    }
+
+    /**
+     * Sends a HTTP 1.1 header
+     *
+     * @param out           used output stream
+     * @param code          HTTP Status-Code (e.g. 200)
+     * @param codeMessage   HTTP Status-Message of HTTP Status-Code (e.g. Ok)
+     * @param contentType   Content-Type Header
+     * @param contentLength Content-Length Header
+     * @param lastModified  Last modified Meta-Data (used for caching)
+     */
+    private void sendHeader(BufferedOutputStream out, int code, String codeMessage, String contentType, long contentLength, long lastModified) {
+        try {
+            out.write(("HTTP/1.1 " + code + " " + codeMessage + "\r\n" +
+                    "Date: " + new Date().toString() + "\r\n" +
+                    "Server: HTTP-Server\r\n" +
+                    "Content-Type: " + contentType + "; charset=utf-8\r\n" +
+                    ((contentLength != -1) ? "Content-Length: " + contentLength + "\r\n" : "") +
+                    "Last-modified: " + new Date(lastModified).toString() + "\r\n" +
+                    "\r\n").getBytes());
         } catch (IOException e) {
             FileLogger.exception(e.getMessage());
         }

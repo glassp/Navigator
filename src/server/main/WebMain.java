@@ -1,8 +1,12 @@
 package server.main;
 
+import main.Graph;
+import main.IOHandler;
+import server.util.FileLogger;
 import server.util.FileManager;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 /**
  * The entry point for Script
@@ -14,10 +18,19 @@ public class WebMain {
      * @param args the arguments passed via terminal
      */
     public static void main(String[] args) {
-
-        new Server(initPort(args), new File(initWebRoot(args)), true, new File("log.txt"));
-        //TODO: run GeoJsonBuilder and store file as geo.json within webRoot (args[0])
-        //TODO: use initFmiPath(args) to get path to .fmi file as provided via terminal
+        Graph graph;
+        try {
+            graph = new IOHandler().importGraph(initFmiPath(args));
+        } catch (NullPointerException | FileNotFoundException e) {
+            FileLogger.syslog("The file was not found. Cannot start Server");
+            System.exit(1);
+            return;
+        } catch (IllegalArgumentException e) {
+            FileLogger.syslog("Cannot start Server.\r\n" + e.getMessage());
+            System.exit(1);
+            return;
+        }
+        new Server(initPort(args), new File(initWebRoot(args)), true, new File("log.txt"), graph);
     }
 
 

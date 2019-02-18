@@ -1,5 +1,7 @@
 package server.util;
 
+import main.Graph;
+
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.File;
@@ -8,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class JavaClassLoader extends ClassLoader {
-    public Object getInstance(String fullClassName, File webRoot) {
+    public Object getInstance(String fullClassName, File webRoot, Graph graph) {
 
         String sourcePath = FileManager.getProjectRoot() + "src/" + FileManager.packageNameToPath(fullClassName) + ".java";
         String compilePath = FileManager.getProjectRoot() + "src/" + FileManager.packageNameToPath(fullClassName) + ".class";
@@ -26,8 +28,8 @@ public class JavaClassLoader extends ClassLoader {
             FileLogger.syslog("Try to load class " + fullClassName);
             ClassLoader classLoader = this.getClass().getClassLoader();
             Class<?> cls = Class.forName(fullClassName, true, classLoader);
-            Constructor constructor = cls.getConstructor(webRoot.getClass());
-            return constructor.newInstance(webRoot);
+            Constructor constructor = cls.getConstructor(webRoot.getClass(), Graph.class);
+            return constructor.newInstance(webRoot, graph);
         } catch (Exception e) {
             return null;
         }

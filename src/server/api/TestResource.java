@@ -1,30 +1,19 @@
 package server.api;
 
+import main.Graph;
 import server.util.FileLogger;
 
 import java.io.File;
 
 public class TestResource extends ApiResource {
-
-    public TestResource(File webRoot) {
+    public TestResource(File webRoot, Graph graph) {
         super(webRoot);
+        //ignore Graph in this class
     }
 
     @Override
     public String run(String arg) {
         FileLogger.syslog("TestResource did run");
-        try {
-            String[] args = arg.split("&");
-            FileLogger.syslog("" + args.length);
-            FileLogger.syslog(args[0]);
-            if (args.length < 2)
-                return null;
-            else {
-                return webRoot.getPath() + "ok.html";
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return "./.ok.html";
     }
 }
