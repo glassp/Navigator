@@ -331,7 +331,7 @@ public class Graph extends CLILogger {
      *
      * @param node the node
      * @return the offset or -1 if it has no edges.
-     * @throws IllegalArgumentException if node index is < 0 or > offset.length
+     * @throws IllegalArgumentException if node index is < 0 or node index > offset.length
      */
     public int getOffset(int node) throws IllegalArgumentException {
         if (node > offset.length || node < 0)
