@@ -122,7 +122,7 @@ function toggleShowCoordinates() {
 
 function toggleSelectStart() {
     if (selectDest) {
-        return
+        return;
     }
 
     if (selectStart) {
@@ -136,7 +136,7 @@ function toggleSelectStart() {
 
 function toggleSelectDest() {
     if (selectStart) {
-        return
+        return;
     }
 
     if (selectDest) {
@@ -150,12 +150,19 @@ function toggleSelectDest() {
 
 
 function getRouteAjax() {
+    if (start === undefined || dest === undefined) {
+        return;
+    }
+    
+    document.getElementById('btnFindRoute').innerHTML = "Calculating Route...";
+    
     var requestUrl = ".server.api.PathResource.api?startLat=" + startLat + "&startLong=" + startLong + "&destLat=" + destLat + "&destLong=" + destLong;
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             var response = this.responseText;
+            document.getElementById('btnFindRoute').innerHTML = "Find Route";
             displayGeo(JSON.parse(response));
         }
     };
