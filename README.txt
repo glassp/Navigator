@@ -4,8 +4,6 @@ A Simple Dijkstra Navigator
 ![](https://img.shields.io/github/license/otakupasi/Navigator.svg) 
 ![](https://img.shields.io/coveralls/github/otakupasi/Navigator.svg) 
 ![](https://img.shields.io/github/status/s/pulls/badges/shields/1110.svg)  
-[goto](https://drive.google.com/drive/folders/18Yi9jL2jzjAOlSKQE7uswRldwCoxtzc1?usp=sharing)
-
 
 
 ## Requirements
@@ -13,30 +11,17 @@ A Simple Dijkstra Navigator
 - JRE ( Java Runtime Environment)
 
 ## Installation
-### Automatic
-Just download and run the makefile.sh or run.sh
+Just download and run the makefile.sh, run.sh or webrunner.sh
 
 - Will check if JRE is installed
 - Will compile the Java source code
-- Will run the program with a CLI or as terminal script
-
-### Manual
-Just follow these steps
-1. Open Terminal and cd into Project Folder
-2. Run ``javac ./src/main/*.java -d ./bin``
-3.
- - Run ``java -cp ./bin/ main/Main`` for CLI
- - Run ``java -cp ./bin/ main/Main arg1 arg2 arg3 `` for Terminal Script,  
- where `arg1` is the path to the graph data  
- `arg2` the path to the query file  
- and `arg3` the path to the .sol file
-
+- Will run the program
 
 ## Running  
 
-### As CLI  
+### Via Makefile.sh
 
-Use the makefile.sh file and run in in Terminal
+makefile.sh will run the programm as a CLI within the Terminal
 
 #### Import the Graph  
 
@@ -47,8 +32,8 @@ Use the makefile.sh file and run in in Terminal
 
 - Import the Graph
 - Enter ``1``
-- Enter the start node
-- Enter any target node
+- Enter the start node ![](https://img.shields.io/badge/Datatype-Integer-important.svg)
+- Enter any target node ![](https://img.shields.io/badge/Datatype-Integer-important.svg)
 
 If you want to make multiple inquiries from the same starting point in a row, Dijkstra's algorithm will only be running once.
 
@@ -67,15 +52,8 @@ If you want to make multiple inquiries from the same starting point in a row, Di
 
 NOTE: After having run a query, the path to its .out file is automatically used for this Graph. 
 
-#### Logging output  
-NOTE: This will increase the runtime
-##### Verbose Logging
-Enter ``v`` to toggle verbose logging
 
-##### Debug Logging
-Enter ``d`` to toggle debug logging
-
-### From Terminal  
+### Via Run.sh 
 
 Use the run.sh from terminal with parameter  
 - `arg1` The Path to the Graph data
@@ -83,3 +61,33 @@ Use the run.sh from terminal with parameter
 - `arg3` The path to the .sol file
   
 The Script will import the graph, run the query and compare it to the solution.
+
+### Via Webrunner.sh
+
+Use the webrunner.sh with following parameter
+- `arg1` The path to the .fmi Graph file
+- `arg2` ![](https://img.shields.io/badge/Optional-True-green.svg) The path to the webroot dir
+- `arg3` ![](https://img.shields.io/badge/Optional-True-green.svg) ![](https://img.shields.io/badge/Datatype-Integer-important.svg) The port you want the server to run on
+ 
+After running the terminal should output a message like the following  
+ 
+[2019-02-13 19:39:22] [SYS] Starting server...
+#################################
+### HTTP-Server               ###
+### http://YOUR_LOCAL_IP:8080 ###
+#################################
+
+
+After that you can go to the provided like and use the files provided
+
+To Terminate the server you just need to close the Terminal window.
+
+#### Running Queries on the Server
+
+When using the Web GUI, you can freely choose start and destination coordinates on the map.
+Clicking "Find Route" will run Dijkstra and display the route on the map.
+
+If the closest node to start and destination is identical, a pin icon will mark the coordinates as the only point on the route.
+
+An appropriately labeled button will toggle a popup showing info on
+coordinates and the next node from the graph wherever you click on the map.
