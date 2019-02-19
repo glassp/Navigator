@@ -46,18 +46,33 @@ public class PathResource extends ApiResource {
                     start = graph.getClosestNode(startLat, startLong);
                     dest = graph.getClosestNode(destLat, destLong);
                 }
+                
+                GeoJsonBuilder builder;
+                if (start == dest) {
+                	builder = new GeoJsonBuilder(GeoJsonBuilder.POINT);
+                	builder.addGeo(graph.getLatitude(start), graph.getLongitude(start));
+				}
+                else {
+					// Normal case: run Dijkstra if necessary, then add all nodes' coordinates
+				
+                
 
-                graph.runQuery(start, dest);
-
-                //TODO: bugfix: get Path will output a empty geoJson
-                int temp = dest;
-                GeoJsonBuilder builder = new GeoJsonBuilder(GeoJsonBuilder.LINE_STRING);
-
-                do {
-                    builder.addGeo(graph.getLatitude(temp), graph.getLongitude(temp));
-                    temp = graph.getPredecessor(temp);
-                } while (temp != graph.getStartingNode() && temp >= 0);
-
+	                graph.runQuery(start, dest);
+	
+	                //TODO: bugfix: get Path will output an empty geoJson
+	                int temp = dest;
+	                builder = new GeoJsonBuilder(GeoJsonBuilder.LINE_STRING);
+	
+	                do {
+	                    builder.addGeo(graph.getLatitude(temp), graph.getLongitude(temp));
+	                    temp = graph.getPredecessor(temp);
+	                } while (temp != graph.getStartingNode() && temp >= 0);
+	                
+	                // once more, since loop is left straight after reaching node without adding it to path
+	                builder.addGeo(graph.getLatitude(temp), graph.getLongitude(temp)); 
+	                
+                }
+                
                 String json = builder.build();
 
                 String fname = graph.hashCode() + "-" + start + "-" + dest + ".json";

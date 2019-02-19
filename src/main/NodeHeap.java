@@ -284,8 +284,6 @@ public class NodeHeap extends CLILogger {
      */
     private void swap(int item1, int item2) {
         int temp = heapNodes[item1];
-
-        //TODO: Is it shure that these items always have been added to the heap before? 
         
         nodeLocation[temp] = item2;    // item from position 'item1' is to be at 'item2'
         nodeLocation[heapNodes[item2]] = item1;    // vice versa

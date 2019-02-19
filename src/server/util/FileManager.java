@@ -87,6 +87,7 @@ public class FileManager {
                     throw new IOException("Could not create File.");
                 }
             } catch (IOException e) {
+            	System.out.println(path);
                 e.printStackTrace();
             }
         }
