@@ -68,6 +68,8 @@ Use the webrunner.sh with following parameter
 - `arg1` The path to the .fmi Graph file
 - `arg2` ![](https://img.shields.io/badge/Optional-True-green.svg) The path to the webroot dir
 - `arg3` ![](https://img.shields.io/badge/Optional-True-green.svg) ![](https://img.shields.io/badge/Datatype-Integer-important.svg) The port you want the server to run on
+
+The second argument should always be used if the server runs from a directory that is not called "Navigator" or the server may not find the default webroot dir.
  
 After running the terminal should output a message like the following  
  
@@ -78,9 +80,9 @@ After running the terminal should output a message like the following
 #################################
 
 
-After that you can go to the provided like and use the files provided
+After that you can go to the provided link and use the files provided.
 
-To Terminate the server you just need to close the Terminal window.
+To terminate the server you just need to close the terminal window.
 
 #### Running Queries on the Server
 
