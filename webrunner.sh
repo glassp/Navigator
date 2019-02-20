@@ -7,22 +7,29 @@ done
 
 if [[ ${DEPS} -ne 1 ]];
 then
-    echo -en "OK \n\n"
+    echo -en " OK \n\n"
 else
-	echo -en "\n Install the above  and rerun this script\n"; exit 1;
+	echo -en "\n Install the above and rerun this script\n"; exit 1;
 fi
 
-#chech if bin exists
+#check if bin exists
 if [[ -d "./bin" ]];
 then
     #previous compiled files exist => remove them
     rm -r  ./bin/
+fi
+#check if www/.build exists
+if [[ -d "./www/.build" ]];
+then
+    rm -r  ./www/.build
 fi
 
 #create bin dir
 mkdir ./bin
 #create dir for dijkstra outputs
 mkdir ./bin/out
+#create dir for http answers
+mkdir ./www/.build
 
 #compile code
 javac -cp ./bin/ ./src/geoJson/*.java -d ./bin/

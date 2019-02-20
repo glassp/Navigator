@@ -1,11 +1,6 @@
-//Implemented:
-//init map
-//function mark(x,y) to set Markers at Point(lat:x,long:y)
-//handleClick(e) -> Snackbar("You clicked at e.lat, e.long")
-//addEventlistner DOMContentLoader->init, click->handleClick
-
 var mapVar;
 var popupVar;
+var routeGeoLayer;
 
 // to store coordinates:
 var start;
@@ -37,7 +32,7 @@ function initMap() {
 
     // use Open Street Map tiles for map
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
         subdomains: ['a', 'b', 'c']
     }).addTo(mapVar);
 
@@ -58,22 +53,6 @@ function isNode(lat, lng) {
 }
 
 async function onMapClick(e) {
-    if (showCoordinates) {
-        getNextNodeAjax(e.latlng.lat, e.latlng.lng);
-        while (wait)
-            await sleep(1000);
-        popupVar = L.popup()
-            .setLatLng(e.latlng)
-            .setContent("You clicked at" +
-                "<br>Latitude: " + e.latlng.lat + "" +
-                "<br>Longitude: " + e.latlng.lng +
-                "<br><br>Next Node is:<br> &nbsp;&nbsp;&nbsp;&nbsp;NodeId: " + nodeId +
-                "<br>&nbsp;&nbsp;&nbsp;&nbsp;NodeLatitude: " + nodeLat +
-                "<br> &nbsp;&nbsp;&nbsp;&nbsp;NodeLongitude: " + nodeLong + "<br>" +
-                isNode(e.latlng.lat, e.latlng.lng))
-            .openOn(mapVar);
-    }
-
     if (selectStart) {
         if (startMarker !== undefined) {
             removeMarker(startMarker);
@@ -84,6 +63,9 @@ async function onMapClick(e) {
         startMarker = mark(startLat, startLong, "Start - ");
 
         toggleSelectStart();
+//        if (showCoordinates) {  
+//            toggleShowCoordinates
+//        }
     }
 
     if (selectDest) {
@@ -96,7 +78,36 @@ async function onMapClick(e) {
         destMarker = mark(destLat, destLong, "Destination - ");
 
         toggleSelectDest()
+//          if (showCoordinates) {  
+//            toggleShowCoordinates
+//        }
     }
+    
+        if (showCoordinates) {
+        popupVar = L.popup()        // Immediate feedback, since inquiry can take eup to 5 seconds
+            .setLatLng(e.latlng)
+            .setContent("You clicked at" +
+                "<br>Latitude: " + e.latlng.lat + "" +
+                "<br>Longitude: " + e.latlng.lng +
+                "<br><br>Fetching info on closest node now...")
+            .openOn(mapVar);
+        getNextNodeAjax(e.latlng.lat, e.latlng.lng);
+        while (wait)
+            await sleep(1000);
+        popupVar = L.popup()        // Full info shown
+            .setLatLng(e.latlng)
+            .setContent("You clicked at" +
+                "<br>Latitude: " + e.latlng.lat + "" +
+                "<br>Longitude: " + e.latlng.lng +
+                "<br><br>Next Node is:<br> &nbsp;&nbsp;&nbsp;&nbsp;Node ID: " + nodeId +
+                "<br>&nbsp;&nbsp;&nbsp;&nbsp;Node Latitude: " + nodeLat +
+                "<br> &nbsp;&nbsp;&nbsp;&nbsp;Node Longitude: " + nodeLong + "<br>" +
+                isNode(e.latlng.lat, e.latlng.lng))
+            .openOn(mapVar);
+        
+        //mark(nodeLat, nodeLong); // Marker to see where next node would be
+    }
+    
 }
 
 function toggleShowCoordinates() {
@@ -111,7 +122,7 @@ function toggleShowCoordinates() {
 
 function toggleSelectStart() {
     if (selectDest) {
-        return
+        return;
     }
 
     if (selectStart) {
@@ -125,7 +136,7 @@ function toggleSelectStart() {
 
 function toggleSelectDest() {
     if (selectStart) {
-        return
+        return;
     }
 
     if (selectDest) {
@@ -139,12 +150,19 @@ function toggleSelectDest() {
 
 
 function getRouteAjax() {
+    if (start === undefined || dest === undefined) {
+        return;
+    }
+    
+    document.getElementById('btnFindRoute').innerHTML = "Calculating Route...";
+    
     var requestUrl = ".server.api.PathResource.api?startLat=" + startLat + "&startLong=" + startLong + "&destLat=" + destLat + "&destLong=" + destLong;
 
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             var response = this.responseText;
+            document.getElementById('btnFindRoute').innerHTML = "Find Route";
             displayGeo(JSON.parse(response));
         }
     };
@@ -171,7 +189,7 @@ async function getNextNodeAjax(lat, lng) {
 }
 
 function showGraphPoints() {
-    //can crash the site when the produced geoJson is to big (tested with bw.fmi)
+    //can crash the site when the produced geoJson is too big (tested with bw.fmi)
 
     var requestUrl = ".server.api.PointsResource.api";
 
@@ -190,7 +208,11 @@ function showGraphPoints() {
 }
 
 function displayGeo(geoJson) {
-    L.geoJSON(geoJson).addTo(mapVar);
+    if (routeGeoLayer !== undefined) {
+        routeGeoLayer.remove();
+    }
+
+    routeGeoLayer = L.geoJSON(geoJson).addTo(mapVar);
 }
 
 

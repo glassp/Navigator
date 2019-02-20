@@ -81,3 +81,13 @@ After running the terminal should output a message like the following
 After that you can go to the provided like and use the files provided
 
 To Terminate the server you just need to close the Terminal window.
+
+#### Running Queries on the Server
+
+When using the Web GUI, you can freely choose start and destination coordinates on the map.
+Clicking "Find Route" will run Dijkstra and display the route on the map.
+
+If the closest node to start and destination is identical, a pin icon will mark the coordinates as the only point on the route.
+
+An appropriately labeled button will toggle a popup showing info on
+coordinates and the next node from the graph wherever you click on the map.
