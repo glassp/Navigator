@@ -3,8 +3,6 @@ A Simple Dijkstra Navigator
 
 
 ![GitHub](https://img.shields.io/github/license/otakupasi/Navigator.svg?style=popout) 
-![](https://img.shields.io/coveralls/github/otakupasi/Navigator.svg) 
-![](https://img.shields.io/github/status/s/pulls/badges/shields/1110.svg)  
 
 ## Requirements
 
